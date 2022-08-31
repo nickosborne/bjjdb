@@ -1,0 +1,13 @@
+- Choose webframework
+- Choose diagraming tool or build from scratch
+- Choose backend setup
+- Mobile platform (flutter)
+- Build database
+- Build journal component
+- build monetization strategy
+
+Primary Components:
+- Database of jiu jitsu positions and moves (sweeps, subs, throws etc.)
+- Diagram structure that can link together and display db elements
+- Journal to record training
+- A way for instructors to publish "systems" or strategies to their students
