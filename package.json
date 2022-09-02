@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/nickosborne/bjjdb#readme",
   "dependencies": {
-    "mongoose": "^6.5.4"
+    "mongoose": "^6.5.4",
+    "node": "^16.17.0"
   }
 }
