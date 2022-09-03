@@ -1,0 +1,23 @@
+const mongoose = require('mongoose');
+
+const positionSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    otherNames: {
+        type: [String],
+        required: false
+    },
+    top: {
+        type: Boolean,
+        required: true
+    },
+    options: {
+        type: [String],
+        required: false
+    }
+});
+
+const Position = mongoose.model('Position', positionSchema);
+module.exports = Position;

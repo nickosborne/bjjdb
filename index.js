@@ -1,36 +1,38 @@
 // getting-started.js
 const mongoose = require('mongoose');
-const { monitorEventLoopDelay } = require('perf_hooks');
+const express = require('express');
+const app = express();
+const path = require('path');
 
-main().catch(err => console.log(err));
 
-async function main() {
-    await mongoose.connect('mongodb://localhost:27017/bjjdb')
-        .then(() => {
-            console.log("Connection open")
-        })
-        .catch(err => {
-            console.log("connection error")
-            console.log(err)
-        });
+//Models
+const Position = require('./models/Position');
 
-    // use `await mongoose.connect('mongodb://user:password@localhost:27017/test');` if your database has auth enabled
-}
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
-const positionSchema = new mongoose.Schema({
-    name: String,
-    otherNames: [String],
-    top: Boolean,
-    options: [String]
+mongoose.connect('mongodb://localhost:27017/bjjdb')
+    .then(() => {
+        console.log("Connection open")
+    })
+    .catch(err => {
+        console.log("connection error")
+        console.log(err)
+    });
+
+
+app.get('/positions', async (req, res) => {
+    const positions = await Position.find({})
+    res.render('positions/index', { positions })
+})
+
+app.get('/positions/:id', async (req, res) => {
+    const { id } = req.params;
+    const position = await Position.findById(id)
+    res.render('positions/details', { position })
+})
+
+app.listen(3000, () => {
+    console.log("APP is listening on 3000")
 });
 
-const Position = mongoose.model('Position', positionSchema)
-
-// Position.insertMany([
-//     { name: 'Truck', otherNames: [], top: true, options: [] },
-//     { name: 'Mount', otherNames: ['Front Mount'], top: true, options: [] },
-//     { name: 'Back', otherNames: ['Back Mount', 'Rear Mount'], top: true, options: [] },
-//     { name: 'Side Control', otherNames: [], top: true, options: ['Kesa Getame', 'Americana', 'Kimura'] },
-//     { name: 'Crucifix', otherNames: [], top: true, options: ['Short Choke', 'Arm bar'] },
-//     { name: 'Turtle', otherNames: [], top: true, options: ['Back Entry', 'Truck Entry'] },
-// ])
