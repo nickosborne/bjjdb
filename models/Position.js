@@ -9,13 +9,13 @@ const positionSchema = new mongoose.Schema({
         type: [String],
         required: false
     },
-    top: {
-        type: Boolean,
+    topOptions: {
+        type: [mongoose.objectId],
         required: true
     },
-    options: {
-        type: [String],
-        required: false
+    bottomOptions: {
+        type: [mongoose.objectId],
+        required: true
     }
 });
 

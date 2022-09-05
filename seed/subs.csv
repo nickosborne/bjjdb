@@ -1,65 +1,65 @@
-﻿Name,Type
-Arm Bar,Joint
-Kimura,Joint
-Americana,Joint
-Arm Crush,Joint
-Omoplata,Joint
-Leg Kimura,Joint
-Leg Americana,Joint
-Monoplata,Joint
-Baratoplata,Joint
-Tarikoplata,Joint
-Mir lock,Joint
-Rear Naked Choke,Choke
-Bulldog Choke,Choke
-Guillotine Choke,Choke
-Darce Choke,Choke
-Anaconda Choke,Choke
-Peruvian Neck Tie,Choke
-Japanese Neck Tie,Choke
-Arm Triangle,Choke
-North South Choke,Choke
-Buggy Choke,Choke
-Triangle,Choke
-Loop Choke,Choke
-Clock Choke,Choke
-Ezekiel Choke,Choke
-Bow and Arrow Choke,Choke
-Lapel Choke,Choke
-Cross Choke,Choke
-Baseball Bat Choke,Choke
-Pena Choke,Choke
-Papercutter Choke,Choke
-Diesel Squeezle,Choke
-Front Naked,Choke
-Gogoplata,Choke
-Teepee Choke,Choke
-Scissor Choke,Choke
-Heel Hook,Joint
-Toe Hold,Joint
-Straight Ankle Lock,Joint
-Aoki Lock,Joint
-Knee Bar,Joint
-Footlock from bottom back mount,Joint
-Calf Slicer,Joint
-Twister,Joint
-Wrist lock,Joint
-Can Opener,Joint
-100% Neck Crank,Joint
-Chest Compression,Choke
-Estima Lock,Joint
-Banana Split,Joint
-Z-Lock,Joint
-Von Flue Choke,Choke
-Scorpion Rib Crush,Joint
-Scorpion Death Lock,Joint
-Boston Crab,Joint
-Short Choke,Choke
-Thrust Choke,Choke
-Canto Choke,Choke
-Brabo Choke,Choke
-Bicep Slicer,Joint
-Hammer Lock,Joint
-Electric Chair,Joint
-Ham Sandwich,Joint
-Cobra Choke,Choke
+﻿Name,Type,Gi
+Arm Bar,Joint,0
+Kimura,Joint,0
+Americana,Joint,0
+Straight Armlock,Joint,0
+Omoplata,Joint,0
+Leg Kimura,Joint,0
+Leg Americana,Joint,0
+Monoplata,Joint,0
+Baratoplata,Joint,0
+Tarikoplata,Joint,0
+Mir lock,Joint,0
+Rear Naked Choke,Choke,0
+Bulldog Choke,Choke,0
+Guillotine Choke,Choke,0
+Darce Choke,Choke,0
+Anaconda Choke,Choke,0
+Peruvian Neck Tie,Choke,0
+Japanese Neck Tie,Choke,0
+Arm Triangle,Choke,0
+North South Choke,Choke,0
+Buggy Choke,Choke,0
+Triangle,Choke,0
+Loop Choke,Choke,1
+Clock Choke,Choke,1
+Ezekiel Choke,Choke,0
+Bow and Arrow Choke,Choke,1
+Lapel Choke,Choke,1
+Cross Choke,Choke,0
+Baseball Bat Choke,Choke,0
+Pena Choke,Choke,1
+Paper Cutter Choke,Choke,0
+Diesel Squeezle,Choke,0
+Front Naked,Choke,0
+Gogoplata,Choke,0
+Teepee Choke,Choke,0
+Scissor Choke,Choke,0
+Heel Hook,Joint,0
+Toe Hold,Joint,0
+Straight Ankle Lock,Joint,0
+Aoki Lock,Joint,0
+Knee Bar,Joint,0
+Footlock from bottom back mount,Joint,0
+Calf Slicer,Joint,0
+Twister,Joint,0
+Wrist lock,Joint,0
+Can Opener,Joint,0
+100% Neck Crank,Joint,0
+Chest Compression,Choke,0
+Estima Lock,Joint,0
+Banana Split,Joint,0
+Z-Lock,Joint,0
+Von Flue Choke,Choke,0
+Scorpion Rib Crush,Joint,0
+Scorpion Death Lock,Joint,0
+Boston Crab,Joint,0
+Short Choke,Choke,0
+Thrust Choke,Choke,0
+Canto Choke,Choke,0
+Brabo Choke,Choke,1
+Bicep Slicer,Joint,0
+Hammer Lock,Joint,0
+Electric Chair,Joint,0
+Ham Sandwich,Joint,0
+Cobra Choke,Choke,0
