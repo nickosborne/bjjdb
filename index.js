@@ -20,6 +20,9 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
         console.log(err)
     });
 
+app.get('/', (req, res) => {
+    res.send('HOME')
+})
 
 app.get('/positions', async (req, res) => {
     const positions = await Position.find({})

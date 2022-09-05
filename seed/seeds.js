@@ -5,13 +5,12 @@ const fs = require("fs");
 const readline = require("readline");
 
 mongoose.connect('mongodb://localhost:27017/bjjdb')
-    .then(() => { console.log("connection open") })
-    .catch(error => console.log("error"))
+    .then(() => { console.log("connection open") }).catch(error => console.log("error"))
 
 
 
 const seedDB = async () => {
-    const stream = fs.createReadStream("./seed/positions.csv");
+    const stream = fs.createReadStream("./positions.csv");
     const reader = readline.createInterface({ input: stream });
 
     let data = [];
