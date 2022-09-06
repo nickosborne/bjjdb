@@ -1,14 +1,31 @@
-﻿Name,Top
-Mount,TRUE
-Side Control,TRUE
-Back,TRUE
-Truck,TRUE
-Knee On Belly,TRUE
-Turtle,TRUE
-Crucifix,TRUE
-50 50,TRUE
-Crab Ride,TRUE
-Kesa Getame,TRUE
-Saddle,TRUE
-North South,TRUE
-Dogfight,TRUE
+﻿Name,Guard,Gi
+Mount,0,0
+Side Control,0,0
+Back,0,0
+Truck,0,0
+Knee On Belly,0,0
+Turtle,0,0
+Crucifix,0,0
+50 50,0,0
+Crab Ride,0,0
+Kesa Getame,0,0
+Saddle,0,0
+North South,0,0
+Dogfight,0,0
+Closed Guard,1,0
+Half Guard,1,0
+De La Riva Guard,1,0
+Open Guard,1,0
+Spider Guard,1,0
+Collar Sleeve Guard,1,1
+X Guard,1,0
+Single Leg X Guard,1,0
+Shin to Shin Guard,1,0
+Rubber Guard,1,0
+Reverse De La Riva Guard,1,0
+Lasso Guard,1,1
+Knee Shield Guard,1,0
+Rat Guard,1,0
+Deep Half Guard,1,0
+K Guard,1,0
+Cross Guard,1,1

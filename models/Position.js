@@ -16,8 +16,17 @@ const positionSchema = new mongoose.Schema({
     bottomOptions: {
         type: [mongoose.objectId],
         required: true
+    },
+    gi: {
+        type: Boolean,
+        required: true
+    },
+    guard: {
+        type: Boolean,
+        required: true
     }
 });
 
 const Position = mongoose.model('Position', positionSchema);
 module.exports = Position;
+

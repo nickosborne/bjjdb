@@ -28,6 +28,8 @@ const seedPositions = async () => {
             let position = data[i]
             var p = new Position({
                 name: position[0],
+                guard: position[1],
+                gi: position[2]
             })
             p.save()
         }
