@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Position = require('./models/Position');
 const Submission = require('./models/Submission');
+const Sweep = require('./models/Sweep')
 
 const fs = require("fs");
 const readline = require("readline");
@@ -62,10 +63,34 @@ const seedSubs = async () => {
     });
 }
 
+const seedSweeps = async () => {
+    let stream = fs.createReadStream("./seed/sweeps.csv");
+    let reader = readline.createInterface({ input: stream });
+
+    let data = [];
+
+    reader.on("line", row => {
+        // 👇 split a row string into an array
+        // then push into the data array
+        data.push(row.split(","));
+    });
+
+    reader.on("close", () => {
+        for (let i = 1; i < data.length; i++) {
+
+            let sweep = data[i]
+            var s = new Sweep({
+                name: sweep[0]
+            })
+            s.save()
+        }
+    });
+}
+
 function seedDB() {
     seedPositions()
     seedSubs()
-
+    seedSweeps()
 }
 seedDB()
 
