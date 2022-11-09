@@ -9,17 +9,21 @@ const positionSchema = new mongoose.Schema({
         type: [String],
         required: false
     },
-    topOptions: {
+    Subs: {
         type: [mongoose.objectId],
-        required: true
+        required: false
     },
-    bottomOptions: {
+    Sweeps: {
         type: [mongoose.objectId],
-        required: true
+        required: false
     },
-    gi: {
-        type: Boolean,
-        required: true
+    Passes: {
+        type: [mongoose.objectId],
+        required: false
+    },
+    Transitions: {
+        type: [mongoose.objectId],
+        required: false
     },
     guard: {
         type: Boolean,
