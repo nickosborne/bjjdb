@@ -21,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
     });
 
 app.get('/', (req, res) => {
-    res.send('HOME')
+    res.render('home/home')
 })
 
 app.get('/positions', async (req, res) => {
