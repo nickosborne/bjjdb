@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Position</title>
+</head>
+
+<body>
+    <h1>Edit Positoin</h1>
+    <form action="/positions/<%= position._id %>?_method=PUT" method="POST">
+
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="position[name]" value="<%= position.name %> ">
+        </div>
+        <button>Update Position</button>
+    </form>
+    <a href="/positions/<%= position._id %> ">Back To Position</a>
+</body>
+
+</html>
