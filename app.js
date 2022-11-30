@@ -62,6 +62,12 @@ app.put('/positions/:id', async (req, res) => {
     res.redirect(`/positions/${position._id}`)
 })
 
+app.delete('/positions/:id', async (req, res) => {
+    const { id } = req.params;
+    await Position.findByIdAndDelete(id);
+    res.redirect('/positions');
+})
+
 app.listen(3000, () => {
     console.log("APP is listening on 3000")
 });

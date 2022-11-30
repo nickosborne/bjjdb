@@ -21,8 +21,14 @@
     </ul>
     <p>
         <a href="/positions/<%= position.id %>/edit">Edit</a>
-
     </p>
+
+    <p>
+    <form action="/positions/<%= position._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+    </p>
+
     <footer>
         <a href="/positions">All Positons</a>
     </footer>
