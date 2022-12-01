@@ -1,20 +1,22 @@
 <% layout('layouts/boilerplate') %>
 
     <h1>Edit Position</h1>
-    <form action="/positions/<%= position._id %>?_method=PUT" method="POST">
+    <form action="/positions/<%= position._id %>?_method=PUT" method="POST" novalidate class="validated-form">
 
         <div class="mb-3">
             <label class="form-label" for="name">Name</label>
-            <input class="form-control" type="text" id="name" name="position[name]" value="<%= position.name %> ">
+            <input class="form-control" type="text" id="name" name="position[name]" value="<%= position.name %> "
+                required>
         </div>
         <div class="mb-3">
             <label class="form-label" for="otherNames">Other Names</label>
             <input class="form-control" type="text" id="otherNames" name="position[otherNames]"
-                value="<%= position.otherNames %> ">
+                value="<%= position.otherNames %> " required>
         </div>
         <div class="mb-3">
             <label class="form-label" for="image">Image</label>
-            <input class="form-control" type="text" id="image" name="position[image]" value="<%= position.image %>">
+            <input class="form-control" type="text" id="image" name="position[image]" value="<%= position.image %>"
+                required>
         </div>
         <div class="mb-3">
             <button class="btn btn-success">Update Position</button>
