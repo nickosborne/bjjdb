@@ -1,14 +1,9 @@
 <% layout('layouts/boilerplate')%>
     <h1>All Positions</h1>
-    <div>
-        <a href="/positions/new">Add Position</a>
-    </div>
     <div class="row">
         <% for (let position of positions) {%>
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top"
-                    src="http://1.bp.blogspot.com/-O_GvcSeU7GU/VkDfR40tm1I/AAAAAAAAAHg/UiSA25Cjj0Q/s1600/girls-bluebelt.jpg"
-                    alt="Card image cap">
+            <div class="card text-light bg-dark m-1 " style="width: 18rem;">
+                <img class="card-img-top mt-2" src="<%=position.image %>" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">
                         <%=position.name %>
@@ -18,7 +13,7 @@
                             <%=position.otherNames %>
                         </small>
                     </p>
-                    <a class="btn btn-primary" href="/positions/<%= position._id %>" class="card-link">Explore</a>
+                    <a class="btn btn-secondary" href="/positions/<%= position._id %>" class="card-link">Explore</a>
                 </div>
             </div>
             <% } %>

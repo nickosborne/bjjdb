@@ -1,12 +1,23 @@
 <% layout('layouts/boilerplate') %>
 
-    <h1>Edit Positoin</h1>
+    <h1>Edit Position</h1>
     <form action="/positions/<%= position._id %>?_method=PUT" method="POST">
 
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="position[name]" value="<%= position.name %> ">
+        <div class="mb-3">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-control" type="text" id="name" name="position[name]" value="<%= position.name %> ">
         </div>
-        <button>Update Position</button>
+        <div class="mb-3">
+            <label class="form-label" for="otherNames">Other Names</label>
+            <input class="form-control" type="text" id="otherNames" name="position[otherNames]"
+                value="<%= position.otherNames %> ">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="image">Image</label>
+            <input class="form-control" type="text" id="image" name="position[image]" value="<%= position.image %>">
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-success">Update Position</button>
+        </div>
     </form>
     <a href="/positions/<%= position._id %> ">Back To Position</a>

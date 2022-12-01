@@ -1,20 +1,21 @@
 <% layout('layouts/boilerplate') %>
-    <h1>
-        <%= position.name %>
-    </h1>
-    <h2>
-        <%= position.otherNames %>
-    </h2>
-    <p>
-        <a href="/positions/<%= position.id %>/edit">Edit</a>
-    </p>
 
-    <p>
-    <form action="/positions/<%= position._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-    </p>
-
-    <footer>
-        <a href="/positions">All Positons</a>
-    </footer>
+    <div class="row">
+        <h1 class="text-center">
+            <%= position.name %>
+        </h1>
+        <small class="text-center mb-3">
+            <%= position.otherNames %>
+        </small>
+        <div class="col-6 offset-3">
+            <div class="card">
+                <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
+                <div class="card-body">
+                    <a class="card-link btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
+                    <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

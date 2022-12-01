@@ -9,6 +9,10 @@ const positionSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    image: {
+        type: String,
+        required: true
+    }
 });
 
 const Position = mongoose.model('Position', positionSchema);
