@@ -4,11 +4,13 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 
 
 //Models
 const Position = require('./models/Position');
 
+app.engine('ejs', ejsMate);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
@@ -26,7 +28,7 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
 
 
 app.get('/', (req, res) => {
-    res.render('home/home')
+    res.send('home')
 })
 
 app.get('/positions', async (req, res) => {
