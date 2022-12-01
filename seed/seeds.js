@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const Position = require('./models/Position');
-const Submission = require('./models/Submission');
-const Sweep = require('./models/Sweep');
-const Pass = require('./models/Pass');
+
+const Position = require('../models/Position');
+const Submission = require('../models/Submission');
+const Sweep = require('../models/Sweep');
+const Pass = require('../models/Pass');
 
 const fs = require("fs");
 const readline = require("readline");
 
-mongoose.connect('mongodb://localhost:27017/bjjdb')
-    .then(() => { console.log("connection open") }).catch(error => console.log("error"))
+
 
 
 
@@ -24,17 +24,19 @@ const seedPositions = async () => {
         data.push(row.split(","));
     });
 
+    Position.collection.drop();
     reader.on("close", () => {
         for (let i = 1; i < data.length; i++) {
 
             let position = data[i]
             var p = new Position({
                 name: position[0],
-                guard: position[1],
-                gi: position[2]
+                otherNames: position[1],
             })
             p.save()
+
         }
+        console.log('seeded positions')
     });
 }
 
@@ -109,15 +111,20 @@ const seedPasses = async () => {
             })
             s.save()
         }
+
     });
 }
 
 function seedDB() {
+    mongoose.connect('mongodb://localhost:27017/bjjdb')
+        .then(() => { console.log("connection open") }).catch(error => console.log("error").then(seedPositions()));
     seedPositions()
-    seedSubs()
-    seedSweeps()
-    seedPasses()
+
+    // seedSubs()
+    // seedSweeps()
+    // seedPasses()
 }
 seedDB()
+
 
 //Position.findByIdAndUpdate("6316568f57c5f2096312fac0", { $push: { topOptions: ["fifty fifty"] } })

@@ -6,7 +6,7 @@ const positionSchema = new mongoose.Schema({
         required: true
     },
     otherNames: {
-        type: [String],
+        type: String,
         required: false
     },
 });
