@@ -7,10 +7,12 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const { positionSchema } = require('./schemas.js')
 
 
 //Models
 const Position = require('./models/Position');
+const { resourceLimits } = require('worker_threads');
 
 app.engine('ejs', ejsMate);
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +30,16 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
     });
 
 
+const validatePosition = (req, res, next) => {
 
+    const { error } = positionSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
 app.get('/', (req, res) => {
     res.send('home')
 })
@@ -42,7 +53,7 @@ app.get('/positions/new', (req, res) => {
     res.render('positions/new');
 });
 
-app.post('/positions', catchAsync(async (req, res) => {
+app.post('/positions', validatePosition, catchAsync(async (req, res) => {
     const position = new Position(req.body.position);
     await position.save();
     res.redirect(`/positions/${position.id}`)
@@ -60,7 +71,7 @@ app.get('/positions/:id/edit', catchAsync(async (req, res) => {
     res.render('positions/edit', { position })
 }))
 
-app.put('/positions/:id', catchAsync(async (req, res) => {
+app.put('/positions/:id', validatePosition, catchAsync(async (req, res) => {
     const { id } = req.params;
     const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
     res.redirect(`/positions/${position._id}`)
