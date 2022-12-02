@@ -8,14 +8,13 @@ const Submission = require('../models/Submission');
 async function testSeed() {
     const position = new Position({ name: "test position", otherNames: "alt name", image: "url here" })
     const submission = new Submission({ name: "triangle", otherNames: "Sankaku" });
+
+    position.submissions.push(submission);
+    submission.positions.push(position);
     await position.save();
     await submission.save();
-    // position.submissions.push(submission);
-    // submission.positions.push(position);
-    // await position.save();
-    // await submission.save();
-    // console.log(position);
-    // console.log(submission);
+    console.log(position);
+    console.log(submission);
 }
 
 async function connect() {

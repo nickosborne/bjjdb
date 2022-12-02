@@ -11,6 +11,14 @@
             <div class="card">
                 <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
                 <div class="card-body">
+                    <h5>Submissions</h5>
+                    <ul class="list-group">
+                        <% for (let submission of position.submissions) {%>
+                            <li class="list-group-item">
+                                <%= submission.name %>
+                            </li>
+                            <% } %>
+                    </ul>
                     <a class="card-link btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
                     <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>

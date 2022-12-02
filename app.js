@@ -12,8 +12,7 @@ const { positionSchema } = require('./schemas.js')
 
 //Models
 const Position = require('./models/Position');
-const { resourceLimits } = require('worker_threads');
-
+const Submission = require('./models/Submission')
 app.engine('ejs', ejsMate);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -61,7 +60,7 @@ app.post('/positions', validatePosition, catchAsync(async (req, res) => {
 
 app.get('/positions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id)
+    const position = await Position.findById(id).populate('submissions', 'name')
     res.render('positions/show', { position })
 }))
 
