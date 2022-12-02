@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const positionSchema = new mongoose.Schema({
+const positionSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -12,6 +13,11 @@ const positionSchema = new mongoose.Schema({
     image: {
         type: String,
         required: true
+    },
+    submissions: {
+        type: [Schema.Types.ObjectId],
+        ref: 'Submission',
+        required: false
     }
 });
 

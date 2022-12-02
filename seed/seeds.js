@@ -27,16 +27,21 @@ const seedPositions = async () => {
                 image: "http://1.bp.blogspot.com/-O_GvcSeU7GU/VkDfR40tm1I/AAAAAAAAAHg/UiSA25Cjj0Q/s1600/girls-bluebelt.jpg"
             })
             p.save()
-
         }
-        console.log('seeded positions')
     });
 }
+async function connect() {
+    await mongoose.connect('mongodb://localhost:27017/bjjdb')
+        .then(() => { console.log("connection open") }).catch(error => console.log("connection error"));
+}
 
-function seedDB() {
-    mongoose.connect('mongodb://localhost:27017/bjjdb')
-        .then(() => { console.log("connection open") }).catch(error => console.log("error").then(seedPositions()));
-    seedPositions()
+async function disconnect() {
+    mongoose.disconnect().then(() => { console.log("connection closed") }).catch(error => console.log("error disconnecting"));
+}
+async function seedDB() {
+    await connect();
+    await Position.deleteMany().then(() => { console.log("dropped positions") });
+    seedPositions().then(() => { console.log("seeded positions") });
 }
 seedDB()
 

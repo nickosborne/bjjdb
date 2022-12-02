@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const submissionSchema = new mongoose.Schema({
+const submissionSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -10,21 +11,9 @@ const submissionSchema = new mongoose.Schema({
         required: true
     },
     positions: {
-        type: [mongoose.objectId],
-        required: true
-    },
-    gi: {
-        type: Boolean,
-        required: true
-    },
-    url: {
-        type: String,
+        type: [Schema.Types.ObjectId],
+        ref: 'Position',
         required: false
-    },
-    type: {
-        type: String,
-        required: true,
-        enum: ['Choke', 'Joint']
     }
 });
 
