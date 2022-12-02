@@ -31,4 +31,37 @@ async function seedDB() {
     await disconnect();
 }
 
-seedDB()
+//seedDB();
+
+//get a position and insert a submission into it
+async function addSubmission() {
+    await connect();
+    let position = await Position.findOne({ name: "Mount" });
+    console.log(position)
+    let submission = await Submission.findOne({ name: "Triangle" });
+    position.submissions.push(submission);
+    let update = await position.save();
+    console.log(update);
+    //await Position.findByIdAndUpdate({ id: position.id, submissions: push(submission.id) });
+    await disconnect();
+}
+addSubmission();
+
+//test findONe results
+async function testFindOne() {
+    await connect();
+    let submission = await Submission.findOne();
+    console.log(submission)
+    submission = await Submission.findOne();
+    console.log(submission)
+    submission = await Submission.findOne();
+    console.log(submission)
+    submission = await Submission.findOne();
+    console.log(submission)
+    submission = await Submission.findOne();
+    console.log(submission)
+    submission = await Submission.findOne();
+    console.log(submission)
+    await disconnect();
+}
+//testFindOne();

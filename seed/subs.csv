@@ -1,65 +1,65 @@
-﻿Name,Type,Gi
-Arm Bar,Joint,0
-Kimura,Joint,0
-Americana,Joint,0
-Straight Armlock,Joint,0
-Omoplata,Joint,0
-Leg Kimura,Joint,0
-Leg Americana,Joint,0
-Monoplata,Joint,0
-Baratoplata,Joint,0
-Tarikoplata,Joint,0
-Mir lock,Joint,0
-Rear Naked Choke,Choke,0
-Bulldog Choke,Choke,0
-Guillotine Choke,Choke,0
-Darce Choke,Choke,0
-Anaconda Choke,Choke,0
-Peruvian Neck Tie,Choke,0
-Japanese Neck Tie,Choke,0
-Arm Triangle,Choke,0
-North South Choke,Choke,0
-Buggy Choke,Choke,0
-Triangle,Choke,0
-Loop Choke,Choke,1
-Clock Choke,Choke,1
-Ezekiel Choke,Choke,0
-Bow and Arrow Choke,Choke,1
-Lapel Choke,Choke,1
-Cross Choke,Choke,0
-Baseball Bat Choke,Choke,0
-Pena Choke,Choke,1
-Paper Cutter Choke,Choke,0
-Diesel Squeezle,Choke,0
-Front Naked,Choke,0
-Gogoplata,Choke,0
-Teepee Choke,Choke,0
-Scissor Choke,Choke,0
-Heel Hook,Joint,0
-Toe Hold,Joint,0
-Straight Ankle Lock,Joint,0
-Aoki Lock,Joint,0
-Knee Bar,Joint,0
-Footlock from bottom back mount,Joint,0
-Calf Slicer,Joint,0
-Twister,Joint,0
-Wrist lock,Joint,0
-Can Opener,Joint,0
-100% Neck Crank,Joint,0
-Chest Compression,Choke,0
-Estima Lock,Joint,0
-Banana Split,Joint,0
-Z-Lock,Joint,0
-Von Flue Choke,Choke,0
-Scorpion Rib Crush,Joint,0
-Scorpion Death Lock,Joint,0
-Boston Crab,Joint,0
-Short Choke,Choke,0
-Thrust Choke,Choke,0
-Canto Choke,Choke,0
-Brabo Choke,Choke,1
-Bicep Slicer,Joint,0
-Hammer Lock,Joint,0
-Electric Chair,Joint,0
-Ham Sandwich,Joint,0
-Cobra Choke,Choke,0
+﻿Name,otherNames
+Arm Bar,other names
+Kimura,other names
+Americana,other names
+Straight Armlock,other names
+Omoplata,other names
+Leg Kimura,other names
+Leg Americana,other names
+Monoplata,other names
+Baratoplata,other names
+Tarikoplata,other names
+Mir lock,other names
+Rear Naked Choke,other names
+Bulldog Choke,other names
+Guillotine Choke,other names
+Darce Choke,other names
+Anaconda Choke,other names
+Peruvian Neck Tie,other names
+Japanese Neck Tie,other names
+Arm Triangle,other names
+North South Choke,other names
+Buggy Choke,other names
+Triangle,other names
+Loop Choke,other names
+Clock Choke,other names
+Ezekiel Choke,other names
+Bow and Arrow Choke,other names
+Lapel Choke,other names
+Cross Choke,other names
+Baseball Bat Choke,other names
+Pena Choke,other names
+Paper Cutter Choke,other names
+Diesel Squeezle,other names
+Front Naked,other names
+Gogoplata,other names
+Teepee Choke,other names
+Scissor Choke,other names
+Heel Hook,other names
+Toe Hold,other names
+Straight Ankle Lock,other names
+Aoki Lock,other names
+Knee Bar,other names
+Footlock from bottom back mount,other names
+Calf Slicer,other names
+Twister,other names
+Wrist lock,other names
+Can Opener,other names
+100% Neck Crank,other names
+Chest Compression,other names
+Estima Lock,other names
+Banana Split,other names
+Z-Lock,other names
+Von Flue Choke,other names
+Scorpion Rib Crush,other names
+Scorpion Death Lock,other names
+Boston Crab,other names
+Short Choke,other names
+Thrust Choke,other names
+Canto Choke,other names
+Brabo Choke,other names
+Bicep Slicer,other names
+Hammer Lock,other names
+Electric Chair,other names
+Ham Sandwich,other names
+Cobra Choke,other names
