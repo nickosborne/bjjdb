@@ -43,6 +43,7 @@ app.get('/', (req, res) => {
     res.send('home')
 })
 
+// Position routes
 app.get('/positions', catchAsync(async (req, res, next) => {
     const positions = await Position.find({})
     res.render('positions/index', { positions })
@@ -60,7 +61,7 @@ app.post('/positions', validatePosition, catchAsync(async (req, res) => {
 
 app.get('/positions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id).populate('submissions', 'name')
+    const position = await Position.findById(id).populate('submissions', 'name');
     res.render('positions/show', { position })
 }))
 
@@ -81,6 +82,19 @@ app.delete('/positions/:id', catchAsync(async (req, res) => {
     await Position.findByIdAndDelete(id);
     res.redirect('/positions');
 }))
+
+// Submission routes
+app.get('/submissions', catchAsync(async (req, res, next) => {
+    const submissions = await Submission.find({})
+    res.render('submissions/index', { submissions })
+}))
+
+app.get('/submissions/:id', catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const submission = await Submission.findById(id);
+    res.render('submissions/show', { submission })
+}))
+
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404))

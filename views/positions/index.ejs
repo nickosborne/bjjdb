@@ -1,6 +1,9 @@
 <% layout('layouts/boilerplate')%>
     <h1>All Positions</h1>
     <div class="row">
+        <a class="btn btn-success" href="/positions/new">Add New Position</a>
+    </div>
+    <div class="row">
         <% for (let position of positions) {%>
             <div class="card text-light bg-dark m-1 " style="width: 18rem;">
                 <img class="card-img-top mt-2" src="<%=position.image %>" alt="Card image cap">

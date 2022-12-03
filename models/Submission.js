@@ -10,9 +10,14 @@ const submissionSchema = new Schema({
         type: [String],
         required: true
     },
-    positions: {
+    submissionType: {
+        type: String,
+        enum: ['Choke', 'Break', 'Pain'],
+        required: true
+    },
+    variations: {
         type: [Schema.Types.ObjectId],
-        ref: 'Position',
+        ref: 'SubVariation',
         required: false
     }
 });

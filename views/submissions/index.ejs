@@ -1,0 +1,19 @@
+<% layout('layouts/boilerplate')%>
+    <h1>All Submissions</h1>
+    <div class="row">
+        <% for (let submission of submissions) {%>
+            <div class="card text-light bg-dark m-1 " style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%=submission.name %>
+                    </h5>
+                    <p>
+                        <small>
+                            <%=submission.otherNames %>
+                        </small>
+                    </p>
+                    <a class="btn btn-secondary" href="/submissions/<%= submission._id %>" class="card-link">Explore</a>
+                </div>
+            </div>
+            <% } %>
+    </div>

@@ -18,7 +18,7 @@ const positionSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: 'Submission',
         required: false
-    }
+    },
 });
 
 const Position = mongoose.model('Position', positionSchema);
