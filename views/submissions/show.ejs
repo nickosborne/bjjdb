@@ -11,13 +11,23 @@
             <div class="card">
                 <div class="card-body">
                     <h5>Variations</h5>
-                    <ul class="list-group">
+                    <div class="list-group">
                         <% for (let variation of submission.variations) {%>
-                            <li class="list-group-item">
-                                <%= variation.name %>
-                            </li>
+                            <a href="#"
+                                class="list-group-item list-group-item-action flex-column align-items-start active">
+                                <div class="d-flex w-100 ">
+                                    <h5 class="mb-1">
+                                        <%= variation.name %>
+                                    </h5>
+
+                                </div>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="<%= variation.video %> "
+                                        allowfullscreen></iframe>
+                                </div>
+                            </a>
                             <% } %>
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>

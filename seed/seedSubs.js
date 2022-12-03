@@ -31,7 +31,7 @@ const seedSubmissions = async () => {
             let variation = new SubVariation({
                 submissionId: s.id,
                 submissionName: s.name,
-                video: 'https://www.youtube.com/watch?v=nuaT_7PkqMg'
+                video: 'https://www.youtube.com/embed/nuaT_7PkqMg'
             })
 
             variation.save();
