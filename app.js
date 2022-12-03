@@ -1,4 +1,4 @@
-// getting-started.js
+// required
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
@@ -12,13 +12,18 @@ const { positionSchema } = require('./schemas.js')
 
 //Models
 const Position = require('./models/Position');
-const Submission = require('./models/Submission')
+const Submission = require('./models/Submission');
+const SubVariation = require('./models/SubVariation');
+
+// App setup
 app.engine('ejs', ejsMate);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+
+// connect to DB
 mongoose.connect('mongodb://localhost:27017/bjjdb')
     .then(() => {
         console.log("Connection open")
@@ -29,6 +34,7 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
     });
 
 
+// Validation
 const validatePosition = (req, res, next) => {
 
     const { error } = positionSchema.validate(req.body);
@@ -39,6 +45,8 @@ const validatePosition = (req, res, next) => {
         next();
     }
 }
+
+// Routes
 app.get('/', (req, res) => {
     res.send('home')
 })
@@ -61,7 +69,7 @@ app.post('/positions', validatePosition, catchAsync(async (req, res) => {
 
 app.get('/positions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id).populate('submissions', 'name');
+    const position = await Position.findById(id).populate('submissions');
     res.render('positions/show', { position })
 }))
 
@@ -91,7 +99,7 @@ app.get('/submissions', catchAsync(async (req, res, next) => {
 
 app.get('/submissions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const submission = await Submission.findById(id);
+    const submission = await Submission.findById(id).populate('variations')
     res.render('submissions/show', { submission })
 }))
 

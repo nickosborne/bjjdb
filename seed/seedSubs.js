@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Submission = require('../models/Submission');
+const SubVariation = require('../models/SubVariation')
 const fs = require("fs");
 const readline = require("readline");
 
@@ -17,14 +18,24 @@ const seedSubmissions = async () => {
     });
 
     Submission.collection.drop();
+    SubVariation.collection.drop();
     reader.on("close", () => {
         for (let i = 1; i < data.length; i++) {
 
-            let submission = data[i]
+            let sub = data[i]
             var s = new Submission({
-                name: submission[0],
-                otherNames: submission[1],
+                name: sub[0],
+                otherNames: sub[1],
             })
+
+            let variation = new SubVariation({
+                submissionId: s.id,
+                submissionName: s.name,
+                video: 'https://www.youtube.com/watch?v=nuaT_7PkqMg'
+            })
+
+            variation.save();
+            s.variations.push(variation);
             s.save()
         }
     });

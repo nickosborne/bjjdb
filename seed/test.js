@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const Position = require('../models/Position');
 const Submission = require('../models/Submission');
+const SubVariation = require('../models/SubVariation');
 
 
 async function testSeed() {
@@ -38,8 +39,8 @@ async function addSubmission() {
     await connect();
     let position = await Position.findOne({ name: "Mount" });
     console.log(position)
-    let submission = await Submission.findOne({ name: "Triangle" });
-    position.submissions.push(submission);
+    let sub = await SubVariation.findOne({ name: "Classic" });
+    position.submissions.push(sub);
     let update = await position.save();
     console.log(update);
     //await Position.findByIdAndUpdate({ id: position.id, submissions: push(submission.id) });

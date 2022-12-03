@@ -7,7 +7,7 @@ const positionSchema = new Schema({
         required: true
     },
     otherNames: {
-        type: String,
+        type: [String],
         required: false
     },
     image: {
@@ -16,7 +16,7 @@ const positionSchema = new Schema({
     },
     submissions: {
         type: [Schema.Types.ObjectId],
-        ref: 'Submission',
+        ref: 'SubVariation',
         required: false
     },
 });

@@ -15,8 +15,9 @@
                     <ul class="list-group">
                         <% for (let submission of position.submissions) {%>
                             <li class="list-group-item">
-                                <a href="/submissions/<%= submission.id %> " class="card-link">
-                                    <%= submission.name %>
+                                <a class="card-link" href="/submissions/<%= submission.submissionId %> "
+                                    class="card-link">
+                                    <%= submission.submissionName %>: <%= submission.name %>
                                 </a>
                             </li>
                             <% } %>

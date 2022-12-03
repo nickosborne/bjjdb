@@ -13,6 +13,7 @@ const submissionSchema = new Schema({
     submissionType: {
         type: String,
         enum: ['Choke', 'Break', 'Pain'],
+        default: 'Choke',
         required: true
     },
     variations: {

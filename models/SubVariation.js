@@ -12,10 +12,14 @@ const subVariationSchema = new Schema({
         ref: 'Position',
         required: false
     },
-    submission: {
+    submissionId: {
         type: Schema.Types.ObjectId,
         ref: 'Submission',
         required: true
+    },
+    submissionName: {
+        type: String,
+        required: true,
     },
     video: {
         type: String,
@@ -23,5 +27,5 @@ const subVariationSchema = new Schema({
     }
 });
 
-const Submission = mongoose.model('Submission', submissionSchema);
-module.exports = Submission;
+const SubVariation = mongoose.model('SubVariation', subVariationSchema);
+module.exports = SubVariation;
