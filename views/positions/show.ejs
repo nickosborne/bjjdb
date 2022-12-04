@@ -5,13 +5,22 @@
             <%= position.name %>
         </h1>
         <small class="text-center mb-3">
-            <%= position.otherNames %>
+            (<%= position.otherNames %>)
         </small>
         <div class="col-6 offset-3">
             <div class="card">
                 <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
                 <div class="card-body">
-                    <h5>Submissions</h5>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Submissions</h5>
+                        <button class="btn btn-success" id="hideForm">+</button>
+                    </div>
+                    <form action="/submissions" id="submission-search" method="GET" style="display: none"
+                        class="form-inline mb-3">
+                        <div class="form-group">
+                            <input type="text" name="search" placeholder="Submission search..." class="form-control">
+                        </div>
+                    </form>
                     <ul class="list-group">
                         <% for (let submission of position.submissions) {%>
                             <li class="list-group-item">
@@ -30,3 +39,18 @@
             </div>
         </div>
     </div>
+    <script>
+        const btn = document.getElementById('hideForm');
+
+        btn.addEventListener('click', () => {
+            const form = document.getElementById('submission-search');
+
+            if (form.style.display === 'none') {
+                // 👇️ this SHOWS the form
+                form.style.display = 'block';
+            } else {
+                // 👇️ this HIDES the form
+                form.style.display = 'none';
+            }
+        });
+    </script>

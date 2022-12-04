@@ -46,6 +46,11 @@ const validatePosition = (req, res, next) => {
     }
 }
 
+// Define escapeRegex function for search feature
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
 // Routes
 app.get('/', (req, res) => {
     res.send('home')
@@ -55,7 +60,7 @@ app.get('/', (req, res) => {
 app.get('/positions', catchAsync(async (req, res, next) => {
     const positions = await Position.find({})
     res.render('positions/index', { positions })
-}))
+}));
 
 app.get('/positions/new', (req, res) => {
     res.render('positions/new');
@@ -93,8 +98,23 @@ app.delete('/positions/:id', catchAsync(async (req, res) => {
 
 // Submission routes
 app.get('/submissions', catchAsync(async (req, res, next) => {
-    const submissions = await Submission.find({})
-    res.render('submissions/index', { submissions })
+
+    if (req.query.search && req.xhr) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        // Get all position from DB
+        Submission.find({ name: regex }, function (err, submission) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.status(200).json(submission);
+            }
+        });
+    }
+    else {
+        const submissions = await Submission.find({})
+        res.render('submissions/index', { submissions })
+    }
+
 }))
 
 app.get('/submissions/:id', catchAsync(async (req, res) => {
