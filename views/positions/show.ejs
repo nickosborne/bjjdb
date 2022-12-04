@@ -18,7 +18,8 @@
                     <form action="/submissions" id="submission-search" method="GET" style="display: none"
                         class="form-inline mb-3">
                         <div class="form-group">
-                            <input type="text" name="search" placeholder="Submission search..." class="form-control">
+                            <input id="query" type="text" name="search" placeholder="Submission search..."
+                                class="form-control">
                         </div>
                     </form>
                     <ul class="list-group">
@@ -39,18 +40,3 @@
             </div>
         </div>
     </div>
-    <script>
-        const btn = document.getElementById('hideForm');
-
-        btn.addEventListener('click', () => {
-            const form = document.getElementById('submission-search');
-
-            if (form.style.display === 'none') {
-                // 👇️ this SHOWS the form
-                form.style.display = 'block';
-            } else {
-                // 👇️ this HIDES the form
-                form.style.display = 'none';
-            }
-        });
-    </script>

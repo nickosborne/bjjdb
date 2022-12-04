@@ -98,7 +98,6 @@ app.delete('/positions/:id', catchAsync(async (req, res) => {
 
 // Submission routes
 app.get('/submissions', catchAsync(async (req, res, next) => {
-
     if (req.query.search && req.xhr) {
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
         // Get all position from DB
