@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-const Submission = require('../models/Submission');
-const SubVariation = require('../models/SubVariation')
+const Sub = require('../models/Sub');
+const SubVar = require('../models/SubVar')
+//const SubImpl = require('../models/SubImpl');
 const fs = require("fs");
 const readline = require("readline");
 
@@ -17,26 +18,29 @@ const seedSubmissions = async () => {
         data.push(row.split(","));
     });
 
-    Submission.collection.drop();
-    SubVariation.collection.drop();
+    Sub.collection.drop();
+    SubVar.collection.drop().then(() => { console.log('dropped subs') });
+    //await SubImpl.collection.drop().then(() => { console.log('dropped subs') });
+
+
     reader.on("close", () => {
         for (let i = 1; i < data.length; i++) {
 
-            let sub = data[i]
-            var s = new Submission({
-                name: sub[0],
-                otherNames: sub[1],
+            let subData = data[i]
+            var newSub = new Sub({
+                name: subData[0],
+                otherNames: subData[1],
             })
 
-            let variation = new SubVariation({
-                submissionId: s.id,
-                submissionName: s.name,
-                video: 'https://www.youtube.com/embed/nuaT_7PkqMg'
+            let newSubVar = new SubVar({
+                //name seeded as "classic" by default
+                subId: newSub.id,
+                subName: newSub.name,
             })
 
-            variation.save();
-            s.variations.push(variation);
-            s.save()
+            newSubVar.save();
+            newSub.subVars.push(newSubVar);
+            newSub.save()
         }
     });
 }
@@ -50,7 +54,7 @@ async function disconnect() {
 }
 async function seedDB() {
     await connect();
-    await Submission.deleteMany().then(() => { console.log("dropped submissions") });
+
     seedSubmissions().then(() => { console.log("seeded subs") });
 }
 seedDB()

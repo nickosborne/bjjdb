@@ -23,12 +23,9 @@
                         </div>
                     </form>
                     <ul class="list-group">
-                        <% for (let submission of position.submissions) {%>
+                        <% for (let subImpl of position.subImpls) {%>
                             <li class="list-group-item">
-                                <a class="card-link" href="/submissions/<%= submission.submissionId %> "
-                                    class="card-link">
-                                    <%= submission.submissionName %>: <%= submission.name %>
-                                </a>
+                                <%= subImpl.name %>
                             </li>
                             <% } %>
                     </ul>

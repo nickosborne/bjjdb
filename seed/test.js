@@ -2,8 +2,9 @@ const { close } = require('fs');
 const mongoose = require('mongoose');
 
 const Position = require('../models/Position');
-const Submission = require('../models/Submission');
-const SubVariation = require('../models/SubVariation');
+const Sub = require('../models/Sub');
+const SubVar = require('../models/SubVar');
+const SubImpl = require('../models/SubImpl');
 
 
 async function testSeed() {
@@ -38,12 +39,24 @@ async function seedDB() {
 async function addSubmission() {
     await connect();
     let position = await Position.findOne({ name: "Mount" });
-    console.log(position)
-    let sub = await SubVariation.findOne({ name: "Classic" });
-    position.submissions.push(sub);
-    let update = await position.save();
-    console.log(update);
-    //await Position.findByIdAndUpdate({ id: position.id, submissions: push(submission.id) });
+    let subVar = await SubVar.findOne({ subName: "Triangle" });
+    let subImpl = new SubImpl({
+        name: `${subVar.name} ${subVar.subName}`,
+        position: position.id,
+        subVar: subVar.id,
+        video: "https://www.youtube.com/embed/A4HkWMOcYaQ"
+    });
+
+    position.subImpls.push(subImpl);
+    subVar.subImpls.push(subImpl);
+
+    let res = await subImpl.save();
+    console.log(res, '/n');
+    res = await position.save();
+    console.log(res);
+    res = await subVar.save();
+    console.log(res);
+
     await disconnect();
 }
 addSubmission();

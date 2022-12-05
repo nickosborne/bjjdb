@@ -12,8 +12,9 @@ const { positionSchema } = require('./schemas.js')
 
 //Models
 const Position = require('./models/Position');
-const Submission = require('./models/Submission');
-const SubVariation = require('./models/SubVariation');
+const Sub = require('./models/Sub');
+const SubVar = require('./models/SubVar');
+const SubImpl = require('./models/SubImpl');
 
 // App setup
 app.engine('ejs', ejsMate);
@@ -74,7 +75,7 @@ app.post('/positions', validatePosition, catchAsync(async (req, res) => {
 
 app.get('/positions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id).populate('submissions');
+    const position = await Position.findById(id).populate('subImpls');
     res.render('positions/show', { position })
 }))
 
@@ -98,28 +99,21 @@ app.delete('/positions/:id', catchAsync(async (req, res) => {
 
 // Submission routes
 app.get('/submissions', catchAsync(async (req, res, next) => {
-    if (req.query.search && req.xhr) {
-        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-        // Get all position from DB
-        Submission.find({ name: regex }, function (err, submission) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.status(200).json(submission);
-            }
-        });
-    }
-    else {
-        const submissions = await Submission.find({})
-        res.render('submissions/index', { submissions })
-    }
 
+    const submissions = await Sub.find({})
+    res.render('submissions/index', { submissions })
 }))
 
 app.get('/submissions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const submission = await Submission.findById(id).populate('variations')
-    res.render('submissions/show', { submission })
+    const sub = await Sub.findById(id).populate({
+        path: 'subVars',
+        populate: {
+            path: 'subImpls',
+        }
+    });
+    console.log(sub.subVars[0].subImpls)
+    res.render('submissions/show', { sub })
 }))
 
 

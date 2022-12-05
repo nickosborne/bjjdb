@@ -2,32 +2,29 @@
 
     <div class="row">
         <h1 class="text-center">
-            <%= submission.name %>
+            <%= sub.name %>
         </h1>
         <small class="text-center mb-3">
-            <%= submission.otherNames %>
+            <%= sub.otherNames %>
         </small>
         <div class="col-6 offset-3">
             <div class="card">
                 <div class="card-body">
                     <h5>Variations</h5>
-                    <div class="list-group">
-                        <% for (let variation of submission.variations) {%>
-                            <a href="#"
-                                class="list-group-item list-group-item-action flex-column align-items-start active">
-                                <div class="d-flex w-100 ">
-                                    <h5 class="mb-1">
-                                        <%= variation.name %>
-                                    </h5>
-
-                                </div>
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe class="embed-responsive-item" src="<%= variation.video %> "
-                                        allowfullscreen></iframe>
-                                </div>
-                            </a>
+                    <ul class="list-group">
+                        <% for (let subvar of sub.subVars) {%>
+                            <li class="list-group-item">
+                                <%= subvar.name %>
+                            </li>
+                            <ul class="list-group">
+                                <% for (let subimpl of subvar.subImpls) {%>
+                                    <li class="list-group-item">
+                                        <%= subimpl.position.name %>
+                                    </li>
+                                    <% } %>
+                            </ul>
                             <% } %>
-                    </div>
+                    </ul>
                 </div>
             </div>
         </div>

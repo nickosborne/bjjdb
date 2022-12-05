@@ -1,25 +1,20 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const subVariationSchema = new Schema({
+const subImplSchema = new Schema({
     name: {
         type: String,
         required: true,
-        default: 'Classic'
     },
-    positions: {
+    position: {
         type: Schema.Types.ObjectId,
         ref: 'Position',
-        required: false
-    },
-    submissionId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Submission',
         required: true
     },
-    submissionName: {
-        type: String,
-        required: true,
+    subVar: {
+        type: Schema.Types.ObjectId,
+        ref: 'SubVar',
+        required: true
     },
     video: {
         type: String,
@@ -27,5 +22,5 @@ const subVariationSchema = new Schema({
     }
 });
 
-const SubVariation = mongoose.model('SubVariation', subVariationSchema);
-module.exports = SubVariation;
+const SubImpl = mongoose.model('SubImpl', subImplSchema);
+module.exports = SubImpl;
