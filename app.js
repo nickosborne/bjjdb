@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const { positionSchema } = require('./schemas.js')
+const { positionSchema, subSchema } = require('./schemas.js')
 
 
 //Models
@@ -47,6 +47,17 @@ const validatePosition = (req, res, next) => {
     }
 }
 
+const validateSubmission = (req, res, next) => {
+
+    const { error } = subSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 // Define escapeRegex function for search feature
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -58,7 +69,7 @@ app.get('/', (req, res) => {
 })
 
 // Position routes
-app.get('/positions', catchAsync(async (req, res, next) => {
+app.get('/positions', catchAsync(async (req, res) => {
     const positions = await Position.find({})
     res.render('positions/index', { positions })
 }));
@@ -98,11 +109,15 @@ app.delete('/positions/:id', catchAsync(async (req, res) => {
 }))
 
 // Submission routes
-app.get('/submissions', catchAsync(async (req, res, next) => {
+app.get('/submissions', catchAsync(async (req, res) => {
 
     const submissions = await Sub.find({})
     res.render('submissions/index', { submissions })
 }))
+
+app.get('/submissions/new', (req, res) => {
+    res.render('submissions/new');
+});
 
 app.get('/submissions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -115,13 +130,22 @@ app.get('/submissions/:id', catchAsync(async (req, res) => {
             }
         }
     });
-
-    let test = await Position.findById('638d17e2eb100ae28d9792d2')
-    console.log(test)
-    console.log(sub.subVars[0].subImpls)
     res.render('submissions/show', { sub })
 }))
 
+app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
+    const sub = new Sub(req.body.submission);
+    console.log(sub);
+    const subVar = new SubVar({
+        name: 'Classic',
+        subId: sub.id,
+        subName: sub.name,
+    })
+    await subVar.save();
+    sub.subVars.push(subVar);
+    await sub.save();
+    res.redirect(`/submissions/${sub.id}`)
+}))
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404))

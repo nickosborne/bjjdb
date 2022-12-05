@@ -1,6 +1,9 @@
 <% layout('layouts/boilerplate')%>
     <h1>All Submissions</h1>
     <div class="row">
+        <a class="btn btn-success" href="/submissions/new">Add New Submission</a>
+    </div>
+    <div class="row">
         <% for (let submission of submissions) {%>
             <div class="card text-light bg-dark m-1 " style="width: 18rem;">
                 <div class="card-body">

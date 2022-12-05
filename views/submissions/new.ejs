@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate') %>
+    <div class="row">
+        <h1 class="text-center">New Submission</h1>
+        <div class="col-6 offset-3">
+            <form action="/submissions" method="POST" novalidate class="validated-form">
+                <div class="mb-3">
+                    <label class="form-label" for="name">Name</label>
+                    <input class="form-control" type="text" id="name" name="submission[name]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="otherNames">Other Names</label>
+                    <input class="form-control" type="text" id="otherNames" name="submission[otherNames]">
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="subType">Type</label>
+                    <select class="form-control" id="subType" name="submission[subType]">
+                        <option>Choke</option>
+                        <option>Break</option>
+                        <option>Pain</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Submission</button>
+                </div>
+            </form>
+        </div>
+    </div>
