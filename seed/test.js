@@ -38,8 +38,8 @@ async function seedDB() {
 //get a position and insert a submission into it
 async function addSubmission() {
     await connect();
-    let position = await Position.findOne({ name: "Mount" });
-    let subVar = await SubVar.findOne({ subName: "Triangle" });
+    let position = await Position.findOne({ name: "Side Control" });
+    let subVar = await SubVar.findOne({ subName: "Americana" });
     let subImpl = new SubImpl({
         name: `${subVar.name} ${subVar.subName}`,
         position: position.id,

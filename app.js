@@ -110,8 +110,14 @@ app.get('/submissions/:id', catchAsync(async (req, res) => {
         path: 'subVars',
         populate: {
             path: 'subImpls',
+            populate: {
+                path: 'position'
+            }
         }
     });
+
+    let test = await Position.findById('638d17e2eb100ae28d9792d2')
+    console.log(test)
     console.log(sub.subVars[0].subImpls)
     res.render('submissions/show', { sub })
 }))

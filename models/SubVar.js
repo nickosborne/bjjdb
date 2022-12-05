@@ -18,6 +18,7 @@ const subVarSchema = new Schema({
     },
     subImpls: {
         type: [Schema.Types.ObjectId],
+        ref: 'SubImpl',
         required: false
     }
 });
