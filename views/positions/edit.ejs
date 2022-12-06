@@ -3,23 +3,60 @@
     <h1>Edit Position</h1>
     <form action="/positions/<%= position._id %>?_method=PUT" method="POST" novalidate class="validated-form">
 
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label class="form-label" for="name">Name</label>
             <input class="form-control" type="text" id="name" name="position[name]" value="<%= position.name %> "
                 required>
         </div>
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label class="form-label" for="otherNames">Other Names</label>
             <input class="form-control" type="text" id="otherNames" name="position[otherNames]"
                 value="<%= position.otherNames %> " required>
         </div>
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label class="form-label" for="image">Image</label>
             <input class="form-control" type="text" id="image" name="position[image]" value="<%= position.image %>"
                 required>
         </div>
-        <div class="mb-3">
+        <div class="form-group mb-3">
+            <label class="form-label" for="subs">Submissions</label>
+            <select class="form-control" id="subs" name="position[subImpls]">
+                <% for (let sub of submissions) {%>
+                    <option>
+                        <%= sub.name %>
+                    </option>
+                    <% } %>
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="variation">Variation</label>
+            <select class="form-control" id="variation" name="">
+                <option>
+
+                </option>
+            </select>
+        </div>
+
+        <div class=" mb-3">
             <button class="btn btn-success">Update Position</button>
         </div>
     </form>
     <a href="/positions/<%= position._id %> ">Back To Position</a>
+
+    <!-- <script>
+        document.querySelector('#subs').addEventListener("change", function () {
+            let variation = document.querySelector('#variation');
+            let option = document.createElement("option");
+            console.log(<%= submissions.name %>)
+            for (let sub of document.body.submissions) {
+                if (sub.name === this.value) {
+                    console.log(sub);
+                    for (let v of sub.subVars) {
+                        let option = document.createElement("option");
+                        option.value = v.name;
+                        variation.appendChild(option);
+                    }
+                }
+            }
+        });
+    </script> -->

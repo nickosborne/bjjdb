@@ -35,7 +35,7 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
     });
 
 
-// Validation
+/////////////////////////////////////////////////////////// Validation
 const validatePosition = (req, res, next) => {
 
     const { error } = positionSchema.validate(req.body);
@@ -93,7 +93,10 @@ app.get('/positions/:id', catchAsync(async (req, res) => {
 app.get('/positions/:id/edit', catchAsync(async (req, res) => {
     const { id } = req.params;
     const position = await Position.findById(id)
-    res.render('positions/edit', { position })
+    const submissions = await Sub.find({}).populate({
+        path: 'subVars'
+    })
+    res.render('positions/edit', { position, submissions })
 }))
 
 app.put('/positions/:id', validatePosition, catchAsync(async (req, res) => {
