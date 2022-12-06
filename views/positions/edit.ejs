@@ -30,11 +30,7 @@
         </div>
         <div class="form-group mb-3">
             <label class="form-label" for="variation">Variation</label>
-            <select class="form-control" id="variation" name="">
-                <option>
-
-                </option>
-            </select>
+            <select class="form-control" id="variation" name=""></select>
         </div>
 
         <div class=" mb-3">
@@ -43,20 +39,7 @@
     </form>
     <a href="/positions/<%= position._id %> ">Back To Position</a>
 
-    <!-- <script>
-        document.querySelector('#subs').addEventListener("change", function () {
-            let variation = document.querySelector('#variation');
-            let option = document.createElement("option");
-            console.log(<%= submissions.name %>)
-            for (let sub of document.body.submissions) {
-                if (sub.name === this.value) {
-                    console.log(sub);
-                    for (let v of sub.subVars) {
-                        let option = document.createElement("option");
-                        option.value = v.name;
-                        variation.appendChild(option);
-                    }
-                }
-            }
-        });
-    </script> -->
+    <script>
+        const subs = <%- JSON.stringify(submissions) %>
+    </script>
+    <script src="/forms.js"></script>
