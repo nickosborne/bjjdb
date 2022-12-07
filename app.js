@@ -59,11 +59,6 @@ const validateSubmission = (req, res, next) => {
     }
 }
 
-// Define escapeRegex function for search feature
-function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-};
-
 // Routes
 app.get('/', (req, res) => {
     res.send('home')
@@ -96,7 +91,7 @@ app.get('/positions/:id/edit', catchAsync(async (req, res) => {
     const position = await Position.findById(id)
     const submissions = await Sub.find({}).populate({
         path: 'subVars'
-    })
+    }).sort({ name: 1 });
     res.render('positions/edit', { position, submissions })
 }))
 
@@ -149,6 +144,11 @@ app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
     sub.subVars.push(subVar);
     await sub.save();
     res.redirect(`/submissions/${sub.id}`)
+}))
+
+app.post('/subimpls', catchAsync(async (req, res) => {
+    const subimpl = new SubImpl(req.body.subImpl);
+    console.log(subimpl)
 }))
 
 app.all('*', (req, res, next) => {
