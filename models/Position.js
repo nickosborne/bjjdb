@@ -7,16 +7,16 @@ const positionSchema = new Schema({
         required: true
     },
     otherNames: {
-        type: String,
+        type: [String],
         required: false
     },
     image: {
         type: String,
         required: true
     },
-    subImpls: {
+    submissions: {
         type: [Schema.Types.ObjectId],
-        ref: 'SubImpl',
+        ref: 'SubmissionVariation',
         required: false
     },
 });

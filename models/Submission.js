@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const subSchema = new Schema({
+const submissionSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -16,12 +16,12 @@ const subSchema = new Schema({
         default: 'Choke',
         required: true
     },
-    subVars: {
+    variations: {
         type: [Schema.Types.ObjectId],
-        ref: 'SubVar',
+        ref: 'SubmissionVariation',
         required: false
     }
 });
 
-const Sub = mongoose.model('Sub', subSchema);
-module.exports = Sub;
+const Submission = mongoose.model('Submission', submissionSchema);
+module.exports = Submission;

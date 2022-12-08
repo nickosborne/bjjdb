@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
-const Sub = require('../models/Sub');
-const SubVar = require('../models/SubVar')
+const Submission = require('../models/Submission');
+const SubmissionVariation = require('../models/SubmissionVariation')
+const Position = require('../models/Position');
 //const SubImpl = require('../models/SubImpl');
 const fs = require("fs");
 const readline = require("readline");
+const { submissionSchema } = require('../schemas');
 
 const seedSubmissions = async () => {
     let stream = fs.createReadStream("./seed/subs.csv");
@@ -18,31 +20,36 @@ const seedSubmissions = async () => {
         data.push(row.split(","));
     });
 
-    Sub.collection.drop();
-    SubVar.collection.drop().then(() => { console.log('dropped subs') });
+    //await Submission.collection.drop();
+    //await SubmissionVariation.collection.drop().then(() => { console.log('dropped subs') });
     //await SubImpl.collection.drop().then(() => { console.log('dropped subs') });
-
-
+    let subs = [];
+    let variations = [];
     reader.on("close", () => {
         for (let i = 1; i < data.length; i++) {
 
             let subData = data[i]
-            var newSub = new Sub({
+            var newSub = new Submission({
                 name: subData[0],
-                otherNames: subData[1],
+                otherNames: subData[1]
             })
 
-            let newSubVar = new SubVar({
+            let newSubVar = new SubmissionVariation({
                 //name seeded as "classic" by default
-                subId: newSub.id,
-                subName: newSub.name,
+                submission: newSub.id,
+                position: '639148b6e8edbacd03b46899',
+                video: 'https://www.youtube.com/embed/A4HkWMOcYaQ'
             })
 
-            newSubVar.save();
-            newSub.subVars.push(newSubVar);
-            newSub.save()
+            variations.push(newSubVar);
+            newSub.variations.push(newSubVar);
+            subs.push(newSub);
         }
     });
+
+    await SubmissionVariation.insertMany(subs);
+    await Submission.insertMany(variations);
+
 }
 async function connect() {
     await mongoose.connect('mongodb://localhost:27017/bjjdb')
@@ -55,7 +62,7 @@ async function disconnect() {
 async function seedDB() {
     await connect();
 
-    seedSubmissions().then(() => { console.log("seeded subs") });
+    await seedSubmissions().then(() => { console.log("seeded subs") });
 }
 seedDB()
 

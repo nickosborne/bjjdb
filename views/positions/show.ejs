@@ -23,9 +23,9 @@
                         </div>
                     </form>
                     <ul class="list-group">
-                        <% for (let subImpl of position.subImpls) {%>
+                        <% for (let sub of position.submissions) {%>
                             <li class="list-group-item">
-                                <%= subImpl.name %>
+                                <%= sub.name %>
                             </li>
                             <% } %>
                     </ul>
