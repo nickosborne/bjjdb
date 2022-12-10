@@ -15,7 +15,7 @@
                         <h5 class="mb-1">Submissions</h5>
                         <button class="btn btn-success" id="hideForm">+</button>
                     </div>
-                    <form action="/submissions" id="submission-search" method="GET" style="display: none"
+                    <form action="/submissions" id="add-submission" method="GET" style="display: none"
                         class="form-inline mb-3">
                         <div class="form-group">
                             <input id="query" type="text" name="search" placeholder="Submission search..."
@@ -37,3 +37,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        
+        document.getElementById('hideForm').addEventListener('click', () => {
+            let form = document.getElementById('add-submission');
+            console.log('success')
+            if (form.style.display === 'none'){
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        })
+    </script>

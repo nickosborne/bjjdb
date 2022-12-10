@@ -125,7 +125,6 @@ app.get('/submissions/:id', catchAsync(async (req, res) => {
 
 app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
     const sub = new Submission(req.body.submission);
-    console.log(sub);
     await sub.save();
     res.redirect(`/submissions/${sub.id}`)
 }))
