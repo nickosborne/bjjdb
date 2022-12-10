@@ -88,11 +88,8 @@ app.get('/positions/:id', catchAsync(async (req, res) => {
 
 app.get('/positions/:id/edit', catchAsync(async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id)
-    const submissions = await Submission.find({}).populate({
-        path: 'subVars'
-    }).sort({ name: 1 });
-    res.render('positions/edit', { position, submissions })
+    const position = await Position.findById(id).populate({path: 'submissions'}).sort({name: 1})
+    res.render('positions/edit', { position})
 }))
 
 app.put('/positions/:id', validatePosition, catchAsync(async (req, res) => {
@@ -131,11 +128,6 @@ app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
     console.log(sub);
     await sub.save();
     res.redirect(`/submissions/${sub.id}`)
-}))
-
-app.post('/subimpls', catchAsync(async (req, res) => {
-    const subimpl = new SubImpl(req.body.subImpl);
-    console.log(subimpl)
 }))
 
 app.all('*', (req, res, next) => {

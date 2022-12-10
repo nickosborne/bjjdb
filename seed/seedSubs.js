@@ -34,6 +34,11 @@ fs.createReadStream('./seed/subs.csv')
         }
         await connect();
 
+        const ids = variations.map(({id})=> {return mongoose.Types.ObjectId(id)});
+    
+        let position = await Position.findByIdAndUpdate({_id:'639148b6e8edbacd03b46899'}, {submissions: ids});
+        //let position = await Position.findById('639148b6e8edbacd03b46899')
+        console.log(position)
         await Submission.collection.drop().then(() => { console.log("dropped subs") })
         await SubmissionVariation.collection.drop().then(() => { console.log("dropped variatons") })
 
