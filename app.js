@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const { positionSchema, submissionSchema } = require('./schemas.js')
+const { positionSchema, submissionSchema, submissionVariationSchema } = require('./schemas.js')
 
 
 //Models
@@ -51,6 +51,17 @@ const validatePosition = (req, res, next) => {
 const validateSubmission = (req, res, next) => {
 
     const { error } = submissionSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+const validateSubmissionVariation = (req, res, next) => {
+
+    const { error } = submissionVariationSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
@@ -130,29 +141,18 @@ app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
     res.redirect(`/submissions/${sub.id}`)
 }))
 
-app.post('/variations', catchAsync( async (req, res) => {
+app.post('/variations', validateSubmissionVariation, catchAsync( async (req, res) => {
+    const {position,submission} = req.body.variation;
+    const pos = await Position.findById(position);
+    const sub = await Submission.findById(submission);
 
-    const {position,submission: subName, name, video} = req.body.variation;
-    const pos = await Position.findById(position.trim());
-    const sub = await Submission.findOne({name: subName});
-
-    if (sub){
-        const newVariation = new SubmissionVariation({
-            name: name,
-            position: pos.id,
-            submission: sub,
-            video: video
-        })
+    if (sub && pos){
+        const newVariation = new SubmissionVariation(req.body.variation)
         newVariation.save();
         sub.variations.push(newVariation);
         pos.submissions.push(newVariation);
         pos.save();
         sub.save();
-
-        console.log("Position:", pos);
-        console.log("Submission: ", sub)
-        console.log("Variation: ", newVariation)
-
     } else {
         console.log('error adding submission')
     }

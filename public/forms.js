@@ -1,9 +1,3 @@
-// const form = document.getElementById('subForm');
-// form.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     e.stopPropagation();
-// });
-
 document.querySelector('#subs').addEventListener("change", function () {
     let variation = document.querySelector('#variation');
     while (variation.firstChild) {

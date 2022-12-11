@@ -16,3 +16,12 @@ module.exports.submissionSchema = Joi.object({
         subType: Joi.string().valid('Choke', 'Break', 'Pain').required()
     }).required()
 });
+
+module.exports.submissionVariationSchema = Joi.object({
+    variation: Joi.object({
+        name: Joi.string().required(),
+        position: Joi.string().required(),
+        submission: Joi.string().required(),
+        video: Joi.string().required()
+    }).required()
+})
