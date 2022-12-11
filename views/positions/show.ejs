@@ -13,14 +13,28 @@
                 <div class="card-body">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">Submissions</h5>
-                        <button class="btn btn-success" id="hideForm">+</button>
+                        <button class="btn btn-success" id="hideForm">New</button>
                     </div>
-                    <form action="/submissions" id="add-submission" method="GET" style="display: none"
+                    <form action="/variations" id="add-submission" method="POSt" style="display: none"
                         class="form-inline mb-3">
                         <div class="form-group">
-                            <input id="query" type="text" name="search" placeholder="Submission search..."
-                                class="form-control">
+                            <input type="hidden" id="positionId" name="variation[position]" value="<%=position.id %> ">
+                            <label for="submission">Submission Type</label>
+                            <select id="submission" class="form-control" name="variation[submission]">
+                                <% for (let sub of submissions) { %> 
+                                <option><%= sub.name %> </option>
+                                <% } %> 
+                            </select>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name">Variation Name</label>
+                            <input class="form-control" type="text" id="name" name="variation[name]" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="otherNames">Video</label>
+                            <input class="form-control" type="text" id="otherNames" name="variation[video]" placeholder="Link to video demonstrating the technique in this position" required>
+                        </div>
+                        <button class="btn btn-success">Add</button>
                     </form>
                     <ul class="list-group">
                         <% for (let sub of position.submissions) {%>
@@ -37,16 +51,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        
-        document.getElementById('hideForm').addEventListener('click', () => {
-            let form = document.getElementById('add-submission');
-            console.log('success')
-            if (form.style.display === 'none'){
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
-        })
-    </script>
+    <script src="/addSub.js"></script>

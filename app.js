@@ -83,7 +83,8 @@ app.post('/positions', validatePosition, catchAsync(async (req, res) => {
 app.get('/positions/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const position = await Position.findById(id).populate('submissions');
-    res.render('positions/show', { position })
+    const submissions = await Submission.find().populate({path: 'variations'}).sort({name: 1})
+    res.render('positions/show', { position, submissions })
 }))
 
 app.get('/positions/:id/edit', catchAsync(async (req, res) => {
@@ -127,6 +128,35 @@ app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
     const sub = new Submission(req.body.submission);
     await sub.save();
     res.redirect(`/submissions/${sub.id}`)
+}))
+
+app.post('/variations', catchAsync( async (req, res) => {
+
+    const {position,submission: subName, name, video} = req.body.variation;
+    const pos = await Position.findById(position.trim());
+    const sub = await Submission.findOne({name: subName});
+
+    if (sub){
+        const newVariation = new SubmissionVariation({
+            name: name,
+            position: pos.id,
+            submission: sub,
+            video: video
+        })
+        newVariation.save();
+        sub.variations.push(newVariation);
+        pos.submissions.push(newVariation);
+        pos.save();
+        sub.save();
+
+        console.log("Position:", pos);
+        console.log("Submission: ", sub)
+        console.log("Variation: ", newVariation)
+
+    } else {
+        console.log('error adding submission')
+    }
+    res.redirect(`/positions/${pos.id}`);
 }))
 
 app.all('*', (req, res, next) => {
