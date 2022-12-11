@@ -1,4 +1,4 @@
-// required
+// Required
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
@@ -7,14 +7,16 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const { positionSchema, submissionSchema, submissionVariationSchema } = require('./schemas.js')
+const {  submissionVariationSchema } = require('./schemas.js')
 
-
-//Models
+// Models
 const Position = require('./models/Position');
 const Submission = require('./models/Submission');
 const SubmissionVariation = require('./models/SubmissionVariation');
-//const SubImpl = require('./models/SubImpl');
+
+// Routes
+const positions = require('./routes/positions')
+const submissions = require('./routes/submissions')
 
 // App setup
 app.engine('ejs', ejsMate);
@@ -23,6 +25,8 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
+app.use('/positions', positions);
+app.use('/submissions', submissions);
 
 
 // connect to DB
@@ -34,30 +38,6 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
         console.log("connection error")
         console.log(err)
     });
-
-
-/////////////////////////////////////////////////////////// Validation
-const validatePosition = (req, res, next) => {
-
-    const { error } = positionSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
-const validateSubmission = (req, res, next) => {
-
-    const { error } = submissionSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
 
 const validateSubmissionVariation = (req, res, next) => {
 
@@ -74,72 +54,6 @@ const validateSubmissionVariation = (req, res, next) => {
 app.get('/', (req, res) => {
     res.send('home')
 })
-
-// Position routes
-app.get('/positions', catchAsync(async (req, res) => {
-    const positions = await Position.find({})
-    res.render('positions/index', { positions })
-}));
-
-app.get('/positions/new', (req, res) => {
-    res.render('positions/new');
-});
-
-app.post('/positions', validatePosition, catchAsync(async (req, res) => {
-    const position = new Position(req.body.position);
-    await position.save();
-    res.redirect(`/positions/${position.id}`)
-}))
-
-app.get('/positions/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const position = await Position.findById(id).populate('submissions');
-    const submissions = await Submission.find().populate({path: 'variations'}).sort({name: 1})
-    res.render('positions/show', { position, submissions })
-}))
-
-app.get('/positions/:id/edit', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const position = await Position.findById(id).populate({path: 'submissions'}).sort({name: 1})
-    res.render('positions/edit', { position})
-}))
-
-app.put('/positions/:id', validatePosition, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
-    res.redirect(`/positions/${position._id}`)
-}))
-
-app.delete('/positions/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Position.findByIdAndDelete(id);
-    res.redirect('/positions');
-}))
-
-// Submission routes
-app.get('/submissions', catchAsync(async (req, res) => {
-
-    const submissions = await Submission.find({})
-    res.render('submissions/index', { submissions })
-}))
-
-app.get('/submissions/new', (req, res) => {
-    res.render('submissions/new');
-});
-
-app.get('/submissions/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const sub = await Submission.findById(id).populate({
-        path: 'variations'
-    });
-    res.render('submissions/show', { sub })
-}))
-
-app.post('/submissions', validateSubmission, catchAsync(async (req, res) => {
-    const sub = new Submission(req.body.submission);
-    await sub.save();
-    res.redirect(`/submissions/${sub.id}`)
-}))
 
 app.post('/variations', validateSubmissionVariation, catchAsync( async (req, res) => {
     const {position,submission} = req.body.variation;
