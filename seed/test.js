@@ -2,9 +2,9 @@ const { close } = require('fs');
 const mongoose = require('mongoose');
 
 const Position = require('../models/Position');
-const Sub = require('../models/Sub');
-const SubVar = require('../models/SubVar');
-const SubImpl = require('../models/SubImpl');
+const Submission = require('../models/Submission');
+const Subbmission = require('../models/Submission');
+const SubmissionVariation = require('../models/SubmissionVariation');
 
 
 async function testSeed() {
@@ -59,7 +59,7 @@ async function addSubmission() {
 
     await disconnect();
 }
-addSubmission();
+//addSubmission();
 
 //test findONe results
 async function testFindOne() {
@@ -79,3 +79,48 @@ async function testFindOne() {
     await disconnect();
 }
 //testFindOne();
+
+async function testPull() {
+    await connect();
+
+    const position = await Position.findOne().populate({path: 'submissions'});
+    const submission = await Submission.findOne();
+    // for (i = 0; i < 5; i++){
+    //     let x = new SubmissionVariation({
+    //         submission: submission.id,
+    //         position: position.id,
+    //         video: 'https://www.youtube.com/embed/A4HkWMOcYaQ'
+    //     })
+    //     await x.save();
+    //     position.submissions.push(x);
+    //     submission.variations.push(x);
+    // }
+    // await position.save();
+    // await submission.save();
+    // console.log(position);
+    // console.log(submission);
+    const subIds = position.submissions.map(({ submission }) => { return submission })
+    console.log(subIds);
+    // const test = await Submission.findById(submission.id);
+    // console.log(test)
+    //const subs = await Submission.find({_id: {$in: subIds}})
+    console.log(position.variations)
+    const subs = await Submission.updateMany({_id: {$in: subIds}},{
+        $pull: {
+            variations: { $in: position.submissions }
+        }
+    })
+    console.log(subs)
+    //console.log(submission);
+    // const removed = await SubmissionVariation.deleteMany({
+    //     _id: {
+    //         $in: doc.variations
+    //     }
+    // })
+    // console.log(removed)
+
+    await disconnect();
+}
+
+
+testPull()

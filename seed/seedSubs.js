@@ -13,7 +13,8 @@ fs.createReadStream('./seed/subs.csv')
        
         let subs = [];
         let variations = [];
-
+        await connect();
+        let pos = await Position.findOne();
         for (sub of results){
          
             var newSub = new Submission({
@@ -23,8 +24,9 @@ fs.createReadStream('./seed/subs.csv')
 
             let newSubVar = new SubmissionVariation({
                 //name seeded as "classic" by default
+                name: `${newSub.name} - ${pos.name}`,
                 submission: newSub.id,
-                position: '639148b6e8edbacd03b46899',
+                position: pos.id,
                 video: 'https://www.youtube.com/embed/A4HkWMOcYaQ'
             });
 
@@ -32,13 +34,13 @@ fs.createReadStream('./seed/subs.csv')
             newSub.variations.push(newSubVar);
             subs.push(newSub);
         }
-        await connect();
+        
 
         const ids = variations.map(({id})=> {return mongoose.Types.ObjectId(id)});
-    
-        let position = await Position.findByIdAndUpdate({_id:'639148b6e8edbacd03b46899'}, {submissions: ids});
-        //let position = await Position.findById('639148b6e8edbacd03b46899')
-        console.log(position)
+        pos.submissions = ids;
+        await pos.save();
+        console.log(pos);
+
         await Submission.collection.drop().then(() => { console.log("dropped subs") })
         await SubmissionVariation.collection.drop().then(() => { console.log("dropped variatons") })
 
