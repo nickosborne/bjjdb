@@ -1,28 +1,33 @@
 
-document.getElementById('hideForm').addEventListener('click',  () => {
-    let form = document.getElementById('add-submission');
-    console.log('success')
-    if (form.style.display === 'none') {
-        form.style.display = 'block';
-    } else {
-        form.style.display = 'none';
-    }
-})
+let btn = document.getElementById('hideForm')
 
-document.querySelector('#subs').addEventListener("change", function () {
-    let variation = document.querySelector('#variation');
-    while (variation.firstChild) {
-        variation.removeChild(variation.lastChild);
-    }
-    for (let sub of subs) {
-        if (sub.name === this.value) {
-            console.log(sub);
-            for (let v of sub.subVars) {
-                let option = document.createElement("option");
-                option.innerHTML = v.name;
-                document.querySelector('#subVarId').value = v.id;
-                variation.appendChild(option);
-            }
+if (btn) {
+    btn.addEventListener('click', () => {
+        let form = document.getElementById('add-submission');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
         }
-    }
-});
+    })
+}
+
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict';
+    window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.getElementsByClassName('validated-form');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
