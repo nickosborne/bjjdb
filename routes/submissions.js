@@ -32,6 +32,10 @@ router.get('/:id', catchAsync(async (req, res) => {
     const sub = await Submission.findById(id).populate({
         path: 'variations'
     });
+    if (!sub) {
+        req.flash('error', 'Submission not found!')
+        return res.redirect('/submissions')
+    }
     res.render('submissions/show', { sub })
 }))
 

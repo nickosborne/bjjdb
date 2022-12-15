@@ -8,15 +8,13 @@ const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const {  submissionVariationSchema } = require('./schemas.js')
+const session = require('express-session');
+const flash = require('connect-flash');
 
 // Models
 const Position = require('./models/Position');
 const Submission = require('./models/Submission');
 const SubmissionVariation = require('./models/SubmissionVariation');
-
-// Routes
-const positions = require('./routes/positions')
-const submissions = require('./routes/submissions')
 
 // App setup
 app.engine('ejs', ejsMate);
@@ -24,9 +22,33 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+const sessionConfig = {
+    secret: "testsecret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig))
+app.use(flash());
+
+app.use(function (req, res, next) {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+
+// Routes
+const positions = require('./routes/positions')
+const submissions = require('./routes/submissions')
 app.use('/positions', positions);
 app.use('/submissions', submissions);
+
+
 
 
 // connect to DB

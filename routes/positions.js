@@ -31,12 +31,17 @@ router.get('/new', (req, res) => {
 router.post('/', validatePosition, catchAsync(async (req, res) => {
     const position = new Position(req.body.position);
     await position.save();
+    req.flash('success','Created the position!');
     res.redirect(`/positions/${position.id}`)
 }))
 
 router.get('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const position = await Position.findById(id).populate('submissions');
+    if (!position){
+        req.flash('error', 'Position not found!')
+        return res.redirect('/positions')
+    }
     const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
     res.render('positions/show', { position, submissions })
 }))
