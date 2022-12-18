@@ -5,18 +5,14 @@ const app = express();
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const {  submissionVariationSchema } = require('./schemas.js')
+
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-// Models
-const Position = require('./models/Position');
-const Submission = require('./models/Submission');
-const SubmissionVariation = require('./models/SubmissionVariation');
+//Models
 const User = require('./models/User');
 
 // App setup
@@ -60,10 +56,6 @@ app.use('/', userRoutes)
 app.use('/positions', positionRoutes);
 app.use('/submissions', submissionRoutes);
 
-
-
-
-
 // connect to DB
 mongoose.connect('mongodb://localhost:27017/bjjdb')
     .then(() => {
@@ -74,39 +66,10 @@ mongoose.connect('mongodb://localhost:27017/bjjdb')
         console.log(err)
     });
 
-const validateSubmissionVariation = (req, res, next) => {
-
-    const { error } = submissionVariationSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
 // Routes
 app.get('/', (req, res) => {
     res.send('home')
 })
-
-app.post('/variations', validateSubmissionVariation, catchAsync( async (req, res) => {
-    const {position,submission} = req.body.variation;
-    const pos = await Position.findById(position);
-    const sub = await Submission.findById(submission);
-
-    if (sub && pos){
-        const newVariation = new SubmissionVariation(req.body.variation)
-        newVariation.save();
-        sub.variations.push(newVariation);
-        pos.submissions.push(newVariation);
-        pos.save();
-        sub.save();
-    } else {
-        console.log('error adding submission')
-    }
-    res.redirect(`/positions/${pos.id}`);
-}))
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404))

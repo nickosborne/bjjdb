@@ -1,48 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const ExpressError = require('../utils/ExpressError');
-const catchAsync = require('../utils/catchAsync');
-const Submission = require('../models/Submission');
-const { submissionSchema } = require('../schemas.js');
+const catchAsync = require('../utils/catchAsync'); 
+const subs = require('../controllers/submissions');
 
-const validateSubmission = (req, res, next) => {
+router.get('/', catchAsync(subs.index))
 
-    const { error } = submissionSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+router.get('/new', subs.new);
 
-// Submission routes
-router.get('/', catchAsync(async (req, res) => {
+router.get('/:id', catchAsync(subs.edit))
 
-    const submissions = await Submission.find({})
-    res.render('submissions/index', { submissions })
-}))
+router.post('/', subs.validateSubmission, catchAsync(subs.update))
 
-router.get('/new', (req, res) => {
-    res.render('submissions/new');
-});
-
-router.get('/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const sub = await Submission.findById(id).populate({
-        path: 'variations'
-    });
-    if (!sub) {
-        req.flash('error', 'Submission not found!')
-        return res.redirect('/submissions')
-    }
-    res.render('submissions/show', { sub })
-}))
-
-router.post('/', validateSubmission, catchAsync(async (req, res) => {
-    const sub = new Submission(req.body.submission);
-    await sub.save();
-    res.redirect(`/submissions/${sub.id}`)
-}))
+router.post('/variations', subs.validateSubmissionVariation, catchAsync(subs.createVariation))
 
 module.exports = router;
