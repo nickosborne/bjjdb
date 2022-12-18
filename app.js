@@ -10,11 +10,14 @@ const ExpressError = require('./utils/ExpressError');
 const {  submissionVariationSchema } = require('./schemas.js')
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 // Models
 const Position = require('./models/Position');
 const Submission = require('./models/Submission');
 const SubmissionVariation = require('./models/SubmissionVariation');
+const User = require('./models/User');
 
 // App setup
 app.engine('ejs', ejsMate);
@@ -35,18 +38,28 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use(function (req, res, next) {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 });
 
 // Routes
-const positions = require('./routes/positions')
-const submissions = require('./routes/submissions')
-app.use('/positions', positions);
-app.use('/submissions', submissions);
+const positionRoutes = require('./routes/positions')
+const submissionRoutes = require('./routes/submissions')
+const userRoutes = require('./routes/users')
+app.use('/', userRoutes)
+app.use('/positions', positionRoutes);
+app.use('/submissions', submissionRoutes);
+
 
 
 

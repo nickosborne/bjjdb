@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const Position = require('../models/Position');
 const Submission = require('../models/Submission');
 const { positionSchema } = require('../schemas.js');
+const {isLoggedIn } = require('../middleware');
 
 
 const validatePosition = (req, res, next) => {
@@ -24,11 +25,11 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('positions/index', { positions })
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('positions/new');
 });
 
-router.post('/', validatePosition, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, validatePosition, catchAsync(async (req, res) => {
     const position = new Position(req.body.position);
     await position.save();
     req.flash('success','Created the position!');
