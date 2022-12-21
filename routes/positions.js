@@ -13,10 +13,10 @@ router.post('/', isLoggedIn, positions.validatePosition, catchAsync(positions.cr
 
 router.get('/:id', catchAsync(positions.show))
 
-router.get('/:id/edit', catchAsync(positions.edit))
+router.get('/:id/edit', isLoggedIn, catchAsync(positions.edit))
 
-router.put('/:id', positions.validatePosition, catchAsync(positions.update))
+router.put('/:id', isLoggedIn, positions.validatePosition, catchAsync(positions.update))
 
-router.delete('/:id', catchAsync(positions.delete))
+router.delete('/:id', isLoggedIn, catchAsync(positions.delete))
 
 module.exports = router;
