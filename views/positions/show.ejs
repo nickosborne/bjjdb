@@ -1,19 +1,18 @@
 <% layout('layouts/boilerplate') %>
 
     <div class="row">
-        <h1 class="text-center">
-            <%= position.name %>
-        </h1>
-        <small class="text-center mb-3">
-            (<%= position.otherNames %>)
-        </small>
         <div class="col-6 offset-3">
             <div class="card">
                 <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
                 <div class="card-body">
+                    <h1 class="text-center">
+                        <%= position.name %>
+                    </h1>
+                    <p class="text-center"> <small>(<%= position.otherNames %>)</small>
+
+                    </p>
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">Submissions</h5>
-                        <button class="btn btn-success" id="hideForm">New</button>
                     </div>
                     <form action="/submissions/variations" id="add-submission" method="POSt" style="display: none"
                         class="form-inline mb-3 validated-form" novalidate>
@@ -21,9 +20,11 @@
                             <input type="hidden" id="positionId" name="variation[position]" value="<%=position.id %>">
                             <label for="submission">Submission Type</label>
                             <select id="submission" class="form-control" name="variation[submission]">
-                                <% for (let sub of submissions) { %> 
-                                <option value="<%=sub.id %>"><%= sub.name %></option>
-                                <% } %> 
+                                <% for (let sub of submissions) { %>
+                                    <option value="<%=sub.id %>">
+                                        <%= sub.name %>
+                                    </option>
+                                    <% } %>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -32,7 +33,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="otherNames">Video</label>
-                            <input class="form-control" type="text" id="otherNames" name="variation[video]" placeholder="Link to video demonstrating the technique in this position" required>
+                            <input class="form-control" type="text" id="otherNames" name="variation[video]"
+                                placeholder="Link to video demonstrating the technique in this position" required>
                         </div>
                         <button class="btn btn-success">Add</button>
                     </form>

@@ -1,15 +1,15 @@
 
-let btn = document.getElementById('hideForm')
-if (btn) {
-    btn.addEventListener('click', () => {
-        let form = document.getElementById('add-submission');
-        if (form.style.display === 'none') {
-            form.style.display = 'block';
-        } else {
-            form.style.display = 'none';
-        }
-    })
-}
+// let btn = document.getElementById('hideForm')
+// if (btn) {
+//     btn.addEventListener('click', () => {
+//         let form = document.getElementById('add-submission');
+//         if (form.style.display === 'none') {
+//             form.style.display = 'block';
+//         } else {
+//             form.style.display = 'none';
+//         }
+//     })
+// }
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
