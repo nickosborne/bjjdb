@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync'); 
+const catchAsync = require('../utils/catchAsync');
 const subs = require('../controllers/submissions');
+const { isLoggedIn } = require('../middleware');
 
 router.get('/', catchAsync(subs.index))
 
-router.get('/new', subs.new);
+router.get('/new', isLoggedIn, subs.new);
 
 router.get('/:id', catchAsync(subs.edit))
 

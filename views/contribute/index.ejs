@@ -5,16 +5,49 @@
             <div class="card">
                 <div class="card-body">
                     <h1>Contribute</h1>
-                    <p>BJJ_DB exists as a catalog of all the free jiu jitsu knowledge available on the internet. We rely
+                    <p>BJJ_DB exists as a catalog of all the free jiu jitsu knowledge on the internet. We rely
                         on bjj practioners from around the globe to share their knowledge and expertise. We've provided
                         the framework for modeling jiu jitsu positions, moves and techniques, but need your help to
                         build our database.
                     </p>
                     <p>If you would like to contribute please create an account, then follow the links below. Your
-                        contributions will be reviewed
-                        by an admin before being added to the public database.
+                        contributions will be reviewed by an admin before being added to the public database.
+                    </p>
+
+                    <h3>Methodology</h3>
+                    <h5>Positions</h5>
+                    <p>BJJ_DB was built by thinking about jiu jitsu positionally. From each position there are any given
+                        number of techniques you could apply.We break these moves into 3 main types: passes, sweeps and
+                        submissions. </p>
+                    <h5>Techniques</h5>
+                    <p>We tried to develop a system that respected existing naming conventions, while removing things we
+                        found confusing.</p>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item">Passes</li>
+                        <li class="list-group-item">Sweeps</li>
+                        <li class="list-group-item">Submissions</li>
+                    </ul>
+                    <h6>Variations</h6>
+                    <p>In an attempt to account for the nuances of jiu jitsu techniques, we created the variation class.
+                        A variation exists as a pair between a position and a technique. We add a variation to the
+                        database to link a general technique type to a specific position.
+                    </p>
+                    <p>For example, there are many ways to do a triangle. It might be called a reverse triangle or an
+                        inverted
+                        triangle in some contexts, but the idea is always the same: choking your oppoenent between your
+                        thighs.
+                        Rather than having multiple triangle entries in the database, we group them all under the
+                        umbrella term "Triangle". </p>
+                    <p>We also want to avoid going too wide with our definitions. For example, should the arm triangle
+                        be added as a variation of a triangle or should it get its own entry in the submissions
+                        database? We believe the latter should be true. Most chokes boil down to some sort of triangle.
+                        Although they both share the name triangle, the submission is applied with different limbs,
+                        which is enough to differentiate the two as different submissions.
                     </p>
                     <div class="row">
+                        <p>Before adding a new position or tecnique, please make sure it doesn't already exist in the
+                            database (potentially under a different name), or if it should instead be added as a
+                            variation to an existing technique.</p>
                         <a class="btn btn-success mb-3" href="/positions/new">Add New Position</a>
                         <a class="btn btn-success" href="/submissions/new">Add New Submission</a>
                     </div>
