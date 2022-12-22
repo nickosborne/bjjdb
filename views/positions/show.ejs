@@ -15,7 +15,7 @@
                     <ul class="list-group">
                         <% for (let sub of position.submissions) {%>
                             <li class="list-group-item">
-                                <%= sub.name %>
+                                <%= sub.submission.name %> : <%= sub.name %>
                             </li>
                             <% } %>
                     </ul>

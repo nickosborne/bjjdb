@@ -9,7 +9,7 @@ const submissionVariationSchema = new Schema({
     },
     submission: {
         type: Schema.Types.ObjectId,
-        ref: 'Sub',
+        ref: 'Submission',
         required: true
     },
     position: {

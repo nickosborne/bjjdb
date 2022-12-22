@@ -32,7 +32,13 @@ module.exports.createPosition = async (req, res) => {
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id).populate('submissions');
+    const position = await Position.findById(id).populate({
+        path: 'submissions',
+        populate: {
+            path: 'submission'
+        }
+    })
+    console.log(position);
     if (!position) {
         req.flash('error', 'Position not found!')
         return res.redirect('/positions')
