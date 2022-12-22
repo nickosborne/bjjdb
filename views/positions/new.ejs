@@ -2,7 +2,7 @@
     <div class="row">
         <h1 class="text-center">New Position</h1>
         <div class="col-6 offset-3">
-            <form action="/positions" method="POST"  class="validated-form" novalidate> 
+            <form action="/positions" method="POST" class="validated-form" novalidate>
                 <div class="mb-3">
                     <label class="form-label" for="name">Name</label>
                     <input class="form-control" type="text" id="name" name="position[name]" required>
@@ -15,6 +15,7 @@
                     <label class="form-label" for="image">Image</label>
                     <input class="form-control" type="text" id="image" name="position[image]" required>
                 </div>
+                <input type="hidden" id="userId" name="position[userId]" value="<%=currentUser.id%>">
                 <div class="mb-3">
                     <button class="btn btn-success">Add Position</button>
                 </div>

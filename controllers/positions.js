@@ -4,12 +4,17 @@ const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 
 module.exports.index = async (req, res) => {
-    const positions = await Position.find({})
+    let findPositions;
+    if (req.isAuthenticated()) {
+        findPositions = await Position.find({ $or: [{ edited: false }, { userId: req.user.id }] })
+    } else {
+        findPositions = await Position.find({ edited: false })
+    }
+    const positions = findPositions;
     res.render('positions/index', { positions })
 }
 
 module.exports.validatePosition = (req, res, next) => {
-
     const { error } = positionSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
@@ -38,7 +43,6 @@ module.exports.show = async (req, res) => {
             path: 'submission'
         }
     })
-    console.log(position);
     if (!position) {
         req.flash('error', 'Position not found!')
         return res.redirect('/positions')

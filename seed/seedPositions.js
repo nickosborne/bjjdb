@@ -24,7 +24,8 @@ const seedPositions = async () => {
             var p = new Position({
                 name: position[0],
                 otherNames: position[1],
-                image: "http://1.bp.blogspot.com/-O_GvcSeU7GU/VkDfR40tm1I/AAAAAAAAAHg/UiSA25Cjj0Q/s1600/girls-bluebelt.jpg"
+                image: "http://1.bp.blogspot.com/-O_GvcSeU7GU/VkDfR40tm1I/AAAAAAAAAHg/UiSA25Cjj0Q/s1600/girls-bluebelt.jpg",
+                edited: false
             })
             p.save()
         }

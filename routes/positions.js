@@ -1,24 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn } = require('../middleware');
+const { forceLogin } = require('../middleware');
 const positions = require('../controllers/positions')
 
 // Position routes
 router.get('/', catchAsync(positions.index));
 
-router.get('/new', isLoggedIn, positions.new);
+router.get('/new', forceLogin, positions.new);
 
-router.post('/', isLoggedIn, positions.validatePosition, catchAsync(positions.createPosition))
+router.post('/', forceLogin, positions.validatePosition, catchAsync(positions.createPosition))
 
 router.get('/:id', catchAsync(positions.show))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(positions.edit))
+router.get('/:id/edit', forceLogin, catchAsync(positions.edit))
 
-router.get('/:id/addSub', isLoggedIn, catchAsync(positions.addSub))
+router.get('/:id/addSub', forceLogin, catchAsync(positions.addSub))
 
-router.put('/:id', isLoggedIn, positions.validatePosition, catchAsync(positions.update))
+router.put('/:id', forceLogin, positions.validatePosition, catchAsync(positions.update))
 
-router.delete('/:id', isLoggedIn, catchAsync(positions.delete))
+router.delete('/:id', forceLogin, catchAsync(positions.delete))
 
 module.exports = router;
