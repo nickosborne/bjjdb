@@ -8,7 +8,7 @@ module.exports.index = async (req, res) => {
     res.render('positions/index', { positions })
 }
 
-module.exports.validatePosition =  (req, res, next) => {
+module.exports.validatePosition = (req, res, next) => {
 
     const { error } = positionSchema.validate(req.body);
     if (error) {
@@ -26,25 +26,32 @@ module.exports.new = (req, res) => {
 module.exports.createPosition = async (req, res) => {
     const position = new Position(req.body.position);
     await position.save();
-    req.flash('success','Created the position!');
+    req.flash('success', 'Created the position!');
     res.redirect(`/positions/${position.id}`)
 }
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
     const position = await Position.findById(id).populate('submissions');
-    if (!position){
+    if (!position) {
         req.flash('error', 'Position not found!')
         return res.redirect('/positions')
     }
-    const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
-    res.render('positions/show', { position, submissions })
+    res.render('positions/show', { position })
 }
 
 module.exports.edit = async (req, res) => {
     const { id } = req.params;
     const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
     res.render('positions/edit', { position })
+}
+
+module.exports.addSub = async (req, res) => {
+    const { id } = req.params;
+    const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
+    const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
+
+    res.render('positions/addSub', { position, submissions })
 }
 
 module.exports.update = async (req, res) => {

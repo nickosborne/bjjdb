@@ -12,30 +12,6 @@
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">Submissions</h5>
                     </div>
-                    <form action="/submissions/variations" id="add-submission" method="POSt" style="display: none"
-                        class="form-inline mb-3 validated-form" novalidate>
-                        <div class="form-group">
-                            <input type="hidden" id="positionId" name="variation[position]" value="<%=position.id %>">
-                            <label for="submission">Submission Type</label>
-                            <select id="submission" class="form-control" name="variation[submission]">
-                                <% for (let sub of submissions) { %>
-                                    <option value="<%=sub.id %>">
-                                        <%= sub.name %>
-                                    </option>
-                                    <% } %>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="name">Variation Name</label>
-                            <input class="form-control" type="text" id="name" name="variation[name]" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="otherNames">Video</label>
-                            <input class="form-control" type="text" id="otherNames" name="variation[video]"
-                                placeholder="Link to video demonstrating the technique in this position" required>
-                        </div>
-                        <button class="btn btn-success">Add</button>
-                    </form>
                     <ul class="list-group">
                         <% for (let sub of position.submissions) {%>
                             <li class="list-group-item">
@@ -47,6 +23,7 @@
                     <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
+                    <a class="card-link btn btn-success" href="/positions/<%= position.id %>/addSub">addSub</a>
                 </div>
             </div>
         </div>
