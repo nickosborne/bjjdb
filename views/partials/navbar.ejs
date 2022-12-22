@@ -7,17 +7,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/contribute">Contribute</a>
                 <a class="nav-link" href="/positions">Positions</a>
                 <a class="nav-link" href="/submissions">Submissions</a>
             </div>
             <div class="navbar-nav flex-row flex-wrap ms-md-auto">
-                <% if (!currentUser) {%> 
-                <a class="nav-link" href="/login">Login</a>
-                <a class="nav-link" href="/register">Register</a>
-                <% } else { %> 
-                <a class="nav-link" href="/logout">Logout</a>
-                <% } %> 
+                <% if (!currentUser) {%>
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/register">Register</a>
+                    <% } else { %>
+                        <a class="nav-link" href="/logout">Logout</a>
+                        <% } %>
             </div>
         </div>
     </div>
