@@ -18,6 +18,7 @@
             <input class="form-control" type="text" id="image" name="position[image]" value="<%= position.image %>"
                 required>
         </div>
+        <input type="hidden" id="userId" name="position[userId]" value="<%=currentUser.id%>">
         <div class=" mb-3">
             <button class="btn btn-success">Update Position</button>
         </div>
