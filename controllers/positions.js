@@ -14,6 +14,18 @@ module.exports.index = async (req, res) => {
     res.render('positions/index', { positions })
 }
 
+module.exports.admin = async (req, res) => {
+    let findPositions;
+    if (req.isAuthenticated() && req.user.admin) {
+        findPositions = await Position.find({ edited: true })
+    } else {
+        req.flash('error', 'Admins Only!')
+        findPositions = await Position.find({ edited: false })
+    }
+    const positions = findPositions;
+    res.render('positions/index', { positions })
+}
+
 module.exports.validatePosition = (req, res, next) => {
     const { error } = positionSchema.validate(req.body);
     if (error) {

@@ -7,6 +7,8 @@ const positions = require('../controllers/positions')
 // Position routes
 router.get('/', catchAsync(positions.index));
 
+router.get('/admin', catchAsync(positions.admin));
+
 router.get('/new', forceLogin, positions.new);
 
 router.post('/', forceLogin, positions.validatePosition, catchAsync(positions.createPosition))
