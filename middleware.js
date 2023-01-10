@@ -13,3 +13,13 @@ module.exports.checkReturnTo = (req, res, next) => {
     }
     next()
 }
+
+module.exports.isAdmin = (req, res, next) => {
+    if (req.user.admin) {
+        next();
+    }
+    else {
+        req.flash('error', 'Permission denied.')
+        res.redirect('/positions')
+    }
+}

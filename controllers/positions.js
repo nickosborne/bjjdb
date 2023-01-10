@@ -15,14 +15,7 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.admin = async (req, res) => {
-    let findPositions;
-    if (req.isAuthenticated() && req.user.admin) {
-        findPositions = await Position.find({ edited: true })
-    } else {
-        req.flash('error', 'Admins Only!')
-        findPositions = await Position.find({ edited: false })
-    }
-    const positions = findPositions;
+    const positions = await Position.find({ edited: true })
     res.render('positions/index', { positions })
 }
 
@@ -78,8 +71,19 @@ module.exports.addSub = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
-    res.redirect(`/positions/${position._id}`)
+    if (req.user.admin) {
+        // if admin, post update and change status to approved
+        const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
+        position.edited = false;
+        position.save();
+        res.redirect(`/positions/${position._id}`)
+    } else {
+        //if not admin, post new position in edited status and ref original
+        const position = new Position(req.body.position);
+        await position.save();
+        req.flash('success', 'Created the position!');
+        res.redirect(`/positions/${position.id}`)
+    }
 }
 
 module.exports.delete = async (req, res) => {

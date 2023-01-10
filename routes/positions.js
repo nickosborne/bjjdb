@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { forceLogin } = require('../middleware');
+const { forceLogin, isAdmin } = require('../middleware');
 const positions = require('../controllers/positions')
 
 // Position routes
 router.get('/', catchAsync(positions.index));
 
-router.get('/admin', catchAsync(positions.admin));
+router.get('/admin', forceLogin, isAdmin, catchAsync(positions.admin));
 
 router.get('/new', forceLogin, positions.new);
 
