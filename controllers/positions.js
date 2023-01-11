@@ -75,14 +75,21 @@ module.exports.update = async (req, res) => {
         // if admin, post update and change status to approved
         const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
         position.edited = false;
-        position.save();
+        await position.save();
         res.redirect(`/positions/${position._id}`)
-    } else {
+    } else if (req.body.position.edited === "false") {
         //if not admin, post new position in edited status and ref original
         const position = new Position(req.body.position);
+        position.parent = id;
+        position.edited = true;
         await position.save();
-        req.flash('success', 'Created the position!');
+        req.flash('success', 'Posted the position.');
         res.redirect(`/positions/${position.id}`)
+    } else {
+        // if editing a position that already has an edited status, just add the edit
+        const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
+        req.flash('success', 'Updated the position.');
+        res.redirect(`/positions/${position._id}`)
     }
 }
 

@@ -6,7 +6,8 @@ module.exports.positionSchema = Joi.object({
         name: Joi.string().required(),
         otherNames: Joi.string().allow(''),
         image: Joi.string().required(),
-        userId: Joi.string().required()
+        userId: Joi.string().required(),
+        edited: Joi.boolean().required()
     }).required()
 });
 
