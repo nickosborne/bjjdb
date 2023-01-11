@@ -73,10 +73,12 @@ module.exports.update = async (req, res) => {
     const { id } = req.params;
     if (req.user.admin) {
         // if admin, post update and change status to approved
-        const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
-        position.edited = false;
-        await position.save();
-        res.redirect(`/positions/${position._id}`)
+        const position = await Position.findByIdAndDelete(id);
+        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
+        parent.edited = false;
+        await parent.save();
+        req.flash('success', 'Approved the changes');
+        res.redirect('/positions')
     } else if (req.body.position.edited === "false") {
         //if not admin, post new position in edited status and ref original
         const position = new Position(req.body.position);
