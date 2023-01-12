@@ -71,12 +71,14 @@ module.exports.addSub = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     const { id } = req.params;
+    console.log(req.body.position);
     if (req.user.admin) {
-        // if admin, post update and change status to approved
-        const position = await Position.findByIdAndDelete(id);
-        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
+        // // if admin, post update and change status to approved
+        const position = await Position.findById(id)
+        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position });
         parent.edited = false;
-        await parent.save();
+        parent.save();
+        position.delete();
         req.flash('success', 'Approved the changes');
         res.redirect('/positions')
     } else if (req.body.position.edited === "false") {
@@ -85,6 +87,7 @@ module.exports.update = async (req, res) => {
         position.parent = id;
         position.edited = true;
         await position.save();
+        console.log(position);
         req.flash('success', 'Posted the position.');
         res.redirect(`/positions/${position.id}`)
     } else {
