@@ -1,17 +1,27 @@
+const { off } = require('process');
 const Position = require('../models/Position');
 const Submission = require('../models/Submission');
 const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 
 module.exports.index = async (req, res) => {
-    let findPositions;
     if (req.isAuthenticated()) {
-        findPositions = await Position.find({ $or: [{ edited: false }, { userId: req.user.id }] })
+        const userPositions = await Position.find({ userId: req.user.id })
+        let ids = [];
+        for (pos of userPositions) {
+            ids.push(pos.parent);
+        }
+        console.log(ids)
+        const result = await Position.find({ edited: false });
+        let positions = result.filter(pos => !ids.includes(pos.id))
+        for (pos of userPositions) {
+            positions.push(pos);
+        }
+        res.render('positions/index', { positions })
     } else {
-        findPositions = await Position.find({ edited: false })
+        const positions = await Position.find({ edited: false })
+        res.render('positions/index', { positions })
     }
-    const positions = findPositions;
-    res.render('positions/index', { positions })
 }
 
 module.exports.admin = async (req, res) => {
