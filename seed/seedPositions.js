@@ -16,10 +16,8 @@ const seedPositions = async () => {
         data.push(row.split(","));
     });
 
-    Position.collection.drop();
     reader.on("close", () => {
         for (let i = 1; i < data.length; i++) {
-
             let position = data[i]
             var p = new Position({
                 name: position[0],

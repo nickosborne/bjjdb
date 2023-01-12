@@ -71,25 +71,22 @@ module.exports.addSub = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     const { id } = req.params;
-    console.log(req.body.position);
     if (req.user.admin) {
-        // // if admin, post update and change status to approved
-        const position = await Position.findById(id)
-        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position });
-        parent.edited = false;
-        parent.save();
-        position.delete();
+        // if admin, delete edited version, update parent with changes
+        req.body.position.edited = false;
+        const position = await Position.findByIdAndDelete(id);
+        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
         req.flash('success', 'Approved the changes');
         res.redirect('/positions')
     } else if (req.body.position.edited === "false") {
-        //if not admin, post new position in edited status and ref original
-        const position = new Position(req.body.position);
-        position.parent = id;
-        position.edited = true;
-        await position.save();
-        console.log(position);
+        //if not admin, post new position in edited status and ref parent
+        const newPosition = new Position(req.body.position);
+        newPosition.parent = id;
+        newPosition.edited = true;
+        await newPosition.save();
+        const posParent = await Position.findById(id);
         req.flash('success', 'Posted the position.');
-        res.redirect(`/positions/${position.id}`)
+        res.redirect(`/positions/${newPosition.id}`)
     } else {
         // if editing a position that already has an edited status, just add the edit
         const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
