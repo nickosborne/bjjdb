@@ -1,19 +1,19 @@
-const { off } = require('process');
 const Position = require('../models/Position');
 const Submission = require('../models/Submission');
 const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
+const mongoose = require('mongoose');
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
+        // get the user's edits and the ids of their parents
         const userPositions = await Position.find({ userId: req.user.id })
         let ids = [];
-        for (pos of userPositions) {
-            ids.push(pos.parent);
-        }
+        userPositions.forEach(pos => ids.push(pos.parent.toString()))
         console.log(ids)
+        //get all unedited positions and filter out ones duplicated by the user positions
         const result = await Position.find({ edited: false });
-        let positions = result.filter(pos => !ids.includes(pos.id))
+        let positions = result.filter(pos => !ids.includes(pos.id));
         for (pos of userPositions) {
             positions.push(pos);
         }
@@ -91,8 +91,9 @@ module.exports.update = async (req, res) => {
     } else if (req.body.position.edited === "false") {
         //if not admin, post new position in edited status and ref parent
         const newPosition = new Position(req.body.position);
-        newPosition.parent = id;
+        newPosition.parent = id
         newPosition.edited = true;
+        newPosition.userId = req.user.id;
         await newPosition.save();
         const posParent = await Position.findById(id);
         req.flash('success', 'Posted the position.');
