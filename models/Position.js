@@ -31,8 +31,8 @@ const positionSchema = new Schema({
         ref: 'User'
     },
     parent: {
-        type: Schema.Types.ObjectId,
-        ref: 'Position'
+        type: String,
+        default: ""
     }
 });
 

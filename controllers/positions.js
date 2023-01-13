@@ -2,14 +2,13 @@ const Position = require('../models/Position');
 const Submission = require('../models/Submission');
 const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
-const mongoose = require('mongoose');
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
         // get the user's edits and the ids of their parents
         const userPositions = await Position.find({ userId: req.user.id })
         let ids = [];
-        userPositions.forEach(pos => ids.push(pos.parent.toString()))
+        userPositions.forEach(pos => ids.push(pos.parent));
         //get all unedited positions and filter out ones duplicated by the user positions
         const result = await Position.find({ edited: false });
         let positions = result.filter(pos => !ids.includes(pos.id));
@@ -44,6 +43,7 @@ module.exports.new = (req, res) => {
 
 module.exports.createPosition = async (req, res) => {
     const position = new Position(req.body.position);
+    position.parent = position.id;
     await position.save();
     req.flash('success', 'Created the position!');
     res.redirect(`/positions/${position.id}`)
@@ -94,7 +94,6 @@ module.exports.update = async (req, res) => {
         newPosition.edited = true;
         newPosition.userId = req.user.id;
         await newPosition.save();
-        const posParent = await Position.findById(id);
         req.flash('success', 'Posted the position.');
         res.redirect(`/positions/${newPosition.id}`)
     } else {

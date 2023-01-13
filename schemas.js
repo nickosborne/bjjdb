@@ -1,4 +1,3 @@
-const { string } = require('joi');
 const Joi = require('joi');
 
 module.exports.positionSchema = Joi.object({
