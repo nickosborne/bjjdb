@@ -10,7 +10,6 @@ module.exports.index = async (req, res) => {
         const userPositions = await Position.find({ userId: req.user.id })
         let ids = [];
         userPositions.forEach(pos => ids.push(pos.parent.toString()))
-        console.log(ids)
         //get all unedited positions and filter out ones duplicated by the user positions
         const result = await Position.find({ edited: false });
         let positions = result.filter(pos => !ids.includes(pos.id));
