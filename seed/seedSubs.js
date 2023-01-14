@@ -7,16 +7,16 @@ const fs = require('fs')
 const results = [];
 
 fs.createReadStream('./seed/subs.csv')
-    .pipe(csv(['name','otherNames']))
+    .pipe(csv(['name', 'otherNames']))
     .on('data', (data) => results.push(data))
     .on('end', async () => {
-       
+
         let subs = [];
         let variations = [];
         await connect();
         let pos = await Position.findOne();
-        for (sub of results){
-         
+        for (sub of results) {
+
             var newSub = new Submission({
                 name: sub.name,
                 otherNames: sub.otherNames
@@ -24,7 +24,7 @@ fs.createReadStream('./seed/subs.csv')
 
             let newSubVar = new SubmissionVariation({
                 //name seeded as "classic" by default
-                name: `${newSub.name} - ${pos.name}`,
+                //name: `${newSub.name} - ${pos.name}`,
                 submission: newSub.id,
                 position: pos.id,
                 video: 'https://www.youtube.com/embed/A4HkWMOcYaQ'
@@ -34,9 +34,9 @@ fs.createReadStream('./seed/subs.csv')
             newSub.variations.push(newSubVar);
             subs.push(newSub);
         }
-        
 
-        const ids = variations.map(({id})=> {return mongoose.Types.ObjectId(id)});
+
+        const ids = variations.map(({ id }) => { return mongoose.Types.ObjectId(id) });
         pos.submissions = ids;
         await pos.save();
         console.log(pos);
@@ -46,7 +46,7 @@ fs.createReadStream('./seed/subs.csv')
 
         await SubmissionVariation.insertMany(variations).then(() => { console.log("seeded variations") });
         await Submission.insertMany(subs).then(() => { console.log("seeded subs") });
-        
+
         await disconnect();
     });
 
