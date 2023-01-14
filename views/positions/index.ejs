@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate')%>
-    <h1>All Positions</h1>
-    <div class="row">
+    <div class="row justify-content-center">
+        <h1>All Positions</h1>
         <% for (let position of positions) {%>
-            <div class="card text-light bg-dark m-1 " style="width: 18rem;">
+            <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1 ">
                 <img class="card-img-top mt-2" src="<%=position.image %>" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">
