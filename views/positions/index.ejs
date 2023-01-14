@@ -1,20 +1,22 @@
 <% layout('layouts/boilerplate')%>
-    <div class="row justify-content-center">
-        <h1>All Positions</h1>
-        <% for (let position of positions) {%>
-            <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1 ">
-                <img class="card-img-top mt-2" src="<%=position.image %>" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%=position.name %>
-                    </h5>
-                    <p>
-                        <small>
-                            <%=position.otherNames %>
-                        </small>
-                    </p>
-                    <a class="btn btn-secondary" href="/positions/<%= position._id %>" class="card-link">Explore</a>
+    <div class="container d-flex ms-5">
+        <div class="row">
+            <h1>All Positions</h1>
+            <% for (let position of positions) {%>
+                <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1">
+                    <img class="card-img-top mt-2" src="<%=position.image %>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=position.name %>
+                        </h5>
+                        <p>
+                            <small>
+                                <%=position.otherNames %>
+                            </small>
+                        </p>
+                        <a class="btn btn-secondary" href="/positions/<%= position._id %>" class="card-link">Explore</a>
+                    </div>
                 </div>
-            </div>
-            <% } %>
+                <% } %>
+        </div>
     </div>
