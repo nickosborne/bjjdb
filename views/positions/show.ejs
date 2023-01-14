@@ -15,7 +15,15 @@
                     <ul class="list-group">
                         <% for (let sub of position.submissions) {%>
                             <li class="list-group-item">
-                                <%= sub.submission.name %> : <%= sub.name %>
+                                <a href="<%= sub.video %>" class="list-group-item list-group-item-action d-inline"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <%= sub.name %>
+                                </a>
+                                <a href="/submissions/<%=sub.submission.id %>"
+                                    class="list-group-item list-group-item-action d-inline justify-content-end">
+                                    Submission:
+                                    <%=sub.submission.name %>
+                                </a>
                             </li>
                             <% } %>
                     </ul>

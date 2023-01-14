@@ -36,10 +36,13 @@ module.exports.new = (req, res) => {
     res.render('submissions/new');
 }
 
-module.exports.edit = async (req, res) => {
+module.exports.show = async (req, res) => {
     const { id } = req.params;
     const sub = await Submission.findById(id).populate({
-        path: 'variations'
+        path: 'variations',
+        populate: {
+            path: 'position'
+        }
     });
     if (!sub) {
         req.flash('error', 'Submission not found!')
