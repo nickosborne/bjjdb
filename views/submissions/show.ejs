@@ -10,15 +10,15 @@
                 </small>
                 <div class="card-body">
                     <h5>Variations</h5>
-                    <div class="list-group">
+                    <div class="list-group d-inline">
                         <% for (let variation of sub.variations) {%>
-                            <div class="list-group-item">
-                                <a href="<%= variation.video %>" class="list-group-item list-group-item-action d-inline"
+                            <div class="d-flex d-inline">
+                                <a href="<%= variation.video %>" class="list-group-item list-group-item-action"
                                     target="_blank" rel="noopener noreferrer">
                                     <%= variation.name %>
                                 </a>
                                 <a href="/positions/<%=variation.position.id %>"
-                                    class="list-group-item list-group-item-action d-inline">
+                                    class="list-group-item list-group-item-action d-flex justify-content-end">
                                     Position:
                                     <%=variation.position.name %>
                                 </a>
