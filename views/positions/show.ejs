@@ -3,33 +3,57 @@
     <div class="row">
         <div class="col-6 offset-3">
             <div class="card">
-                <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
-                <div class="card-body">
-                    <h1 class="text-center">
-                        <%= position.name %>
-                    </h1>
-                    <p class="text-center"> <small>(<%= position.otherNames %>)</small></p>
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Submissions</h5>
+                <div class="card text-bg-dark">
+                    <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
+                    <div class="card-img-overlay d-flex align-items-end">
+                        <h1 class="text-center">
+                            <%= position.name %>
+                        </h1>
+                        <p class="text-center"> <small>(<%= position.otherNames %>)</small></p>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <% for (let sub of position.submissions) {%>
-                            <li class="list-group-item">
-                                <div class="d-flex d-inline">
-                                    <a href="<%= sub.video %>" class="list-group-item list-group-item-action"
-                                        target="_blank" rel="noopener noreferrer">
-                                        <%= sub.name %>
-                                    </a>
-                                    <a href="/submissions/<%=sub.submission.id %>"
-                                        class="list-group-item list-group-item-action justify-content-end">
-                                        Submission:
-                                        <%=sub.submission.name %>
-                                    </a>
-                                </div>
-
-                            </li>
-                            <% } %>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="submissions-tab" data-bs-toggle="tab"
+                                data-bs-target="#submissions" type="button" role="tab" aria-controls="submissions"
+                                aria-selected="true">Submissions</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                                type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
+                                type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+                        </li>
                     </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="submissions" role="tabpanel"
+                            aria-labelledby="submissions-tab">
+                            <ul class="list-group list-group-flush">
+                                <% for (let sub of position.submissions) {%>
+                                    <li class="list-group-item">
+                                        <div class="d-flex d-inline">
+                                            <a href="<%= sub.video %>" class="list-group-item list-group-item-action"
+                                                target="_blank" rel="noopener noreferrer">
+                                                <%= sub.name %>
+                                            </a>
+                                            <a href="/submissions/<%=sub.submission.id %>"
+                                                class="list-group-item list-group-item-action justify-content-end">
+                                                Submission:
+                                                <%=sub.submission.name %>
+                                            </a>
+                                        </div>
+
+                                    </li>
+                                    <% } %>
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                    </div>
+
                     <a class="card-link btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
                     <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
