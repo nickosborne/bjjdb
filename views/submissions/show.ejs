@@ -9,6 +9,11 @@
                     <%= sub.otherNames %>
                 </small>
                 <div class="card-body">
+                    <a class="card-link btn btn-warning" href="/submissions/<%= sub.id %>/edit">Edit</a>
+                    <form class="d-inline" action="/submissions/<%= sub.id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <a class="card-link btn btn-success" href="/submissions/<%= sub.id %>/addSub">addSub</a>
                     <h5>Variations</h5>
                     <div class="list-group list-group-flush d-inline">
                         <% for (let variation of sub.variations) {%>

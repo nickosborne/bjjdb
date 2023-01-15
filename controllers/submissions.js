@@ -51,7 +51,7 @@ module.exports.show = async (req, res) => {
     res.render('submissions/show', { sub })
 }
 
-module.exports.update = async (req, res) => {
+module.exports.create = async (req, res) => {
     const sub = new Submission(req.body.submission);
     await sub.save();
     res.redirect(`/submissions/${sub.id}`)
@@ -73,4 +73,23 @@ module.exports.createVariation = async (req, res) => {
         console.log('error adding submission')
     }
     res.redirect(`/positions/${pos.id}`);
+}
+
+module.exports.edit = async (req, res) => {
+    const { id } = req.params;
+    const submission = await Submission.findById(id).populate({
+        path: 'variations',
+        populate: {
+            path: 'position'
+        }
+    });
+    if (!submission) {
+        req.flash('error', 'Submission not found!')
+        return res.redirect('/submissions')
+    }
+    res.render('submissions/edit', { submission })
+}
+
+module.exports.update = async (req, res) => {
+    res.send("hello")
 }
