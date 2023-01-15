@@ -19,7 +19,8 @@ fs.createReadStream('./seed/subs.csv')
 
             var newSub = new Submission({
                 name: sub.name,
-                otherNames: sub.otherNames
+                otherNames: sub.otherNames,
+                edited: false
             })
 
             let newSubVar = new SubmissionVariation({
@@ -27,7 +28,7 @@ fs.createReadStream('./seed/subs.csv')
                 //name: `${newSub.name} - ${pos.name}`,
                 submission: newSub.id,
                 position: pos.id,
-                video: 'https://www.youtube.com/watch?v=A4HkWMOcYaQ'
+                video: 'https://www.youtube.com/watch?v=A4HkWMOcYaQ',
             });
 
             variations.push(newSubVar);

@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const subs = require('../controllers/submissions');
-const { forceLogin } = require('../middleware');
+const { forceLogin, isAdmin } = require('../middleware');
 
 router.get('/', catchAsync(subs.index))
+
+router.get('/admin', forceLogin, isAdmin, catchAsync(subs.admin));
 
 router.get('/new', forceLogin, subs.new);
 

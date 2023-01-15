@@ -20,6 +20,18 @@ const submissionSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: 'SubmissionVariation',
         required: false
+    },
+    edited: {
+        type: Boolean,
+        default: true
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    parent: {
+        type: String,
+        default: ""
     }
 });
 

@@ -27,9 +27,22 @@ module.exports.validateSubmissionVariation = (req, res, next) => {
 }
 
 module.exports.index = async (req, res) => {
-
-    const submissions = await Submission.find({})
-    res.render('submissions/index', { submissions })
+    if (req.isAuthenticated()) {
+        // get the user's edits and the ids of their parents
+        const userSubmissions = await Submission.find({ userId: req.user.id })
+        let ids = [];
+        userSubmissions.forEach(sub => ids.push(sub.parent));
+        //get all unedited submissions and filter out ones duplicated by the user submissions
+        const result = await Submission.find({ edited: false });
+        let submissions = result.filter(sub => !ids.includes(sub.id));
+        for (sub of userSubmissions) {
+            submissions.push(sub);
+        }
+        res.render('submissions/index', { submissions })
+    } else {
+        const submissions = await Submission.find({ edited: false })
+        res.render('submissions/index', { submissions })
+    }
 }
 
 module.exports.new = (req, res) => {
@@ -67,8 +80,8 @@ module.exports.createVariation = async (req, res) => {
         newVariation.save();
         sub.variations.push(newVariation);
         pos.submissions.push(newVariation);
-        pos.save();
-        sub.save();
+        await pos.save();
+        await sub.save();
     } else {
         console.log('error adding submission')
     }
@@ -91,7 +104,29 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.update = async (req, res) => {
-    res.send("hello")
+    const { id } = req.params;
+    if (req.user.admin) {
+        // if admin, delete edited version, update parent with changes
+        req.body.submission.edited = false;
+        const submission = await Submission.findByIdAndDelete(id);
+        const parent = await Submission.findByIdAndUpdate(submission.parent, { ...req.body.submission })
+        req.flash('success', 'Approved the changes');
+        res.redirect('/submissions')
+    } else if (req.body.submission.edited === "false") {
+        //if not admin, post new submission in edited status and ref parent
+        const newSubmission = new Submission(req.body.submission);
+        newSubmission.parent = id
+        newSubmission.edited = true;
+        newSubmission.userId = req.user.id;
+        await newSubmission.save();
+        req.flash('success', 'Posted the submission.');
+        res.redirect(`/submissions/${newSubmission.id}`)
+    } else {
+        // if editing a submission that already has an edited status, just add the edit
+        const submission = await Submission.findByIdAndUpdate(id, { ...req.body.submission })
+        req.flash('success', 'Updated the submission.');
+        res.redirect(`/submissions/${submission._id}`)
+    }
 }
 
 module.exports.delete = async (req, res) => {
@@ -99,4 +134,9 @@ module.exports.delete = async (req, res) => {
     await Submission.findByIdAndDelete(id);
     req.flash('success', 'Sub deleted')
     res.redirect('/submissions');
+}
+
+module.exports.admin = async (req, res) => {
+    const submissions = await Submission.find({ edited: true })
+    res.render('submissions/index', { submissions })
 }
