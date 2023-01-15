@@ -1,8 +1,6 @@
 const { bool } = require('joi');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const Submission = require('./Submission');
-const SubmissionVariation = require('./SubmissionVariation');
 
 const positionSchema = new Schema({
     name: {
@@ -39,18 +37,18 @@ const positionSchema = new Schema({
 positionSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         // get all the submission Ids from the variations
-        const vars = await SubmissionVariation.find({ _id: { $in: doc.submissions } })
+        const vars = await mongoose.model('SubmissionVariation').find({ _id: { $in: doc.submissions } })
         const subIds = vars.map(({ submission }) => { return submission })
 
         // remove variations from submissions
-        await Submission.updateMany({ _id: { $in: subIds } }, {
+        await mongoose.model('Submission').updateMany({ _id: { $in: subIds } }, {
             $pull: {
                 variations: { $in: vars }
             }
         })
 
         // delete variations
-        await SubmissionVariation.deleteMany({ _id: { $in: vars } });
+        await mongoose.model('SubmissionVariation').deleteMany({ _id: { $in: vars } });
     }
 })
 const Position = mongoose.model('Position', positionSchema);
