@@ -107,5 +107,6 @@ module.exports.update = async (req, res) => {
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
     await Position.findByIdAndDelete(id);
+    req.flash('success', 'Position deleted.')
     res.redirect('/positions');
 }

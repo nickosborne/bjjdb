@@ -93,3 +93,10 @@ module.exports.edit = async (req, res) => {
 module.exports.update = async (req, res) => {
     res.send("hello")
 }
+
+module.exports.delete = async (req, res) => {
+    const { id } = req.params;
+    await Submission.findByIdAndDelete(id);
+    req.flash('success', 'Sub deleted')
+    res.redirect('/submissions');
+}

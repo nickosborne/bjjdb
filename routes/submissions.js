@@ -18,4 +18,7 @@ router.post('/', subs.validateSubmission, catchAsync(subs.create))
 
 router.post('/variations', subs.validateSubmissionVariation, catchAsync(subs.createVariation))
 
+router.delete('/:id', forceLogin, catchAsync(subs.delete))
+
+
 module.exports = router;
