@@ -84,7 +84,7 @@ module.exports.update = async (req, res) => {
         // if admin, delete edited version, update parent with changes
         req.body.position.edited = false;
         const position = await Position.findByIdAndDelete(id);
-        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
+        await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
         req.flash('success', 'Approved the changes');
         res.redirect('/positions')
     } else if (req.body.position.edited === "false") {
