@@ -18,7 +18,7 @@ router.get('/:id/edit', forceLogin, catchAsync(subs.edit))
 
 router.post('/', forceLogin, subs.validateSubmission, catchAsync(subs.create))
 
-router.post('/variations', subs.validateSubmissionVariation, catchAsync(subs.createVariation))
+router.post('/variations', forceLogin, subs.validateSubmissionVariation, catchAsync(subs.createVariation))
 
 router.delete('/:id', forceLogin, catchAsync(subs.delete))
 

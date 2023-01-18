@@ -17,9 +17,25 @@ const submissionVariationSchema = new Schema({
         ref: 'Position',
         required: true
     },
+    subName: {
+        type: String,
+        required: true,
+    },
+    posName: {
+        type: String,
+        required: true
+    },
     video: {
         type: String,
         required: true
+    },
+    edited: {
+        type: Boolean,
+        default: true
+    },
+    userId: {
+        type: String,
+        default: ""
     }
 });
 

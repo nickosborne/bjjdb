@@ -24,6 +24,6 @@ module.exports.submissionVariationSchema = Joi.object({
         name: Joi.string().required(),
         position: Joi.string().required(),
         submission: Joi.string().required(),
-        video: Joi.string().required()
+        video: Joi.string().required(),
     }).required()
 })

@@ -77,7 +77,10 @@ module.exports.createVariation = async (req, res) => {
 
     if (sub && pos) {
         const newVariation = new SubmissionVariation(req.body.variation)
-        newVariation.save();
+        newVariation.userId = req.user.id;
+        newVariation.subName = sub.name;
+        newVariation.posName = pos.name;
+        await newVariation.save();
         sub.variations.push(newVariation);
         pos.submissions.push(newVariation);
         await pos.save();

@@ -27,8 +27,11 @@ fs.createReadStream('./seed/subs.csv')
                 //name seeded as "classic" by default
                 //name: `${newSub.name} - ${pos.name}`,
                 submission: newSub.id,
+                subName: newSub.name,
                 position: pos.id,
+                posName: pos.name,
                 video: 'https://www.youtube.com/watch?v=A4HkWMOcYaQ',
+                edited: false
             });
 
             variations.push(newSubVar);

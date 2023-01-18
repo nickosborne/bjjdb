@@ -51,17 +51,27 @@ module.exports.createPosition = async (req, res) => {
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id).populate({
-        path: 'submissions',
-        populate: {
-            path: 'submission'
-        }
-    })
-    if (!position) {
-        req.flash('error', 'Position not found!')
-        return res.redirect('/positions')
+
+    if (req.isAuthenticated()) {
+        const position = await Position.findById(id).populate({
+            path: 'submissions',
+            match: {
+                $or: [
+                    { edited: false },
+                    { userId: req.user.id }
+                ]
+            }
+        });
+        res.render('positions/show', { position })
     }
-    res.render('positions/show', { position })
+    else {
+        const position = await Position.findById(id).populate({
+            path: 'submissions',
+            match: { edited: false }
+        });
+        res.render('positions/show', { position })
+    }
+
 }
 
 module.exports.edit = async (req, res) => {
