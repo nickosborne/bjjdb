@@ -152,3 +152,19 @@ module.exports.admin = async (req, res) => {
     const submissions = await Submission.find({ edited: true })
     res.render('submissions/index', { submissions })
 }
+
+module.exports.variations = async (req, res) => {
+    const subs = await SubmissionVariation.find({ edited: true })
+    res.render('submissions/variations', { subs })
+}
+module.exports.approveVariations = async (req, res) => {
+    const { id } = req.params;
+    const result = await SubmissionVariation.findByIdAndUpdate(id, { edited: false })
+    if (result) {
+        req.flash('success', 'Variation approved');
+        res.redirect('/submissions/variations');
+    } else {
+        req.flash('error', 'Error approving variation');
+        res.redirect('/submissions/variations');
+    }
+}
