@@ -1,5 +1,6 @@
 const Position = require('../models/Position');
 const Submission = require('../models/Submission');
+const SubmissionVariation = require('../models/SubmissionVariation');
 const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 
@@ -92,8 +93,17 @@ module.exports.update = async (req, res) => {
     if (req.user.admin) {
         // if admin, delete edited version, update parent with changes
         req.body.position.edited = false;
-        const position = await Position.findByIdAndDelete(id);
-        await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
+        const position = await Position.findById(id);
+
+        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
+        //update submisison variations to point to parent
+        position.submissions.forEach(async (sub) => {
+            await SubmissionVariation.findByIdAndUpdate(sub._id, { position: parent.id, posName: parent.name });
+            parent.submissions.push(sub);
+            await parent.save();
+        })
+        position.submissions = [];
+        position.delete();
         req.flash('success', 'Approved the changes');
         res.redirect('/positions')
     } else if (req.body.position.edited === "false") {
