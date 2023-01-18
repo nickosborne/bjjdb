@@ -71,7 +71,6 @@ module.exports.show = async (req, res) => {
         });
         res.render('positions/show', { position })
     }
-
 }
 
 module.exports.edit = async (req, res) => {

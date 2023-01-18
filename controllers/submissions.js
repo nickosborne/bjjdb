@@ -51,17 +51,26 @@ module.exports.new = (req, res) => {
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
-    const sub = await Submission.findById(id).populate({
-        path: 'variations',
-        populate: {
-            path: 'position'
-        }
-    });
-    if (!sub) {
-        req.flash('error', 'Submission not found!')
-        return res.redirect('/submissions')
+
+    if (req.isAuthenticated()) {
+        const sub = await Submission.findById(id).populate({
+            path: 'variations',
+            match: {
+                $or: [
+                    { edited: false },
+                    { userId: req.user.id }
+                ]
+            }
+        });
+        res.render('submissions/show', { sub })
     }
-    res.render('submissions/show', { sub })
+    else {
+        const sub = await Submission.findById(id).populate({
+            path: 'variations',
+            match: { edited: false }
+        });
+        res.render('submissions/show', { sub })
+    }
 }
 
 module.exports.create = async (req, res) => {
