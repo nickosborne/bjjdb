@@ -11,13 +11,13 @@ router.get('/admin', forceLogin, isAdmin, catchAsync(positions.admin));
 
 router.get('/new', forceLogin, positions.new);
 
+router.get('/addSub/pos/:pos/id/:id', forceLogin, catchAsync(positions.addSub))
+
 router.post('/', forceLogin, positions.validatePosition, catchAsync(positions.createPosition))
 
 router.get('/:id', catchAsync(positions.show))
 
 router.get('/:id/edit', forceLogin, catchAsync(positions.edit))
-
-router.get('/:id/addSub', forceLogin, catchAsync(positions.addSub))
 
 router.put('/:id', forceLogin, positions.validatePosition, catchAsync(positions.update))
 

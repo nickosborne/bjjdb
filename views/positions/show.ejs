@@ -58,7 +58,8 @@
                     <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
-                    <a class="card-link btn btn-success" href="/positions/<%= position.id %>/addSub">addSub</a>
+                    <a class="card-link btn btn-success"
+                        href="/positions/addSub/pos/true/id/<%= position.id %>">addSub</a>
                 </div>
             </div>
         </div>

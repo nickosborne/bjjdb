@@ -13,7 +13,7 @@
                     <form class="d-inline" action="/submissions/<%= sub.id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
-                    <a class="card-link btn btn-success" href="/submissions/<%= sub.id %>/addSub">addSub</a>
+                    <a class="card-link btn btn-success" href="/positions/addSub/pos/false/id/<%= sub.id %>">addSub</a>
                     <h5>Variations</h5>
                     <div class="list-group list-group-flush d-inline">
                         <% for (let variation of sub.variations) {%>

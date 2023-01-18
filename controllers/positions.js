@@ -81,11 +81,17 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.addSub = async (req, res) => {
-    const { id } = req.params;
-    const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
-    const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
-
-    res.render('positions/addSub', { position, submissions })
+    const { pos, id } = req.params;
+    console.log(req.params);
+    if (pos === "true") {
+        const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
+        const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
+        res.render('positions/addSub', { position, submissions })
+    } else {
+        const submission = await Submission.findById(id);
+        const positions = await Position.find();
+        res.render('submissions/addSub', { positions, submission })
+    }
 }
 
 module.exports.update = async (req, res) => {

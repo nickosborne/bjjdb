@@ -120,8 +120,16 @@ module.exports.update = async (req, res) => {
     if (req.user.admin) {
         // if admin, delete edited version, update parent with changes
         req.body.submission.edited = false;
-        const submission = await Submission.findByIdAndDelete(id);
+        const submission = await Submission.findById(id);
         const parent = await Submission.findByIdAndUpdate(submission.parent, { ...req.body.submission })
+        //update submisison variations to point to parent
+        submission.variations.forEach(async (sub) => {
+            await SubmissionVariation.findByIdAndUpdate(sub._id, { submission: parent.id, subName: parent.name });
+            parent.variations.push(sub);
+            await parent.save();
+        })
+        submission.variations = [];
+        submission.delete();
         req.flash('success', 'Approved the changes');
         res.redirect('/submissions')
     } else if (req.body.submission.edited === "false") {
