@@ -17,8 +17,48 @@
                     <input type="text" class="form-control" id="image" name="position[image]" value="<%=pos.image %>">
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-success">Approve</button>
                 </div>
             </form>
         </div>
         <% } %>
+
+            <div class="row justify-content-center">
+                <h1 class="col-auto">Edits</h1>
+            </div>
+            <% for (let pos of edits) {%>
+                <div class="row gy-2 gx-3 justify-content-center">
+                    <div class="col-auto">
+
+                        <%= pos.name %>
+                    </div>
+                    <div class="col-auto">
+                        <%= pos.otherNames %>
+                    </div>
+                    <div class="col-auto">
+                        <%= pos.image %>
+                    </div>
+                </div>
+                <% for (let edit of pos.edits) {%>
+                    <div class="row">
+                        <form class="row gy-2 gx-3 justify-content-center"
+                            action="positions/<%= pos.id %>/approve?_method=PUT" method="POST">
+                            <div class="col-auto">
+                                <input type="text" class="form-control" id="name" name="position[name]"
+                                    value="<%=edit.name %>">
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
+                                    value="<%=edit.otherNames %>">
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" class="form-control" id="image" name="position[image]"
+                                    value="<%=edit.image %>">
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </div>
+                        </form>
+                    </div>
+                    <% } %>
+                        <% } %>
