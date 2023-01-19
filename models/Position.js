@@ -1,4 +1,4 @@
-const { bool } = require('joi');
+const { bool, object } = require('joi');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -8,8 +8,9 @@ const positionSchema = new Schema({
         required: true
     },
     otherNames: {
-        type: [String],
-        required: false
+        type: String,
+        required: false,
+        default: ""
     },
     image: {
         type: String,
@@ -20,20 +21,49 @@ const positionSchema = new Schema({
         ref: 'SubmissionVariation',
         required: false
     },
-    edited: {
-        type: Boolean,
-        default: true
-    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    parent: {
-        type: String,
-        default: ""
-    }
+    approved: {
+        type: Boolean,
+        default: false
+    },
+    edits: [{
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        name: {
+            type: String
+        },
+        otherNames: {
+            type: String
+        },
+        image: {
+            type: String
+        }
+    }]
 });
 
+positionSchema.methods.swapEdits = function (id) {
+    this.edits.forEach(function (edit) {
+        if (edit.userId.toString() === id) {
+            this.name = edit.name;
+            this.otherNames = edit.otherNames;
+            this.image = edit.image;
+            console.log(this);
+        }
+    })
+}
+
+// positionSchema.virtual('swapEdits').set(function (id) {
+//     this.edits.forEach(function (edit) {
+//         if (edit.userId === id) {
+//             this.set({ ...edit })
+//         }
+//     })
+// })
 positionSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         // get all the submission Ids from the variations

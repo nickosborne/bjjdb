@@ -12,6 +12,11 @@
                         <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
                     </div>
                 </div>
+                <a class="card-link btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
+                <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+                <a class="card-link btn btn-success" href="/positions/addSub/pos/true/id/<%= position.id %>">addSub</a>
                 <div class="card-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -53,13 +58,6 @@
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
                         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                     </div>
-
-                    <a class="card-link btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
-                    <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                    <a class="card-link btn btn-success"
-                        href="/positions/addSub/pos/true/id/<%= position.id %>">addSub</a>
                 </div>
             </div>
         </div>
