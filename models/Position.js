@@ -46,24 +46,6 @@ const positionSchema = new Schema({
     }]
 });
 
-positionSchema.methods.swapEdits = function (id) {
-    this.edits.forEach(function (edit) {
-        if (edit.userId.toString() === id) {
-            this.name = edit.name;
-            this.otherNames = edit.otherNames;
-            this.image = edit.image;
-            console.log(this);
-        }
-    })
-}
-
-// positionSchema.virtual('swapEdits').set(function (id) {
-//     this.edits.forEach(function (edit) {
-//         if (edit.userId === id) {
-//             this.set({ ...edit })
-//         }
-//     })
-// })
 positionSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         // get all the submission Ids from the variations

@@ -5,16 +5,16 @@ const ExpressError = require('../utils/ExpressError');
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
-        // get the user's edits and the ids of their parents
         let positions = await Position.find({ $or: [{ approved: true }, { userId: req.user.id }] })
             .populate('edits').lean();
+
+        // if the user has an edit, change the values to match the edit
         positions.forEach(pos =>
             pos.edits.forEach(edit => {
                 if (edit.userId.toString() === req.user.id) {
                     pos.name = edit.name;
                     pos.otherNames = edit.otherNames;
                     pos.image = edit.image;
-                    console.log(pos);
                 }
             }));
         res.render('positions/index', { positions })
@@ -74,7 +74,16 @@ module.exports.show = async (req, res) => {
                     { userId: req.user.id }
                 ]
             }
-        });
+        }).populate('edits');
+
+        position.edits.forEach(edit => {
+            if (edit.userId.toString() === req.user.id) {
+                position.name = edit.name;
+                position.otherNames = edit.otherNames;
+                position.image = edit.image;
+            }
+        })
+        console.log(position)
         res.render('positions/show', { position })
     }
     else {
@@ -94,7 +103,6 @@ module.exports.edit = async (req, res) => {
 
 module.exports.addSub = async (req, res) => {
     const { pos, id } = req.params;
-    console.log(req.params);
     if (pos === "true") {
         const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
         const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
@@ -112,7 +120,6 @@ module.exports.update = async (req, res) => {
     if (position) {
         position.edits.push({ ...req.body.edit, userId: req.user.id })
         await position.save();
-        console.log(position);
         req.flash('success', 'Posted an edit');
         res.redirect(`/positions/${position._id}`)
     }
