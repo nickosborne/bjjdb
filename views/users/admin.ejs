@@ -4,29 +4,25 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">SubName</th>
-                    <th scope="col">PosName</th>
-                    <th scope="col">Video</th>
+                    <th scope="col">otherNames</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Approve</th>
                 </tr>
             </thead>
             <tbody>
-                <% for (let sub of subs) {%>
+                <% for (let pos of positions) {%>
                     <tr>
                         <td>
-                            <%=sub.name %>
+                            <%=pos.name %>
                         </td>
                         <td>
-                            <%=sub.subName %>
+                            <%=pos.otherNames %>
                         </td>
                         <td>
-                            <%= sub.posName %>
+                            <%= pos.image %>
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="<%-sub.video %>" role="button">Link</a>
-                        </td>
-                        <td>
-                            <form action="/submissions/variations/<%=sub.id %>?_method=PUT" method="POST" novalidate
+                            <form action="/positions/<%= pos.id %>/approve" method="POST" novalidate
                                 class="validated-form">
                                 <button type="submit" class="btn btn-primary">Approve</button>
                             </form>

@@ -134,3 +134,10 @@ module.exports.delete = async (req, res) => {
     req.flash('success', 'Position deleted.')
     res.redirect('/positions');
 }
+
+module.exports.approve = async (req, res) => {
+    const { id } = req.params;
+    await Position.findByIdAndUpdate(id, { approved: true });
+    req.flash('success', 'approved')
+    res.redirect('/admin')
+}

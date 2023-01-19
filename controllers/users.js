@@ -42,6 +42,6 @@ module.exports.logout = function (req, res, next) {
 }
 
 module.exports.admin = async (req, res) => {
-    const subs = await SubmissionVariation.find({ edited: true })
-    res.render('users/admin', { subs })
+    const positions = await Position.find({ approved: false })
+    res.render('users/admin', { positions })
 }
