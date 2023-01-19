@@ -27,38 +27,46 @@
                 <h1 class="col-auto">Edits</h1>
             </div>
             <% for (let pos of edits) {%>
-                <div class="row gy-2 gx-3 justify-content-center">
-                    <div class="col-auto">
+                <div class="row">
+                    <div class="row gy-2 gx-3 justify-content-center">
+                        <div class="col-2">
+                            <b>
+                                <%= pos.name %>
+                            </b>
+                        </div>
+                        <div class="col-2">
+                            <b>
+                                <%= pos.otherNames %>
+                            </b>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" href="<%=pos.image  %>" target="_blank">Image</a>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
 
-                        <%= pos.name %>
-                    </div>
-                    <div class="col-auto">
-                        <%= pos.otherNames %>
-                    </div>
-                    <div class="col-auto">
-                        <%= pos.image %>
-                    </div>
-                </div>
-                <% for (let edit of pos.edits) {%>
-                    <div class="row">
-                        <form class="row gy-2 gx-3 justify-content-center"
-                            action="positions/<%= pos.id %>/approve?_method=PUT" method="POST">
-                            <div class="col-auto">
-                                <input type="text" class="form-control" id="name" name="position[name]"
-                                    value="<%=edit.name %>">
-                            </div>
-                            <div class="col-auto">
-                                <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
-                                    value="<%=edit.otherNames %>">
-                            </div>
-                            <div class="col-auto">
-                                <input type="text" class="form-control" id="image" name="position[image]"
-                                    value="<%=edit.image %>">
-                            </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-success">Approve</button>
-                            </div>
-                        </form>
-                    </div>
-                    <% } %>
+                    <% for (let edit of pos.edits) {%>
+                        <div class="row">
+                            <form class="row gy-2 gx-3 justify-content-center"
+                                action="positions/<%= pos.id %>/approve?_method=PUT" method="POST">
+
+                                <div class="col-2">
+                                    <input type="text" class="form-control" id="name" name="position[name]"
+                                        value="<%=edit.name %>">
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
+                                        value="<%=edit.otherNames %>">
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" class="form-control" id="image" name="position[image]"
+                                        value="<%=edit.image %>">
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </div>
+                            </form>
+                        </div>
                         <% } %>
+                </div>
+                <% } %>
