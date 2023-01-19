@@ -83,7 +83,6 @@ module.exports.show = async (req, res) => {
                 position.image = edit.image;
             }
         })
-        console.log(position)
         res.render('positions/show', { position })
     }
     else {

@@ -10,6 +10,9 @@
                 <a class="nav-link" href="/contribute">Contribute</a>
                 <a class="nav-link" href="/positions">Positions</a>
                 <a class="nav-link" href="/submissions">Submissions</a>
+                <% if (currentUser && currentUser.admin) {%>
+                    <a class="nav-link" href="/admin">Admin</a>
+                    <% } %>
             </div>
             <div class="navbar-nav flex-row flex-wrap ms-md-auto">
                 <% if (!currentUser) {%>

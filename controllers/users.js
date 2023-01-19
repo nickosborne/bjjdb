@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const Position = require('../models/Position');
+const Submission = require('../models/Submission');
+const SubmissionVariation = require('../models/SubmissionVariation');
 
 module.exports.register = (req, res) => {
     res.render('users/register')
@@ -36,4 +39,9 @@ module.exports.logout = function (req, res, next) {
         req.flash('success', 'logged out')
         res.redirect('/positions');
     });
+}
+
+module.exports.admin = async (req, res) => {
+    const subs = await SubmissionVariation.find({ edited: true })
+    res.render('users/admin', { subs })
 }
