@@ -3,22 +3,27 @@
         <h1 class="col-auto">New Positions</h1>
     </div>
     <% for (let pos of positions) {%>
-        <div class="row">
-            <form class="row gy-2 gx-3 justify-content-center" action="positions/<%= pos.id %>/approve?_method=PUT"
-                method="POST">
-                <div class="col-auto">
-                    <input type="text" class="form-control" id="name" name="position[name]" value="<%=pos.name %>">
-                </div>
-                <div class="col-auto">
-                    <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
-                        value="<%=pos.otherNames %>">
-                </div>
-                <div class="col-auto">
-                    <input type="text" class="form-control" id="image" name="position[image]" value="<%=pos.image %>">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-success">Approve</button>
-                </div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <form class="row gy-2 gx-3" action="positions/<%= pos.id %>/approve?_method=PUT" method="POST">
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="name" name="position[name]" value="<%=pos.name %>">
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
+                            value="<%=pos.otherNames %>">
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="image" name="position[image]"
+                            value="<%=pos.image %>">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </div>
+                </form>
+            </div>
+            <form class="col-auto" action="/positions/<%= pos._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Deny</button>
             </form>
         </div>
         <% } %>
@@ -27,8 +32,8 @@
                 <h1 class="col-auto">Edits</h1>
             </div>
             <% for (let pos of edits) {%>
-                <div class="row">
-                    <div class="row gy-2 gx-3 justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="row justify-content-center">
                         <div class="col-2">
                             <b>
                                 <%= pos.name %>
@@ -46,26 +51,30 @@
                     </div>
 
                     <% for (let edit of pos.edits) {%>
-                        <div class="row">
-                            <form class="row gy-2 gx-3 justify-content-center"
-                                action="positions/<%= pos.id %>/approve?_method=PUT" method="POST">
-
-                                <div class="col-2">
-                                    <input type="text" class="form-control" id="name" name="position[name]"
-                                        value="<%=edit.name %>">
-                                </div>
-                                <div class="col-2">
-                                    <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
-                                        value="<%=edit.otherNames %>">
-                                </div>
-                                <div class="col-2">
-                                    <input type="text" class="form-control" id="image" name="position[image]"
-                                        value="<%=edit.image %>">
-                                </div>
-                                <input type="hidden" id="userId" name="position[userId]" value="<%=edit.userId%>">
-                                <div class="col-2">
-                                    <button type="submit" class="btn btn-success">Approve</button>
-                                </div>
+                        <div class="row  gy-2 gx-3 justify-content-center">
+                            <div class="col-auto">
+                                <form class="row gy-2 gx-3" action="positions/<%= pos.id %>/approve?_method=PUT"
+                                    method="POST">
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="name" name="position[name]"
+                                            value="<%=edit.name %>">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="otherNames"
+                                            name="position[otherNames]" value="<%=edit.otherNames %>">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="image" name="position[image]"
+                                            value="<%=edit.image %>">
+                                    </div>
+                                    <input type="hidden" id="userId" name="position[userId]" value="<%=edit.userId%>">
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <form class="col-auto" action="/positions/<%= pos._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger">Deny</button>
                             </form>
                         </div>
                         <% } %>
