@@ -21,7 +21,7 @@ router.get('/:id/edit', forceLogin, catchAsync(positions.edit))
 
 router.put('/:id/approve', forceLogin, isAdmin, positions.validatePosition, catchAsync(positions.approve))
 
-router.put('/:id', forceLogin, positions.validateEdit, catchAsync(positions.update))
+router.post('/:id', forceLogin, positions.validatePosition, catchAsync(positions.postEdit))
 
 router.delete('/:id', forceLogin, catchAsync(positions.delete))
 

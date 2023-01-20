@@ -113,11 +113,11 @@ module.exports.addSub = async (req, res) => {
     }
 }
 
-module.exports.update = async (req, res) => {
+module.exports.postEdit = async (req, res) => {
     const { id } = req.params;
     const position = await (Position.findById(id));
     if (position) {
-        position.edits.push({ ...req.body.edit, userId: req.user.id })
+        position.edits.push({ ...req.body.position, userId: req.user.id })
         await position.save();
         req.flash('success', 'Posted an edit');
         res.redirect(`/positions/${position._id}`)
@@ -137,7 +137,16 @@ module.exports.delete = async (req, res) => {
 
 module.exports.approve = async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findByIdAndUpdate(id, { ...req.body.position, approved: true });
+    const position = await Position.findByIdAndUpdate(id, {
+        ...req.body.position,
+        approved: true,
+        $pull: {
+            edits: {
+                userId: { $eq: req.body.position.userId }
+            }
+        }
+    });
+
     if (position) {
         req.flash('success', 'approved')
     } else {
