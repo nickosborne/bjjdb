@@ -74,6 +74,8 @@
                                 </form>
                             </div>
                             <form class="col-auto" action="/positions/<%= pos._id %>?_method=DELETE" method="POST">
+                                <input type="hidden" id="userId" name="userId" value="<%=edit.userId%>">
+
                                 <button class="btn btn-danger">Deny</button>
                             </form>
                         </div>

@@ -2,6 +2,18 @@ const Position = require('../models/Position');
 const Submission = require('../models/Submission');
 const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
+const mongoose = require('mongoose');
+
+// middleware
+module.exports.validatePosition = (req, res, next) => {
+    const { error } = positionSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
@@ -29,16 +41,6 @@ module.exports.admin = async (req, res) => {
     res.render('positions/index', { positions })
 }
 
-module.exports.validatePosition = (req, res, next) => {
-    const { error } = positionSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
 module.exports.validateEdit = (req, res, next) => {
     const { error } = editSchema.validate(req.body);
     if (error) {
@@ -51,15 +53,6 @@ module.exports.validateEdit = (req, res, next) => {
 
 module.exports.new = (req, res) => {
     res.render('positions/new');
-}
-
-module.exports.createPosition = async (req, res) => {
-    const position = new Position(req.body.position);
-    position.userId = req.user.id;
-    position.approved = false;
-    await position.save();
-    req.flash('success', 'Created the position!');
-    res.redirect(`/positions/${position.id}`)
 }
 
 module.exports.show = async (req, res) => {
@@ -100,6 +93,17 @@ module.exports.edit = async (req, res) => {
     res.render('positions/edit', { position })
 }
 
+// make a new position
+module.exports.createPosition = async (req, res) => {
+    const position = new Position(req.body.position);
+    position.userId = req.user.id;
+    position.approved = false;
+    await position.save();
+    req.flash('success', 'Created the position!');
+    res.redirect(`/positions/${position.id}`)
+}
+
+// add a sub to a position
 module.exports.addSub = async (req, res) => {
     const { pos, id } = req.params;
     if (pos === "true") {
@@ -113,6 +117,7 @@ module.exports.addSub = async (req, res) => {
     }
 }
 
+// insert an edit to a position
 module.exports.postEdit = async (req, res) => {
     const { id } = req.params;
     const position = await (Position.findById(id));
@@ -128,13 +133,32 @@ module.exports.postEdit = async (req, res) => {
     }
 }
 
+// delete a position or an edit
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
-    await Position.findByIdAndDelete(id);
-    req.flash('success', 'Position deleted.')
-    res.redirect('/positions');
+    const userId = req.body.userId;
+
+    // delete edit
+    if (userId) {
+        await Position.findByIdAndUpdate(id, {
+            $pull: {
+                edits: {
+                    userId: { $eq: userId }
+                }
+            }
+        });
+        req.flash('success', 'Edit removed')
+        res.redirect('/admin');
+    }
+    // delete position
+    else {
+        await Position.findByIdAndDelete(id);
+        req.flash('success', 'Position deleted.')
+        res.redirect('/positions');
+    }
 }
 
+// approve positions and edits
 module.exports.approve = async (req, res) => {
     const { id } = req.params;
     const position = await Position.findByIdAndUpdate(id, {
