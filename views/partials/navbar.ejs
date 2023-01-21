@@ -1,19 +1,35 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">BJJ_DB</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="#">BJJ_DB</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="/contribute">Contribute</a>
-                <a class="nav-link" href="/positions">Positions</a>
-                <a class="nav-link" href="/submissions">Submissions</a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/contribute">Contribute</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/positions">Positions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/submissions">Submissions</a>
+                </li>
                 <% if (currentUser && currentUser.admin) {%>
-                    <a class="nav-link" href="/admin">Admin</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/positions/admin">Positions</a></li>
+                            <li><a class="dropdown-item" href="/submissions/admin">Submissions</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
                     <% } %>
-            </div>
+            </ul>
             <div class="navbar-nav flex-row flex-wrap ms-md-auto">
                 <% if (!currentUser) {%>
                     <a class="nav-link" href="/login">Login</a>

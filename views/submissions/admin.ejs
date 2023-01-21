@@ -1,0 +1,91 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row justify-content-center">
+        <h1 class="col-auto">New Submissions</h1>
+    </div>
+    <% for (let sub of submissions) {%>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <form class="row gy-2 gx-3" action="/submissions/<%= sub.id %>/approve?_method=PUT" method="POST">
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="name" name="submission[name]"
+                            value="<%=sub.name %>">
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="otherNames" name="submission[otherNames]"
+                            value="<%=sub.otherNames %>">
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-control" id="subType" name="submission[subType]">
+                            <option>Choke</option>
+                            <option>Break</option>
+                            <option>Pain</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </div>
+                </form>
+            </div>
+            <form class="col-auto" action="/submissions/<%= sub._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Deny</button>
+            </form>
+        </div>
+        <% } %>
+
+            <div class="row justify-content-center">
+                <h1 class="col-auto">Edits</h1>
+            </div>
+            <% for (let sub of edits) {%>
+                <div class="row justify-content-center">
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <b>
+                                <%= sub.name %>
+                            </b>
+                        </div>
+                        <div class="col-2">
+                            <b>
+                                <%= sub.otherNames %>
+                            </b>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" href="<%=sub.image%>" target="_blank">Image</a>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+
+                    <% for (let edit of sub.edits) {%>
+                        <div class="row  gy-2 gx-3 justify-content-center">
+                            <div class="col-auto">
+                                <form class="row gy-2 gx-3" action="/submissions/<%= sub.id %>/approve?_method=PUT"
+                                    method="POST">
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="name" name="submission[name]"
+                                            value="<%=edit.name %>">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="otherNames"
+                                            name="submission[otherNames]" value="<%=edit.otherNames %>">
+                                    </div>
+                                    <div class="col-auto">
+                                        <select class="form-control" id="subType" name="submission[subType]">
+                                            <option>Choke</option>
+                                            <option>Break</option>
+                                            <option>Pain</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="userId" name="submission[userId]" value="<%=edit.userId%>">
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <form class="col-auto" action="/submissions/<%= sub._id %>?_method=DELETE" method="POST">
+                                <input type="hidden" id="userId" name="userId" value="<%=edit.userId%>">
+
+                                <button class="btn btn-danger">Deny</button>
+                            </form>
+                        </div>
+                        <% } %>
+                </div>
+                <% } %>

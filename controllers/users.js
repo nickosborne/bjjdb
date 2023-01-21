@@ -40,10 +40,3 @@ module.exports.logout = function (req, res, next) {
         res.redirect('/positions');
     });
 }
-
-module.exports.admin = async (req, res) => {
-    const result = await Position.find();
-    let positions = result.filter(pos => !pos.approved)
-    let edits = result.filter(pos => pos.edits.length)
-    res.render('users/admin', { positions, edits })
-}

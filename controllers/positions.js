@@ -37,8 +37,10 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.admin = async (req, res) => {
-    const positions = await Position.find({ edited: true })
-    res.render('positions/index', { positions })
+    const result = await Position.find();
+    let positions = result.filter(pos => !pos.approved)
+    let edits = result.filter(pos => pos.edits.length)
+    res.render('positions/admin', { positions, edits })
 }
 
 module.exports.validateEdit = (req, res, next) => {

@@ -21,6 +21,7 @@ module.exports.submissionSchema = Joi.object({
     submission: Joi.object({
         name: Joi.string().required(),
         otherNames: Joi.string().allow(''),
+        userId: Joi.string(),
         subType: Joi.string().valid('Choke', 'Break', 'Pain').required(),
     }).required()
 });

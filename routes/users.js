@@ -7,8 +7,6 @@ const users = require('../controllers/users')
 
 router.get('/register', users.register)
 
-router.get('/admin', forceLogin, isAdmin, users.admin);
-
 router.post('/register', catchAsync(users.createAccount));
 
 router.get('/login', users.login)

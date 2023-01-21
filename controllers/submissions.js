@@ -64,7 +64,7 @@ module.exports.show = async (req, res) => {
                 ]
             }
         }).populate('edits');
-        console.log(sub);
+
         sub.edits.forEach(edit => {
             if (edit.userId.toString() === req.user.id) {
                 sub.name = edit.name;
@@ -85,7 +85,10 @@ module.exports.show = async (req, res) => {
 
 module.exports.create = async (req, res) => {
     const sub = new Submission(req.body.submission);
+    sub.userId = req.user.id;
+    sub.approved = false;
     await sub.save();
+    req.flash('success', 'Created the position!');
     res.redirect(`/submissions/${sub.id}`)
 }
 
@@ -141,16 +144,36 @@ module.exports.postEdit = async (req, res) => {
     }
 }
 
+// delete a position or an edit
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
-    await Submission.findByIdAndDelete(id);
-    req.flash('success', 'Sub deleted')
-    res.redirect('/submissions');
+    const userId = req.body.userId;
+
+    // delete edit
+    if (userId) {
+        await Submission.findByIdAndUpdate(id, {
+            $pull: {
+                edits: {
+                    userId: { $eq: userId }
+                }
+            }
+        });
+        req.flash('success', 'Edit removed')
+        res.redirect('/admin');
+    }
+    // delete position
+    else {
+        await Submission.findByIdAndDelete(id);
+        req.flash('success', 'Submission deleted.')
+        res.redirect('/submissions');
+    }
 }
 
 module.exports.admin = async (req, res) => {
-    const submissions = await Submission.find({ edited: true })
-    res.render('submissions/index', { submissions })
+    const result = await Submission.find();
+    let submissions = result.filter(sub => !sub.approved)
+    let edits = result.filter(sub => sub.edits.length)
+    res.render('submissions/admin', { submissions, edits })
 }
 
 module.exports.variations = async (req, res) => {
@@ -167,4 +190,25 @@ module.exports.approveVariations = async (req, res) => {
         req.flash('error', 'Error approving variation');
         res.redirect('/submissions/variations');
     }
+}
+
+// approve submissions and edits
+module.exports.approve = async (req, res) => {
+    const { id } = req.params;
+    const submission = await Submission.findByIdAndUpdate(id, {
+        ...req.body.submission,
+        approved: true,
+        $pull: {
+            edits: {
+                userId: { $eq: req.body.submission.userId }
+            }
+        }
+    });
+
+    if (submission) {
+        req.flash('success', 'approved')
+    } else {
+        req.flash('error', 'error')
+    }
+    res.redirect('/submissions/admin')
 }
