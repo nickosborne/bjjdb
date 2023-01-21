@@ -16,7 +16,7 @@ router.get('/new', forceLogin, subs.new);
 
 router.get('/:id', catchAsync(subs.show))
 
-router.put('/:id', forceLogin, subs.validateSubmission, catchAsync(subs.update))
+router.put('/:id', forceLogin, subs.validateSubmission, catchAsync(subs.postEdit))
 
 router.get('/:id/edit', forceLogin, catchAsync(subs.edit))
 

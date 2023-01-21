@@ -16,8 +16,14 @@
                         <input class="form-control" type="text" id="otherNames" name="submission[otherNames]"
                             value="<%= submission.otherNames %>">
                     </div>
-                    <input type="hidden" id="subtype" name="submission[subType]" value="<%=submission.subType%>">
-                    <input type="hidden" id="edited" name="submission[edited]" value="<%=submission.edited%>">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="subType">Type</label>
+                        <select class="form-control" id="subType" name="submission[subType]">
+                            <option>Choke</option>
+                            <option>Break</option>
+                            <option>Pain</option>
+                        </select>
+                    </div>
                     <div class=" mb-3">
                         <button class="btn btn-success">Update submission</button>
                     </div>

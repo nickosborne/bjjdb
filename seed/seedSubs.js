@@ -20,7 +20,7 @@ fs.createReadStream('./seed/subs.csv')
             var newSub = new Submission({
                 name: sub.name,
                 otherNames: sub.otherNames,
-                edited: false
+                approved: true
             })
 
             let newSubVar = new SubmissionVariation({

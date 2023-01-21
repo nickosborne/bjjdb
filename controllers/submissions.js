@@ -28,19 +28,21 @@ module.exports.validateSubmissionVariation = (req, res, next) => {
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
-        // get the user's edits and the ids of their parents
-        const userSubmissions = await Submission.find({ userId: req.user.id })
-        let ids = [];
-        userSubmissions.forEach(sub => ids.push(sub.parent));
-        //get all unedited submissions and filter out ones duplicated by the user submissions
-        const result = await Submission.find({ edited: false });
-        let submissions = result.filter(sub => !ids.includes(sub.id));
-        for (sub of userSubmissions) {
-            submissions.push(sub);
-        }
+        let submissions = await Submission.find({ $or: [{ approved: true }, { userId: req.user.id }] })
+            .populate('edits').lean();
+
+        // if the user has an edit, change the values to match the edit
+        submissions.forEach(sub =>
+            sub.edits.forEach(edit => {
+                if (edit.userId.toString() === req.user.id) {
+                    sub.name = edit.name;
+                    sub.otherNames = edit.otherNames;
+                    sub.image = edit.image;
+                }
+            }));
         res.render('submissions/index', { submissions })
     } else {
-        const submissions = await Submission.find({ edited: false })
+        const submissions = await Submission.find({ approved: true })
         res.render('submissions/index', { submissions })
     }
 }
@@ -61,13 +63,21 @@ module.exports.show = async (req, res) => {
                     { userId: req.user.id }
                 ]
             }
-        });
+        }).populate('edits');
+        console.log(sub);
+        sub.edits.forEach(edit => {
+            if (edit.userId.toString() === req.user.id) {
+                sub.name = edit.name;
+                sub.otherNames = edit.otherNames;
+                sub.subType = edit.subType;
+            }
+        })
         res.render('submissions/show', { sub })
     }
     else {
         const sub = await Submission.findById(id).populate({
             path: 'variations',
-            match: { edited: false }
+            match: { approved: true }
         });
         res.render('submissions/show', { sub })
     }
@@ -115,37 +125,19 @@ module.exports.edit = async (req, res) => {
     res.render('submissions/edit', { submission })
 }
 
-module.exports.update = async (req, res) => {
+// insert an edit to a submission
+module.exports.postEdit = async (req, res) => {
     const { id } = req.params;
-    if (req.user.admin) {
-        // if admin, delete edited version, update parent with changes
-        req.body.submission.edited = false;
-        const submission = await Submission.findById(id);
-        const parent = await Submission.findByIdAndUpdate(submission.parent, { ...req.body.submission })
-        //update submisison variations to point to parent
-        submission.variations.forEach(async (sub) => {
-            await SubmissionVariation.findByIdAndUpdate(sub._id, { submission: parent.id, subName: parent.name });
-            parent.variations.push(sub);
-            await parent.save();
-        })
-        submission.variations = [];
-        submission.delete();
-        req.flash('success', 'Approved the changes');
-        res.redirect('/submissions')
-    } else if (req.body.submission.edited === "false") {
-        //if not admin, post new submission in edited status and ref parent
-        const newSubmission = new Submission(req.body.submission);
-        newSubmission.parent = id
-        newSubmission.edited = true;
-        newSubmission.userId = req.user.id;
-        await newSubmission.save();
-        req.flash('success', 'Posted the submission.');
-        res.redirect(`/submissions/${newSubmission.id}`)
-    } else {
-        // if editing a submission that already has an edited status, just add the edit
-        const submission = await Submission.findByIdAndUpdate(id, { ...req.body.submission })
-        req.flash('success', 'Updated the submission.');
+    const submission = await (Submission.findById(id));
+    if (submission) {
+        submission.edits.push({ ...req.body.submission, userId: req.user.id })
+        await submission.save();
+        req.flash('success', 'Posted an edit');
         res.redirect(`/submissions/${submission._id}`)
+    }
+    else {
+        req.flash('error', 'Error finding submission');
+        res.redirect(`/submissions/${id}`)
     }
 }
 

@@ -7,7 +7,7 @@ const submissionSchema = new Schema({
         required: true
     },
     otherNames: {
-        type: [String],
+        type: String,
         required: false
     },
     subType: {
@@ -21,18 +21,32 @@ const submissionSchema = new Schema({
         ref: 'SubmissionVariation',
         required: false
     },
-    edited: {
+    approved: {
         type: Boolean,
-        default: true
+        default: false
     },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    parent: {
-        type: String,
-        default: ""
-    }
+    edits: [{
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        name: {
+            type: String
+        },
+        otherNames: {
+            type: String
+        },
+        subType: {
+            type: String,
+            enum: ['Choke', 'Break', 'Pain'],
+            default: 'Choke',
+            required: true
+        }
+    }]
 });
 
 submissionSchema.post('findOneAndDelete', async function (doc) {
