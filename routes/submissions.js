@@ -9,6 +9,9 @@ router.get('/', catchAsync(subs.index))
 router.get('/admin', forceLogin, isAdmin, catchAsync(subs.admin));
 router.get('/new', forceLogin, subs.new);
 
+// add a variation
+router.get('/addSub/pos/:pos/id/:id', forceLogin, catchAsync(subs.addSub))
+
 router.get('/variations', forceLogin, isAdmin, catchAsync(subs.variations));
 router.post('/variations', forceLogin, subs.validateSubmissionVariation, catchAsync(subs.createVariation))
 router.put('/variations/:id', forceLogin, isAdmin, catchAsync(subs.approveVariations));

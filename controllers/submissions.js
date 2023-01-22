@@ -104,8 +104,6 @@ module.exports.createVariation = async (req, res) => {
         newVariation.posName = pos.name;
         await newVariation.save();
         sub.variations.push(newVariation);
-        pos.submissions.push(newVariation);
-        await pos.save();
         await sub.save();
     } else {
         console.log('error adding submission')

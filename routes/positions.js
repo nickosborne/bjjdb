@@ -11,9 +11,6 @@ router.get('/admin', forceLogin, isAdmin, catchAsync(positions.admin));
 
 router.get('/new', forceLogin, positions.new);
 
-// move this to submissions
-router.get('/addSub/pos/:pos/id/:id', forceLogin, catchAsync(positions.addSub))
-
 router.post('/', forceLogin, positions.validatePosition, catchAsync(positions.createPosition))
 
 router.get('/:id', catchAsync(positions.show))

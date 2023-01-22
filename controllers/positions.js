@@ -50,21 +50,11 @@ module.exports.new = (req, res) => {
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
+    const submissions = await Submission.find({ approved: true });
 
     if (req.isAuthenticated()) {
-        // const position = await Position.findById(id).populate({
-        //     path: 'submissions',
-        //     match: {
-        //         $or: [
-        //             { edited: false },
-        //             { userId: req.user.id }
-        //         ]
-        //     }
-        // }).populate('edits');
-
         const position = await Position.findById(id);
-
-        const subs = await SubmissionVariation.find({ position: { $eq: position.id } });
+        const subs = await SubmissionVariation.find({ $and: [{ $or: [{ approved: true }, { userId: req.user.id }] }, { position: position.id }] });
 
         position.edits.forEach(edit => {
             if (edit.userId.toString() === req.user.id) {
@@ -73,13 +63,13 @@ module.exports.show = async (req, res) => {
                 position.image = edit.image;
             }
         })
-        res.render('positions/show', { position, subs })
+        res.render('positions/show', { position, subs, submissions })
     }
     else {
         const position = await Position.findById(id);
-        const subs = await SubmissionVariation.find({ position: { $eq: position.id } });
+        const subs = await SubmissionVariation.find({ $and: [{ approved: true }, { position: position }] });
 
-        res.render('positions/show', { position, subs })
+        res.render('positions/show', { position, subs, submissions })
     }
 }
 
@@ -97,20 +87,6 @@ module.exports.createPosition = async (req, res) => {
     await position.save();
     req.flash('success', 'Created the position!');
     res.redirect(`/positions/${position.id}`)
-}
-
-// add a sub to a position
-module.exports.addSub = async (req, res) => {
-    const { pos, id } = req.params;
-    if (pos === "true") {
-        const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
-        const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
-        res.render('positions/addSub', { position, submissions })
-    } else {
-        const submission = await Submission.findById(id);
-        const positions = await Position.find();
-        res.render('submissions/addSub', { positions, submission })
-    }
 }
 
 // insert an edit to a position
