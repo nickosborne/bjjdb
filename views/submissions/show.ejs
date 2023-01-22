@@ -13,22 +13,56 @@
                     <form class="d-inline" action="/submissions/<%= sub.id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
-                    <a class="card-link btn btn-success" href="/positions/addSub/pos/false/id/<%= sub.id %>">addSub</a>
-                    <h5>Variations</h5>
-                    <div class="list-group list-group-flush d-inline">
-                        <% for (let variation of sub.variations) {%>
-                            <div class="d-flex d-inline">
-                                <a href="<%= variation.video %>" class="list-group-item list-group-item-action"
-                                    target="_blank" rel="noopener noreferrer">
-                                    <%= variation.name %>
-                                </a>
-                                <a href="/positions/<%=variation.position.id %>"
-                                    class="list-group-item justify-content-end">
-                                    <%=variation.position.name %>
-                                </a>
-                            </div>
+                    <% if (currentUser) { %>
+                        <button type="button" class="btn btn-primary" id="addSub">Add Variation</button>
+                        <% } else { %>
+                            <a class="btn btn-primary" href="/login" role="button">Link</a>
                             <% } %>
-                    </div>
+                                <form class="row form-floating mt-3" id="add-submission"
+                                    action="/submissions/variations" method="POST" hidden>
+                                    <div class="col form-floating">
+                                        <select id="position" class="form-select" name="variation[position]">
+                                            <% for (let pos of positions) { %>
+                                                <option value="<%=pos.id %>">
+                                                    <%= pos.name %>
+                                                </option>
+                                                <% } %>
+                                        </select>
+                                        <label for="submission">Position</label>
+                                    </div>
+                                    <div class="col form-floating">
+                                        <input class="form-control" type="text" id="name" name="variation[name]"
+                                            required>
+                                        <label class="form-label" for="name">Variation Name</label>
+                                    </div>
+                                    <div class="col form-floating">
+                                        <input class="form-control" type="text" id="video" name="variation[video]"
+                                            required>
+                                        <label class="form-label" for="video">Video</label>
+
+                                    </div>
+                                    <input type="hidden" id="submissionId" name="variation[submission]"
+                                        value="<%=sub.id %>">
+                                    <div class="col">
+                                        <button class="btn btn-success">Add</button>
+                                    </div>
+                                </form>
+                                <h5>Variations</h5>
+                                <div class="list-group list-group-flush d-inline">
+                                    <% for (let variation of sub.variations) {%>
+                                        <div class="d-flex d-inline">
+                                            <a href="<%= variation.video %>"
+                                                class="list-group-item list-group-item-action" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <%= variation.name %>
+                                            </a>
+                                            <a href="/positions/<%=variation.position.id %>"
+                                                class="list-group-item justify-content-end">
+                                                <%=variation.position.name %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+                                </div>
                 </div>
             </div>
         </div>

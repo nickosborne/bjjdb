@@ -1,7 +1,4 @@
 const User = require('../models/User');
-const Position = require('../models/Position');
-const Submission = require('../models/Submission');
-const SubmissionVariation = require('../models/SubmissionVariation');
 
 module.exports.register = (req, res) => {
     res.render('users/register')
@@ -29,7 +26,8 @@ module.exports.login = (req, res) => {
 
 module.exports.authenticate = (req, res) => {
     req.flash('success', 'logged in!');
-    const redirectUrl = res.locals.returnTo || '/positions';
+    console.log(res.locals);
+    const redirectUrl = res.locals.returnTo || res.locals.previous || '/positions';
     res.redirect(redirectUrl)
 }
 

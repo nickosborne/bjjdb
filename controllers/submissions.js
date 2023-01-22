@@ -53,13 +53,13 @@ module.exports.new = (req, res) => {
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
-
+    const positions = await Position.find({ approved: true })
     if (req.isAuthenticated()) {
         const sub = await Submission.findById(id).populate({
             path: 'variations',
             match: {
                 $or: [
-                    { edited: false },
+                    { approved: true },
                     { userId: req.user.id }
                 ]
             }
@@ -72,14 +72,14 @@ module.exports.show = async (req, res) => {
                 sub.subType = edit.subType;
             }
         })
-        res.render('submissions/show', { sub })
+        res.render('submissions/show', { sub, positions })
     }
     else {
         const sub = await Submission.findById(id).populate({
             path: 'variations',
             match: { approved: true }
         });
-        res.render('submissions/show', { sub })
+        res.render('submissions/show', { sub, positions })
     }
 }
 
