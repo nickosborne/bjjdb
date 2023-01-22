@@ -159,7 +159,7 @@ module.exports.delete = async (req, res) => {
             }
         });
         req.flash('success', 'Edit removed')
-        res.redirect('/admin');
+        res.redirect('/submissions/admin');
     }
     // delete position
     else {
