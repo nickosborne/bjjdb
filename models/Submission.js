@@ -55,13 +55,6 @@ submissionSchema.post('findOneAndDelete', async function (doc) {
         const vars = await mongoose.model('SubmissionVariation').find({ _id: { $in: doc.variations } })
         const subIds = vars.map(({ position }) => { return position })
 
-        // remove variations from submissions
-        await mongoose.model('Position').updateMany({ _id: { $in: subIds } }, {
-            $pull: {
-                variations: { $in: vars }
-            }
-        })
-
         // delete variations
         await mongoose.model('SubmissionVariation').deleteMany({ _id: { $in: vars } });
     }

@@ -29,9 +29,9 @@ const submissionVariationSchema = new Schema({
         type: String,
         required: true
     },
-    edited: {
+    approved: {
         type: Boolean,
-        default: true
+        default: false
     },
     userId: {
         type: String,

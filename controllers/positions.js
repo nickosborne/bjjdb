@@ -3,6 +3,7 @@ const Submission = require('../models/Submission');
 const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const mongoose = require('mongoose');
+const SubmissionVariation = require('../models/SubmissionVariation');
 
 // middleware
 module.exports.validatePosition = (req, res, next) => {
@@ -43,16 +44,6 @@ module.exports.admin = async (req, res) => {
     res.render('positions/admin', { positions, edits })
 }
 
-module.exports.validateEdit = (req, res, next) => {
-    const { error } = editSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
 module.exports.new = (req, res) => {
     res.render('positions/new');
 }
@@ -61,15 +52,19 @@ module.exports.show = async (req, res) => {
     const { id } = req.params;
 
     if (req.isAuthenticated()) {
-        const position = await Position.findById(id).populate({
-            path: 'submissions',
-            match: {
-                $or: [
-                    { edited: false },
-                    { userId: req.user.id }
-                ]
-            }
-        }).populate('edits');
+        // const position = await Position.findById(id).populate({
+        //     path: 'submissions',
+        //     match: {
+        //         $or: [
+        //             { edited: false },
+        //             { userId: req.user.id }
+        //         ]
+        //     }
+        // }).populate('edits');
+
+        const position = await Position.findById(id);
+
+        const subs = await SubmissionVariation.find({ position: { $eq: position.id } });
 
         position.edits.forEach(edit => {
             if (edit.userId.toString() === req.user.id) {
@@ -78,14 +73,13 @@ module.exports.show = async (req, res) => {
                 position.image = edit.image;
             }
         })
-        res.render('positions/show', { position })
+        res.render('positions/show', { position, subs })
     }
     else {
-        const position = await Position.findById(id).populate({
-            path: 'submissions',
-            match: { edited: false }
-        });
-        res.render('positions/show', { position })
+        const position = await Position.findById(id);
+        const subs = await SubmissionVariation.find({ position: { $eq: position.id } });
+
+        res.render('positions/show', { position, subs })
     }
 }
 

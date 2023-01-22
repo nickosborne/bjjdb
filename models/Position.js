@@ -16,11 +16,6 @@ const positionSchema = new Schema({
         type: String,
         required: true
     },
-    submissions: {
-        type: [Schema.Types.ObjectId],
-        ref: 'SubmissionVariation',
-        required: false
-    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -49,7 +44,7 @@ const positionSchema = new Schema({
 positionSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         // get all the submission Ids from the variations
-        const vars = await mongoose.model('SubmissionVariation').find({ _id: { $in: doc.submissions } })
+        const vars = await mongoose.model('SubmissionVariation').find({ position: { $eq: doc._id } })
         const subIds = vars.map(({ submission }) => { return submission })
 
         // remove variations from submissions
@@ -60,7 +55,7 @@ positionSchema.post('findOneAndDelete', async function (doc) {
         })
 
         // delete variations
-        await mongoose.model('SubmissionVariation').deleteMany({ _id: { $in: vars } });
+        await mongoose.model('SubmissionVariation').deleteMany({ position: { $eq: doc._id } });
     }
 })
 const Position = mongoose.model('Position', positionSchema);

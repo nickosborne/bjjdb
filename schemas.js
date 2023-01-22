@@ -10,13 +10,6 @@ module.exports.positionSchema = Joi.object({
     }).required()
 });
 
-module.exports.editSchema = Joi.object({
-    edit: Joi.object({
-        name: Joi.string().required(),
-        otherNames: Joi.string(),
-        image: Joi.string().required()
-    })
-})
 module.exports.submissionSchema = Joi.object({
     submission: Joi.object({
         name: Joi.string().required(),

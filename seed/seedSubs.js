@@ -31,19 +31,13 @@ fs.createReadStream('./seed/subs.csv')
                 position: pos.id,
                 posName: pos.name,
                 video: 'https://www.youtube.com/watch?v=A4HkWMOcYaQ',
-                edited: false
+                approved: true
             });
 
             variations.push(newSubVar);
             newSub.variations.push(newSubVar);
             subs.push(newSub);
         }
-
-
-        const ids = variations.map(({ id }) => { return mongoose.Types.ObjectId(id) });
-        pos.submissions = ids;
-        await pos.save();
-        console.log(pos);
 
         await Submission.collection.drop().then(() => { console.log("dropped subs") })
         await SubmissionVariation.collection.drop().then(() => { console.log("dropped variatons") })
