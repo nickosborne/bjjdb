@@ -142,7 +142,7 @@ module.exports.postEdit = async (req, res) => {
     }
 }
 
-// delete a position or an edit
+// delete a submission or an edit
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
     const userId = req.body.userId;
@@ -167,26 +167,42 @@ module.exports.delete = async (req, res) => {
     }
 }
 
-module.exports.admin = async (req, res) => {
-    const result = await Submission.find();
-    let submissions = result.filter(sub => !sub.approved)
-    let edits = result.filter(sub => sub.edits.length)
-    res.render('submissions/admin', { submissions, edits })
+module.exports.deleteVariation = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    const variation = await SubmissionVariation.findByIdAndDelete(id);
+    console.log(variation)
+    await Submission.findByIdAndUpdate(variation.submission, {
+        $pull: {
+            variations: {
+                id: { $eq: id }
+            }
+        }
+    })
+    req.flash('success', 'Deleted variation')
+    res.redirect('/submissions/admin');
 }
 
-module.exports.variations = async (req, res) => {
-    const subs = await SubmissionVariation.find({ edited: true })
-    res.render('submissions/variations', { subs })
+module.exports.admin = async (req, res) => {
+    const result = await Submission.find();
+    const variations = await SubmissionVariation.find({ approved: false })
+    let submissions = result.filter(sub => !sub.approved)
+    let edits = result.filter(sub => sub.edits.length)
+    res.render('submissions/admin', { submissions, edits, variations })
 }
+
 module.exports.approveVariations = async (req, res) => {
     const { id } = req.params;
-    const result = await SubmissionVariation.findByIdAndUpdate(id, { edited: false })
+    const result = await SubmissionVariation.findByIdAndUpdate(id, {
+        approved: true,
+        video: req.body.variation.video
+    })
     if (result) {
         req.flash('success', 'Variation approved');
-        res.redirect('/submissions/variations');
+        res.redirect('/submissions/admin');
     } else {
         req.flash('error', 'Error approving variation');
-        res.redirect('/submissions/variations');
+        res.redirect('/submissions/admin');
     }
 }
 

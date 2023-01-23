@@ -89,3 +89,49 @@
                         <% } %>
                 </div>
                 <% } %>
+
+                    <div class="row justify-content-center">
+                        <h1 class="col-auto">Variations</h1>
+                    </div>
+                    <% for (let variation of variations) {%>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col">
+                                    <input type="text" class="form-control" id="name" name="variation[name]"
+                                        value="<%=variation.name %>">
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary" href="/positions/<%=variation.position%>" role="button">
+                                        <%=variation.posName %>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary" href="/submissions/<%=variation.submission%>"
+                                        role="button">
+                                        <%=variation.subName %>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary" href="<%= variation.video %>" role="button">
+                                        <%=variation.video %>
+                                    </a>
+                                </div>
+                                <form action="/submissions/variations/<%= variation.id %>?_method=PUT" method="POST"
+                                    class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" class="form-control" id="url" name="variation[video]"
+                                                value="<%=variation.video%>">
+                                        </div>
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-success">Approve</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form class="col" action="/submissions/variations/<%= variation.id %>?_method=DELETE"
+                                    method="POST">
+                                    <button class="btn btn-danger">dont</button>
+                                </form>
+                            </div>
+                        </div>
+                        <% } %>

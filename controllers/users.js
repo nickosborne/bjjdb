@@ -26,7 +26,6 @@ module.exports.login = (req, res) => {
 
 module.exports.authenticate = (req, res) => {
     req.flash('success', 'logged in!');
-    console.log(res.locals);
     const redirectUrl = res.locals.returnTo || res.locals.previous || '/positions';
     res.redirect(redirectUrl)
 }
