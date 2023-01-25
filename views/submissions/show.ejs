@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
         <div class="col-6 offset-3">
-            <div class="card">
+            <div class="card bg-dark text-light">
                 <h1 class="text-center">
                     <%= sub.name %>
                 </h1>
@@ -67,20 +67,21 @@
                             <button class="btn btn-success">Add</button>
                         </div>
                     </form>
-                    <div class="list-group list-group-flush d-inline">
+                    <ul class="list-group">
                         <% for (let variation of sub.variations) {%>
-                            <div class="d-flex d-inline">
-                                <a href="<%= variation.video %>" class="list-group-item list-group-item-action"
-                                    target="_blank" rel="noopener noreferrer">
+                            <li class="list-group-item bg-secondary text-light">
+                                <a href="<%= variation.video %>" class="link-primary" target="_blank"
+                                    rel="noopener noreferrer">
                                     <%= variation.name %>
+                                        <%= variation.subName %>
                                 </a>
-                                <a href="/positions/<%=variation.position.id %>"
-                                    class="list-group-item justify-content-end">
-                                    <%=variation.position.name %>
+                                From Top
+                                <a href="/positions/<%=variation.position.id %>" class="link-primary">
+                                    <%=variation.posName %>
                                 </a>
-                            </div>
+                            </li>
                             <% } %>
-                    </div>
+                    </ul>
                 </div>
             </div>
         </div>

@@ -2,16 +2,8 @@
 
     <div class="row">
         <div class="col-6 offset-3">
-            <div class="card">
-                <div class="card text-bg-dark">
-                    <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
-                    <div class="card-img-overlay d-flex align-items-end">
-                        <h1 class="text-center text-light">
-                            <%= position.name %>
-                        </h1>
-                        <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
-                    </div>
-                </div>
+            <div class="card bg-dark">
+                <img src="<%= position.image%>" class="card-img-top" alt="...">
                 <form class="row form-floating mt-3" id="add-submission" action="/submissions/variations" method="POST"
                     hidden>
                     <div class="col form-floating">
@@ -39,6 +31,10 @@
                     </div>
                 </form>
                 <div class="card-body">
+                    <h1 class="text-center text-light">
+                        <%= position.name %>
+                    </h1>
+                    <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="submissions-tab" data-bs-toggle="tab"
@@ -80,21 +76,17 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="submissions" role="tabpanel"
                             aria-labelledby="submissions-tab">
-                            <ul class="list-group list-group-flush">
+                            <ul class="list-group">
                                 <% for (let sub of subs) {%>
-                                    <li class="list-group-item">
-                                        <div class="d-flex d-inline">
-                                            <a href="<%= sub.video %>" class="list-group-item list-group-item-action"
-                                                target="_blank" rel="noopener noreferrer">
-                                                <%= sub.name %>
-                                            </a>
-                                            <a href="/submissions/<%=sub.submission %>"
-                                                class="list-group-item list-group-item-action justify-content-end">
-                                                Submission:
-                                                <%=sub.subName %>
-                                            </a>
-                                        </div>
-
+                                    <li class="list-group-item bg-dark text-light">
+                                        <a href="<%= sub.video %>" class="link-primary" target="_blank"
+                                            rel="noopener noreferrer">
+                                            <%= sub.name %>
+                                        </a>
+                                        <a href="/submissions/<%=sub.submission %>" class="link-primary">
+                                            <%=sub.subName %>
+                                        </a>
+                                        From Top
                                     </li>
                                     <% } %>
                             </ul>
