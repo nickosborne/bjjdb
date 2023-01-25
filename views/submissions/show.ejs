@@ -9,60 +9,78 @@
                     <%= sub.otherNames %>
                 </small>
                 <div class="card-body">
-                    <a class="card-link btn btn-warning" href="/submissions/<%= sub.id %>/edit">Edit</a>
-                    <form class="d-inline" action="/submissions/<%= sub.id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                    <% if (currentUser) { %>
-                        <button type="button" class="btn btn-primary" id="addSub">Add Variation</button>
-                        <% } else { %>
-                            <a class="btn btn-primary" href="/login" role="button">Link</a>
-                            <% } %>
-                                <form class="row form-floating mt-3" id="add-submission"
-                                    action="/submissions/variations" method="POST" hidden>
-                                    <div class="col form-floating">
-                                        <select id="position" class="form-select" name="variation[position]">
-                                            <% for (let pos of positions) { %>
-                                                <option value="<%=pos.id %>">
-                                                    <%= pos.name %>
-                                                </option>
+                    <div class="row">
+                        <div class="col">
+                            <h5>Variations</h5>
+                        </div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    . . .
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li> <a class="card-link btn btn-warning"
+                                            href="/submissions/<%= sub.id %>/edit">Edit</a>
+                                    </li>
+                                    <li>
+                                        <form class="d-inline" action="/submissions/<%= sub.id %>?_method=DELETE"
+                                            method="POST">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <% if (currentUser) { %>
+                                            <button type="button" class="btn btn-success" id="addSub">Add
+                                                Variation</button>
+                                            <% } else { %>
+                                                <a class="btn btn-success" href="/login" role="button">Add Variation</a>
                                                 <% } %>
-                                        </select>
-                                        <label for="submission">Position</label>
-                                    </div>
-                                    <div class="col form-floating">
-                                        <input class="form-control" type="text" id="name" name="variation[name]"
-                                            required>
-                                        <label class="form-label" for="name">Variation Name</label>
-                                    </div>
-                                    <div class="col form-floating">
-                                        <input class="form-control" type="text" id="video" name="variation[video]"
-                                            required>
-                                        <label class="form-label" for="video">Video</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="row form-floating mt-3" id="add-submission" action="/submissions/variations"
+                        method="POST" hidden>
+                        <div class="col form-floating">
+                            <select id="position" class="form-select" name="variation[position]">
+                                <% for (let pos of positions) { %>
+                                    <option value="<%=pos.id %>">
+                                        <%= pos.name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label for="submission">Position</label>
+                        </div>
+                        <div class="col form-floating">
+                            <input class="form-control" type="text" id="name" name="variation[name]" required>
+                            <label class="form-label" for="name">Variation Name</label>
+                        </div>
+                        <div class="col form-floating">
+                            <input class="form-control" type="text" id="video" name="variation[video]" required>
+                            <label class="form-label" for="video">Video</label>
 
-                                    </div>
-                                    <input type="hidden" id="submissionId" name="variation[submission]"
-                                        value="<%=sub.id %>">
-                                    <div class="col">
-                                        <button class="btn btn-success">Add</button>
-                                    </div>
-                                </form>
-                                <h5>Variations</h5>
-                                <div class="list-group list-group-flush d-inline">
-                                    <% for (let variation of sub.variations) {%>
-                                        <div class="d-flex d-inline">
-                                            <a href="<%= variation.video %>"
-                                                class="list-group-item list-group-item-action" target="_blank"
-                                                rel="noopener noreferrer">
-                                                <%= variation.name %>
-                                            </a>
-                                            <a href="/positions/<%=variation.position.id %>"
-                                                class="list-group-item justify-content-end">
-                                                <%=variation.position.name %>
-                                            </a>
-                                        </div>
-                                        <% } %>
-                                </div>
+                        </div>
+                        <input type="hidden" id="submissionId" name="variation[submission]" value="<%=sub.id %>">
+                        <div class="col">
+                            <button class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+                    <div class="list-group list-group-flush d-inline">
+                        <% for (let variation of sub.variations) {%>
+                            <div class="d-flex d-inline">
+                                <a href="<%= variation.video %>" class="list-group-item list-group-item-action"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <%= variation.name %>
+                                </a>
+                                <a href="/positions/<%=variation.position.id %>"
+                                    class="list-group-item justify-content-end">
+                                    <%=variation.position.name %>
+                                </a>
+                            </div>
+                            <% } %>
+                    </div>
                 </div>
             </div>
         </div>
