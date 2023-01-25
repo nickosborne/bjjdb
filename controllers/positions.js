@@ -120,7 +120,7 @@ module.exports.delete = async (req, res) => {
             }
         });
         req.flash('success', 'Edit removed')
-        res.redirect('/admin');
+        res.redirect('/positions/admin');
     }
     // delete position
     else {
