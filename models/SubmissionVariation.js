@@ -29,6 +29,12 @@ const submissionVariationSchema = new Schema({
         type: String,
         required: true
     },
+    side: {
+        type: String,
+        enum: ['Top', 'Bottom'],
+        default: 'Top',
+        required: true
+    },
     approved: {
         type: Boolean,
         default: false

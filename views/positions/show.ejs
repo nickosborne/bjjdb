@@ -4,32 +4,6 @@
         <div class="col-6 offset-3">
             <div class="card bg-dark">
                 <img src="<%= position.image%>" class="card-img-top" alt="...">
-                <form class="row form-floating mt-3" id="add-submission" action="/submissions/variations" method="POST"
-                    hidden>
-                    <div class="col form-floating">
-                        <select id="submission" class="form-select" name="variation[submission]">
-                            <% for (let sub of submissions) { %>
-                                <option value="<%=sub.id %>">
-                                    <%= sub.name %>
-                                </option>
-                                <% } %>
-                        </select>
-                        <label for="submission">Submission</label>
-                    </div>
-                    <div class="col form-floating">
-                        <input class="form-control" type="text" id="name" name="variation[name]" required>
-                        <label class="form-label" for="name">Variation Name</label>
-                    </div>
-                    <div class="col form-floating">
-                        <input class="form-control" type="text" id="video" name="variation[video]" required>
-                        <label class="form-label" for="video">Video</label>
-
-                    </div>
-                    <input type="hidden" id="positionId" name="variation[position]" value="<%=position.id %>">
-                    <div class="col">
-                        <button class="btn btn-success">Add</button>
-                    </div>
-                </form>
                 <div class="card-body">
                     <h1 class="text-center text-light">
                         <%= position.name %>
@@ -73,6 +47,43 @@
                             </div>
                         </li>
                     </ul>
+                    <form class="row form-floating mt-3 bg-secondary" id="add-submission"
+                        action="/submissions/variations" method="POST" hidden>
+                        <div class="col form-floating">
+                            <input class="form-control" type="text" id="name" name="variation[name]" required>
+                            <label class="form-label" for="name">Variation Name</label>
+                        </div>
+                        <div class="col form-floating">
+                            <select id="submission" class="form-select" name="variation[submission]">
+                                <% for (let sub of submissions) { %>
+                                    <option value="<%=sub.id %>">
+                                        <%= sub.name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label for="submission">Submission</label>
+                        </div>
+                        From
+                        <div class="col form-floating">
+                            <select id="submission" class="form-select" name="variation[side]">
+                                <option value="Top">
+                                    Top
+                                </option>
+                                <option value="Bottom">
+                                    Bottom
+                                </option>
+                            </select>
+                            <label for="side">Side</label>
+                        </div>
+                        <div class="col form-floating">
+                            <input class="form-control" type="text" id="video" name="variation[video]" required>
+                            <label class="form-label" for="video">Video</label>
+                        </div>
+                        <input type="hidden" id="positionId" name="variation[position]" value="<%=position.id %>">
+                        <div class="col">
+                            <button class="btn btn-success">Add</button>
+                        </div>
+                    </form>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="submissions" role="tabpanel"
                             aria-labelledby="submissions-tab">

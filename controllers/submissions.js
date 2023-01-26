@@ -105,8 +105,9 @@ module.exports.createVariation = async (req, res) => {
         await newVariation.save();
         sub.variations.push(newVariation);
         await sub.save();
+        req.flash('success', 'Variation Added')
     } else {
-        console.log('error adding submission')
+        req.flash('error', 'Error adding variation')
     }
     res.redirect(`/positions/${pos.id}`);
 }
@@ -169,9 +170,7 @@ module.exports.delete = async (req, res) => {
 
 module.exports.deleteVariation = async (req, res) => {
     const { id } = req.params;
-    console.log(id);
     const variation = await SubmissionVariation.findByIdAndDelete(id);
-    console.log(variation)
     await Submission.findByIdAndUpdate(variation.submission, {
         $pull: {
             variations: {
