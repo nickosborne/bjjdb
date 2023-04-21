@@ -2,17 +2,13 @@
 
     <div class="row">
         <div class="col-6 offset-3">
-            <div class="card">
-                <div class="card text-bg-dark">
-                    <img class="card-img-top" src="<%= position.image%>" alt="Card image cap">
-                    <div class="card-img-overlay d-flex align-items-end">
-                        <h1 class="text-center text-light">
-                            <%= position.name %>
-                        </h1>
-                        <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
-                    </div>
-                </div>
+            <div class="card bg-dark">
+                <img src="<%= position.image%>" class="card-img-top" alt="...">
                 <div class="card-body">
+                    <h1 class="text-center text-light">
+                        <%= position.name %>
+                    </h1>
+                    <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="submissions-tab" data-bs-toggle="tab"
@@ -23,43 +19,95 @@
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
                                 type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
-                                type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+                        <li class="nav-item ms-md-auto" role="presentation">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    . . .
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
+                                    </li>
+                                    <li>
+                                        <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE"
+                                            method="POST">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <% if (currentUser) { %>
+                                            <button type="button" class="btn btn-success" id="addSub">Add
+                                                Submission</button>
+                                            <% } else { %>
+                                                <a class="btn btn-success" href="/login" role="button">Add
+                                                    Submission</a>
+                                                <% } %>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
+                    <form class="row form-floating mt-3 bg-secondary" id="add-submission"
+                        action="/submissions/variations" method="POST" hidden>
+                        <div class="col form-floating">
+                            <input class="form-control" type="text" id="name" name="variation[name]" required>
+                            <label class="form-label" for="name">Variation Name</label>
+                        </div>
+                        <div class="col form-floating">
+                            <select id="submission" class="form-select" name="variation[submission]">
+                                <% for (let sub of submissions) { %>
+                                    <option value="<%=sub.id %>">
+                                        <%= sub.name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label for="submission">Submission</label>
+                        </div>
+                        From
+                        <div class="col form-floating">
+                            <select id="submission" class="form-select" name="variation[side]">
+                                <option value="Top">
+                                    Top
+                                </option>
+                                <option value="Bottom">
+                                    Bottom
+                                </option>
+                            </select>
+                            <label for="side">Side</label>
+                        </div>
+                        <div class="col form-floating">
+                            <input class="form-control" type="text" id="video" name="variation[video]" required>
+                            <label class="form-label" for="video">Video</label>
+                        </div>
+                        <input type="hidden" id="positionId" name="variation[position]" value="<%=position.id %>">
+                        <div class="col">
+                            <button class="btn btn-success">Add</button>
+                        </div>
+                    </form>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="submissions" role="tabpanel"
                             aria-labelledby="submissions-tab">
-                            <ul class="list-group list-group-flush">
-                                <% for (let sub of position.submissions) {%>
-                                    <li class="list-group-item">
-                                        <div class="d-flex d-inline">
-                                            <a href="<%= sub.video %>" class="list-group-item list-group-item-action"
-                                                target="_blank" rel="noopener noreferrer">
-                                                <%= sub.name %>
-                                            </a>
-                                            <a href="/submissions/<%=sub.submission %>"
-                                                class="list-group-item list-group-item-action justify-content-end">
-                                                Submission:
-                                                <%=sub.subName %>
-                                            </a>
-                                        </div>
-
+                            <ul class="list-group">
+                                <% for (let sub of subs) {%>
+                                    <li class="list-group-item bg-dark text-light">
+                                        <a href="<%= sub.video %>" class="link-primary" target="_blank"
+                                            rel="noopener noreferrer">
+                                            <%= sub.name %>
+                                        </a>
+                                        <a href="/submissions/<%=sub.submission %>" class="link-primary">
+                                            <%=sub.subName %>
+                                        </a>
+                                        From Top
                                     </li>
                                     <% } %>
                             </ul>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            ...</div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            ...</div>
                     </div>
 
-                    <a class="card-link btn btn-warning" href="/positions/<%= position.id %>/edit">Edit</a>
-                    <form class="d-inline" action="/positions/<%= position._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                    <a class="card-link btn btn-success"
-                        href="/positions/addSub/pos/true/id/<%= position.id %>">addSub</a>
                 </div>
             </div>
         </div>

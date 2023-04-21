@@ -7,7 +7,7 @@ const submissionSchema = new Schema({
         required: true
     },
     otherNames: {
-        type: [String],
+        type: String,
         required: false
     },
     subType: {
@@ -21,18 +21,32 @@ const submissionSchema = new Schema({
         ref: 'SubmissionVariation',
         required: false
     },
-    edited: {
+    approved: {
         type: Boolean,
-        default: true
+        default: false
     },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    parent: {
-        type: String,
-        default: ""
-    }
+    edits: [{
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        name: {
+            type: String
+        },
+        otherNames: {
+            type: String
+        },
+        subType: {
+            type: String,
+            enum: ['Choke', 'Break', 'Pain'],
+            default: 'Choke',
+            required: true
+        }
+    }]
 });
 
 submissionSchema.post('findOneAndDelete', async function (doc) {
@@ -40,13 +54,6 @@ submissionSchema.post('findOneAndDelete', async function (doc) {
         // get all the submission Ids from the variations
         const vars = await mongoose.model('SubmissionVariation').find({ _id: { $in: doc.variations } })
         const subIds = vars.map(({ position }) => { return position })
-
-        // remove variations from submissions
-        await mongoose.model('Position').updateMany({ _id: { $in: subIds } }, {
-            $pull: {
-                variations: { $in: vars }
-            }
-        })
 
         // delete variations
         await mongoose.model('SubmissionVariation').deleteMany({ _id: { $in: vars } });

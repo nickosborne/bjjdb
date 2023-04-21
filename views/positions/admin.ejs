@@ -1,0 +1,84 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row justify-content-center">
+        <h1 class="col-auto">New Positions</h1>
+    </div>
+    <% for (let pos of positions) {%>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <form class="row gy-2 gx-3" action="positions/<%= pos.id %>/approve?_method=PUT" method="POST">
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="name" name="position[name]" value="<%=pos.name %>">
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="otherNames" name="position[otherNames]"
+                            value="<%=pos.otherNames %>">
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="image" name="position[image]"
+                            value="<%=pos.image %>">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </div>
+                </form>
+            </div>
+            <form class="col-auto" action="/positions/<%= pos._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Deny</button>
+            </form>
+        </div>
+        <% } %>
+
+            <div class="row justify-content-center">
+                <h1 class="col-auto">Edits</h1>
+            </div>
+            <% for (let pos of edits) {%>
+                <div class="row justify-content-center">
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <b>
+                                <%= pos.name %>
+                            </b>
+                        </div>
+                        <div class="col-2">
+                            <b>
+                                <%= pos.otherNames %>
+                            </b>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" href="<%=pos.image  %>" target="_blank">Image</a>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+
+                    <% for (let edit of pos.edits) {%>
+                        <div class="row  gy-2 gx-3 justify-content-center">
+                            <div class="col-auto">
+                                <form class="row gy-2 gx-3" action="positions/<%= pos.id %>/approve?_method=PUT"
+                                    method="POST">
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="name" name="position[name]"
+                                            value="<%=edit.name %>">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="otherNames"
+                                            name="position[otherNames]" value="<%=edit.otherNames %>">
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="text" class="form-control" id="image" name="position[image]"
+                                            value="<%=edit.image %>">
+                                    </div>
+                                    <input type="hidden" id="userId" name="position[userId]" value="<%=edit.userId%>">
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <form class="col-auto" action="/positions/<%= pos._id %>?_method=DELETE" method="POST">
+                                <input type="hidden" id="userId" name="userId" value="<%=edit.userId%>">
+
+                                <button class="btn btn-danger">Deny</button>
+                            </form>
+                        </div>
+                        <% } %>
+                </div>
+                <% } %>

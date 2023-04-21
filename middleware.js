@@ -11,6 +11,9 @@ module.exports.checkReturnTo = (req, res, next) => {
     if (req.session.returnTo) {
         res.locals.returnTo = req.session.returnTo;
     }
+    if (req.session.previous) {
+        res.locals.previous = req.session.previous;
+    }
     next()
 }
 

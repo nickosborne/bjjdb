@@ -28,19 +28,21 @@ module.exports.validateSubmissionVariation = (req, res, next) => {
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
-        // get the user's edits and the ids of their parents
-        const userSubmissions = await Submission.find({ userId: req.user.id })
-        let ids = [];
-        userSubmissions.forEach(sub => ids.push(sub.parent));
-        //get all unedited submissions and filter out ones duplicated by the user submissions
-        const result = await Submission.find({ edited: false });
-        let submissions = result.filter(sub => !ids.includes(sub.id));
-        for (sub of userSubmissions) {
-            submissions.push(sub);
-        }
+        let submissions = await Submission.find({ $or: [{ approved: true }, { userId: req.user.id }] })
+            .populate('edits').lean();
+
+        // if the user has an edit, change the values to match the edit
+        submissions.forEach(sub =>
+            sub.edits.forEach(edit => {
+                if (edit.userId.toString() === req.user.id) {
+                    sub.name = edit.name;
+                    sub.otherNames = edit.otherNames;
+                    sub.image = edit.image;
+                }
+            }));
         res.render('submissions/index', { submissions })
     } else {
-        const submissions = await Submission.find({ edited: false })
+        const submissions = await Submission.find({ approved: true })
         res.render('submissions/index', { submissions })
     }
 }
@@ -51,31 +53,42 @@ module.exports.new = (req, res) => {
 
 module.exports.show = async (req, res) => {
     const { id } = req.params;
-
+    const positions = await Position.find({ approved: true })
     if (req.isAuthenticated()) {
         const sub = await Submission.findById(id).populate({
             path: 'variations',
             match: {
                 $or: [
-                    { edited: false },
+                    { approved: true },
                     { userId: req.user.id }
                 ]
             }
-        });
-        res.render('submissions/show', { sub })
+        }).populate('edits');
+
+        sub.edits.forEach(edit => {
+            if (edit.userId.toString() === req.user.id) {
+                sub.name = edit.name;
+                sub.otherNames = edit.otherNames;
+                sub.subType = edit.subType;
+            }
+        })
+        res.render('submissions/show', { sub, positions })
     }
     else {
         const sub = await Submission.findById(id).populate({
             path: 'variations',
-            match: { edited: false }
+            match: { approved: true }
         });
-        res.render('submissions/show', { sub })
+        res.render('submissions/show', { sub, positions })
     }
 }
 
 module.exports.create = async (req, res) => {
     const sub = new Submission(req.body.submission);
+    sub.userId = req.user.id;
+    sub.approved = false;
     await sub.save();
+    req.flash('success', 'Created the position!');
     res.redirect(`/submissions/${sub.id}`)
 }
 
@@ -91,11 +104,10 @@ module.exports.createVariation = async (req, res) => {
         newVariation.posName = pos.name;
         await newVariation.save();
         sub.variations.push(newVariation);
-        pos.submissions.push(newVariation);
-        await pos.save();
         await sub.save();
+        req.flash('success', 'Variation Added')
     } else {
-        console.log('error adding submission')
+        req.flash('error', 'Error adding variation')
     }
     res.redirect(`/positions/${pos.id}`);
 }
@@ -115,64 +127,101 @@ module.exports.edit = async (req, res) => {
     res.render('submissions/edit', { submission })
 }
 
-module.exports.update = async (req, res) => {
+// insert an edit to a submission
+module.exports.postEdit = async (req, res) => {
     const { id } = req.params;
-    if (req.user.admin) {
-        // if admin, delete edited version, update parent with changes
-        req.body.submission.edited = false;
-        const submission = await Submission.findById(id);
-        const parent = await Submission.findByIdAndUpdate(submission.parent, { ...req.body.submission })
-        //update submisison variations to point to parent
-        submission.variations.forEach(async (sub) => {
-            await SubmissionVariation.findByIdAndUpdate(sub._id, { submission: parent.id, subName: parent.name });
-            parent.variations.push(sub);
-            await parent.save();
-        })
-        submission.variations = [];
-        submission.delete();
-        req.flash('success', 'Approved the changes');
-        res.redirect('/submissions')
-    } else if (req.body.submission.edited === "false") {
-        //if not admin, post new submission in edited status and ref parent
-        const newSubmission = new Submission(req.body.submission);
-        newSubmission.parent = id
-        newSubmission.edited = true;
-        newSubmission.userId = req.user.id;
-        await newSubmission.save();
-        req.flash('success', 'Posted the submission.');
-        res.redirect(`/submissions/${newSubmission.id}`)
-    } else {
-        // if editing a submission that already has an edited status, just add the edit
-        const submission = await Submission.findByIdAndUpdate(id, { ...req.body.submission })
-        req.flash('success', 'Updated the submission.');
+    const submission = await (Submission.findById(id));
+    if (submission) {
+        submission.edits.push({ ...req.body.submission, userId: req.user.id })
+        await submission.save();
+        req.flash('success', 'Posted an edit');
         res.redirect(`/submissions/${submission._id}`)
+    }
+    else {
+        req.flash('error', 'Error finding submission');
+        res.redirect(`/submissions/${id}`)
     }
 }
 
+// delete a submission or an edit
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
-    await Submission.findByIdAndDelete(id);
-    req.flash('success', 'Sub deleted')
-    res.redirect('/submissions');
+    const userId = req.body.userId;
+
+    // delete edit
+    if (userId) {
+        await Submission.findByIdAndUpdate(id, {
+            $pull: {
+                edits: {
+                    userId: { $eq: userId }
+                }
+            }
+        });
+        req.flash('success', 'Edit removed')
+        res.redirect('/submissions/admin');
+    }
+    // delete position
+    else {
+        await Submission.findByIdAndDelete(id);
+        req.flash('success', 'Submission deleted.')
+        res.redirect('/submissions');
+    }
+}
+
+module.exports.deleteVariation = async (req, res) => {
+    const { id } = req.params;
+    const variation = await SubmissionVariation.findByIdAndDelete(id);
+    await Submission.findByIdAndUpdate(variation.submission, {
+        $pull: {
+            variations: {
+                id: { $eq: id }
+            }
+        }
+    })
+    req.flash('success', 'Deleted variation')
+    res.redirect('/submissions/admin');
 }
 
 module.exports.admin = async (req, res) => {
-    const submissions = await Submission.find({ edited: true })
-    res.render('submissions/index', { submissions })
+    const result = await Submission.find();
+    const variations = await SubmissionVariation.find({ approved: false })
+    let submissions = result.filter(sub => !sub.approved)
+    let edits = result.filter(sub => sub.edits.length)
+    res.render('submissions/admin', { submissions, edits, variations })
 }
 
-module.exports.variations = async (req, res) => {
-    const subs = await SubmissionVariation.find({ edited: true })
-    res.render('submissions/variations', { subs })
-}
 module.exports.approveVariations = async (req, res) => {
     const { id } = req.params;
-    const result = await SubmissionVariation.findByIdAndUpdate(id, { edited: false })
+    const result = await SubmissionVariation.findByIdAndUpdate(id, {
+        approved: true,
+        video: req.body.variation.video
+    })
     if (result) {
         req.flash('success', 'Variation approved');
-        res.redirect('/submissions/variations');
+        res.redirect('/submissions/admin');
     } else {
         req.flash('error', 'Error approving variation');
-        res.redirect('/submissions/variations');
+        res.redirect('/submissions/admin');
     }
+}
+
+// approve submissions and edits
+module.exports.approve = async (req, res) => {
+    const { id } = req.params;
+    const submission = await Submission.findByIdAndUpdate(id, {
+        ...req.body.submission,
+        approved: true,
+        $pull: {
+            edits: {
+                userId: { $eq: req.body.submission.userId }
+            }
+        }
+    });
+
+    if (submission) {
+        req.flash('success', 'approved')
+    } else {
+        req.flash('error', 'error')
+    }
+    res.redirect('/submissions/admin')
 }

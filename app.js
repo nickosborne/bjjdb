@@ -42,6 +42,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(function (req, res, next) {
+    if (req.method === "GET") {
+        req.session.previous = req.session.current;
+        req.session.current = req.originalUrl;
+    }
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');

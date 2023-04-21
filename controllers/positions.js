@@ -1,33 +1,11 @@
 const Position = require('../models/Position');
 const Submission = require('../models/Submission');
-const SubmissionVariation = require('../models/SubmissionVariation');
-const { positionSchema } = require('../schemas.js');
+const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
+const mongoose = require('mongoose');
+const SubmissionVariation = require('../models/SubmissionVariation');
 
-module.exports.index = async (req, res) => {
-    if (req.isAuthenticated()) {
-        // get the user's edits and the ids of their parents
-        const userPositions = await Position.find({ userId: req.user.id })
-        let ids = [];
-        userPositions.forEach(pos => ids.push(pos.parent));
-        //get all unedited positions and filter out ones duplicated by the user positions
-        const result = await Position.find({ edited: false });
-        let positions = result.filter(pos => !ids.includes(pos.id));
-        for (pos of userPositions) {
-            positions.push(pos);
-        }
-        res.render('positions/index', { positions })
-    } else {
-        const positions = await Position.find({ edited: false })
-        res.render('positions/index', { positions })
-    }
-}
-
-module.exports.admin = async (req, res) => {
-    const positions = await Position.find({ edited: true })
-    res.render('positions/index', { positions })
-}
-
+// middleware
 module.exports.validatePosition = (req, res, next) => {
     const { error } = positionSchema.validate(req.body);
     if (error) {
@@ -38,100 +16,137 @@ module.exports.validatePosition = (req, res, next) => {
     }
 }
 
+module.exports.index = async (req, res) => {
+    if (req.isAuthenticated()) {
+        let positions = await Position.find({ $or: [{ approved: true }, { userId: req.user.id }] })
+            .populate('edits').lean();
+
+        // if the user has an edit, change the values to match the edit
+        positions.forEach(pos =>
+            pos.edits.forEach(edit => {
+                if (edit.userId.toString() === req.user.id) {
+                    pos.name = edit.name;
+                    pos.otherNames = edit.otherNames;
+                    pos.image = edit.image;
+                }
+            }));
+        res.render('positions/index', { positions })
+    } else {
+        const positions = await Position.find({ approved: true })
+        res.render('positions/index', { positions })
+    }
+}
+
+module.exports.admin = async (req, res) => {
+    const result = await Position.find();
+    let positions = result.filter(pos => !pos.approved)
+    let edits = result.filter(pos => pos.edits.length)
+    res.render('positions/admin', { positions, edits })
+}
+
 module.exports.new = (req, res) => {
     res.render('positions/new');
 }
 
-module.exports.createPosition = async (req, res) => {
-    const position = new Position(req.body.position);
-    position.parent = position.id;
-    await position.save();
-    req.flash('success', 'Created the position!');
-    res.redirect(`/positions/${position.id}`)
-}
-
 module.exports.show = async (req, res) => {
     const { id } = req.params;
+    const submissions = await Submission.find({ approved: true });
 
     if (req.isAuthenticated()) {
-        const position = await Position.findById(id).populate({
-            path: 'submissions',
-            match: {
-                $or: [
-                    { edited: false },
-                    { userId: req.user.id }
-                ]
+        const position = await Position.findById(id);
+        const subs = await SubmissionVariation.find({ $and: [{ $or: [{ approved: true }, { userId: req.user.id }] }, { position: position.id }] });
+
+        position.edits.forEach(edit => {
+            if (edit.userId.toString() === req.user.id) {
+                position.name = edit.name;
+                position.otherNames = edit.otherNames;
+                position.image = edit.image;
             }
-        });
-        res.render('positions/show', { position })
+        })
+        res.render('positions/show', { position, subs, submissions })
     }
     else {
-        const position = await Position.findById(id).populate({
-            path: 'submissions',
-            match: { edited: false }
-        });
-        res.render('positions/show', { position })
+        const position = await Position.findById(id);
+        const subs = await SubmissionVariation.find({ $and: [{ approved: true }, { position: position }] });
+
+        res.render('positions/show', { position, subs, submissions })
     }
 }
 
 module.exports.edit = async (req, res) => {
     const { id } = req.params;
-    const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
+    const position = await Position.findById(id);
     res.render('positions/edit', { position })
 }
 
-module.exports.addSub = async (req, res) => {
-    const { pos, id } = req.params;
-    console.log(req.params);
-    if (pos === "true") {
-        const position = await Position.findById(id).populate({ path: 'submissions' }).sort({ name: 1 })
-        const submissions = await Submission.find().populate({ path: 'variations' }).sort({ name: 1 })
-        res.render('positions/addSub', { position, submissions })
-    } else {
-        const submission = await Submission.findById(id);
-        const positions = await Position.find();
-        res.render('submissions/addSub', { positions, submission })
-    }
+// make a new position
+module.exports.createPosition = async (req, res) => {
+    const position = new Position(req.body.position);
+    position.userId = req.user.id;
+    position.approved = false;
+    await position.save();
+    req.flash('success', 'Created the position!');
+    res.redirect(`/positions/${position.id}`)
 }
 
-module.exports.update = async (req, res) => {
+// insert an edit to a position
+module.exports.postEdit = async (req, res) => {
     const { id } = req.params;
-    if (req.user.admin) {
-        // if admin, delete edited version, update parent with changes
-        req.body.position.edited = false;
-        const position = await Position.findById(id);
-
-        const parent = await Position.findByIdAndUpdate(position.parent, { ...req.body.position })
-        //update submisison variations to point to parent
-        position.submissions.forEach(async (sub) => {
-            await SubmissionVariation.findByIdAndUpdate(sub._id, { position: parent.id, posName: parent.name });
-            parent.submissions.push(sub);
-            await parent.save();
-        })
-        position.submissions = [];
-        position.delete();
-        req.flash('success', 'Approved the changes');
-        res.redirect('/positions')
-    } else if (req.body.position.edited === "false") {
-        //if not admin, post new position in edited status and ref parent
-        const newPosition = new Position(req.body.position);
-        newPosition.parent = id
-        newPosition.edited = true;
-        newPosition.userId = req.user.id;
-        await newPosition.save();
-        req.flash('success', 'Posted the position.');
-        res.redirect(`/positions/${newPosition.id}`)
-    } else {
-        // if editing a position that already has an edited status, just add the edit
-        const position = await Position.findByIdAndUpdate(id, { ...req.body.position })
-        req.flash('success', 'Updated the position.');
+    const position = await (Position.findById(id));
+    if (position) {
+        position.edits.push({ ...req.body.position, userId: req.user.id })
+        await position.save();
+        req.flash('success', 'Posted an edit');
         res.redirect(`/positions/${position._id}`)
     }
+    else {
+        req.flash('error', 'Error finding position');
+        res.redirect(`/positions/${id}`)
+    }
 }
 
+// delete a position or an edit
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
-    await Position.findByIdAndDelete(id);
-    req.flash('success', 'Position deleted.')
-    res.redirect('/positions');
+    const userId = req.body.userId;
+
+    // delete edit
+    if (userId) {
+        await Position.findByIdAndUpdate(id, {
+            $pull: {
+                edits: {
+                    userId: { $eq: userId }
+                }
+            }
+        });
+        req.flash('success', 'Edit removed')
+        res.redirect('/positions/admin');
+    }
+    // delete position
+    else {
+        await Position.findByIdAndDelete(id);
+        req.flash('success', 'Position deleted.')
+        res.redirect('/positions');
+    }
+}
+
+// approve positions and edits
+module.exports.approve = async (req, res) => {
+    const { id } = req.params;
+    const position = await Position.findByIdAndUpdate(id, {
+        ...req.body.position,
+        approved: true,
+        $pull: {
+            edits: {
+                userId: { $eq: req.body.position.userId }
+            }
+        }
+    });
+
+    if (position) {
+        req.flash('success', 'approved')
+    } else {
+        req.flash('error', 'error')
+    }
+    res.redirect('/admin')
 }

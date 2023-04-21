@@ -6,7 +6,7 @@ module.exports.positionSchema = Joi.object({
         otherNames: Joi.string().allow(''),
         image: Joi.string().required(),
         userId: Joi.string(),
-        edited: Joi.boolean().required()
+        approved: Joi.boolean()
     }).required()
 });
 
@@ -14,8 +14,8 @@ module.exports.submissionSchema = Joi.object({
     submission: Joi.object({
         name: Joi.string().required(),
         otherNames: Joi.string().allow(''),
-        subType: Joi.string().valid('Choke', 'Break', 'Pain').required(),
-        edited: Joi.boolean().required()
+        userId: Joi.string(),
+        subType: Joi.string().valid('Choke', 'Break', 'Pain').required()
     }).required()
 });
 
@@ -25,5 +25,6 @@ module.exports.submissionVariationSchema = Joi.object({
         position: Joi.string().required(),
         submission: Joi.string().required(),
         video: Joi.string().required(),
+        side: Joi.string().valid('Top', 'Bottom').required()
     }).required()
 })
