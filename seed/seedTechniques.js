@@ -18,8 +18,8 @@ fs.createReadStream('./seed/techniques.csv')
                 var newTechnique = new Technique({
                     name: technique.name,
                     otherNames: technique.otherNames,
-                    type: technique.type,
-                    approved: true
+                    techniqueType: technique.type,
+                    public: true
                 })
                 techniques.push(newTechnique);
             }

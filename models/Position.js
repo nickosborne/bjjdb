@@ -20,7 +20,7 @@ const positionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    approved: {
+    public: {
         type: Boolean,
         default: false
     },
