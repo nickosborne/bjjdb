@@ -23,14 +23,20 @@ const techniqueSchema = new mongoose.Schema({
         ref: 'Position',
         required: true
     },
-    Type: {
+    type: {
         type: String,
-        enum: techniques
+        enum: techniques,
+        required: true
     },
     side: {
         type: String,
         enum: ['Top', 'Bottom'],
-        default: 'Top'
+        default: 'Top',
+        required: true
+    },
+    video: {
+        type: String,
+        required: true
     },
     public: {
         type: Boolean,

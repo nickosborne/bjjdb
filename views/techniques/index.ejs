@@ -1,0 +1,22 @@
+<% layout('layouts/boilerplate')%>
+    <div class="container d-flex ms-5">
+        <div class="row">
+            <h1>All Techniques</h1>
+            <% for (let technique of techniques) {%>
+                <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=technique.name %>
+                        </h5>
+                        <p>
+                            <small>
+                                <%=technique.otherNames %>
+                            </small>
+                        </p>
+                        <a class="btn btn-secondary" href="/techniques/<%= technique._id %>"
+                            class="card-link">Explore</a>
+                    </div>
+                </div>
+                <% } %>
+        </div>
+    </div>

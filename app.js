@@ -57,10 +57,12 @@ const positionRoutes = require('./routes/positions')
 const submissionRoutes = require('./routes/submissions')
 const userRoutes = require('./routes/users')
 const contributeRoutes = require('./routes/contribute')
+const techniqueRoutes = require('./routes/techniques')
 app.use('/', userRoutes)
 app.use('/positions', positionRoutes);
 app.use('/submissions', submissionRoutes);
 app.use('/contribute', contributeRoutes)
+app.use('/techniques', techniqueRoutes)
 
 // connect to DB
 mongoose.connect('mongodb://localhost:27017/bjjdb')

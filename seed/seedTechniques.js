@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Technique = require('../models/Technique');
+const Position = require('../models/Position');
 const csv = require('csv-parser')
 const fs = require('fs')
 const results = [];
@@ -11,15 +12,18 @@ fs.createReadStream('./seed/techniques.csv')
 
         try {
             techniques = [];
-            connect();
+            await connect();
+            let pos = await Position.findOne();
             //await Technique.collection.drop().then(() => { console.log("dropped techniques") })
             for (technique of results) {
 
                 var newTechnique = new Technique({
                     name: technique.name,
                     otherNames: technique.otherNames,
-                    techniqueType: technique.type,
-                    public: true
+                    type: technique.type,
+                    public: true,
+                    position: pos.id,
+                    video: 'https://www.youtube.com/watch?v=A4HkWMOcYaQ'
                 })
                 techniques.push(newTechnique);
             }

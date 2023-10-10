@@ -25,6 +25,21 @@ module.exports.submissionVariationSchema = Joi.object({
         position: Joi.string().required(),
         submission: Joi.string().required(),
         video: Joi.string().required(),
-        side: Joi.string().valid('Top', 'Bottom').required()
+        side: Joi.string().valid('Top', 'Bottom').required(),
+    }).required()
+})
+
+module.exports.techniqueSchema = Joi.object({
+    variation: Joi.object({
+        name: Joi.string().required(),
+        position: Joi.string().required(),
+        video: Joi.string().required(),
+        side: Joi.string().valid('Top', 'Bottom').required(),
+        type: Joi.string().valid('Pass',
+            'Sweep',
+            'Submission',
+            'Takedown',
+            'Escape',
+            'Back Take').required()
     }).required()
 })
