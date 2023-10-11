@@ -28,3 +28,7 @@ module.exports.show = async (req, res) => {
     });
     res.render('techniques/show', { technique })
 }
+
+module.exports.new = (req, res) => {
+    res.render('techniques/new');
+}

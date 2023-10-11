@@ -5,7 +5,7 @@ const techniques = require('../controllers/techniques')
 const { forceLogin, isAdmin } = require('../middleware');
 
 router.get('/', catchAsync(techniques.index))
-
+router.get('/new', forceLogin, techniques.new)
 
 router.get('/:id', catchAsync(techniques.show))
 
