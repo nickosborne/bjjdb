@@ -30,7 +30,7 @@ module.exports.submissionVariationSchema = Joi.object({
 })
 
 module.exports.techniqueSchema = Joi.object({
-    variation: Joi.object({
+    technique: Joi.object({
         name: Joi.string().required(),
         position: Joi.string().required(),
         video: Joi.string().required(),

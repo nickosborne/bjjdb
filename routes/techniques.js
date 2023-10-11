@@ -6,7 +6,7 @@ const { forceLogin, isAdmin } = require('../middleware');
 
 router.get('/', catchAsync(techniques.index))
 router.get('/new', forceLogin, techniques.new)
-
+router.post('/', forceLogin, techniques.validateTechnique, catchAsync(techniques.create))
 router.get('/:id', catchAsync(techniques.show))
 
 
