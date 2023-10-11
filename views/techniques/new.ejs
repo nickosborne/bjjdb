@@ -11,12 +11,37 @@
                     <label class="form-label" for="otherNames">Other Names</label>
                     <input class="form-control" type="text" id="otherNames" name="technique[otherNames]">
                 </div>
-                <div class="form-group mb-3">
+                <div class="mb-3">
+                    <label class="form-label" for="type">Type</label>
+                    <select class="form-select" id="type" name="technique[type]">
+                        <option>Pass</option>
+                        <option>Sweep</option>
+                        <option>Submission</option>
+                        <option>Takedown</option>
+                        <option>Backtake</option>
+                        <option>Escape</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label class="form-label" for="side">Side</label>
-                    <select class="form-control" id="side" name="technique[side]">
+                    <select class="form-select" id="side" name="technique[side]">
                         <option>Top</option>
                         <option>Bottom</option>
                     </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="position">Position</label>
+                    <select id="position" class="form-select" name="technique[position]">
+                        <% for (let pos of positions) { %>
+                            <option value="<%=pos.id %>">
+                                <%= pos.name %>
+                            </option>
+                            <% } %>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="video">Video</label>
+                    <input class="form-control" type="text" id="video" name="technique[video]" required>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-success">Add Technique</button>

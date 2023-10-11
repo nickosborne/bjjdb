@@ -1,6 +1,7 @@
 const ExpressError = require('../utils/ExpressError');
 const { techniqueSchema } = require('../schemas.js')
 const Technique = require('../models/Technique')
+const Position = require('../models/Position');
 
 module.exports.validateTechnique = (req, res, next) => {
 
@@ -29,14 +30,15 @@ module.exports.show = async (req, res) => {
     res.render('techniques/show', { technique })
 }
 
-module.exports.new = (req, res) => {
-    res.render('techniques/new');
+module.exports.new = async (req, res) => {
+    const positions = await Position.find()
+    res.render('techniques/new', { positions });
 }
 
 module.exports.create = async (req, res) => {
     const technique = new Technique(req.body.technique);
     technique.userId = req.user.id;
-    technique.approved = false;
+    technique.public = true;
     await technique.save();
     req.flash('success', 'Created the technique!');
     res.redirect(`/techniques/${technique.id}`)
