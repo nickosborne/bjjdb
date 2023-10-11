@@ -1,0 +1,36 @@
+<% layout('layouts/boilerplate') %>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card bg-dark text-light">
+                <h1 class="text-center">
+                    <%= technique.name %>
+                </h1>
+                <small class="text-center mb-3">
+                    <%= technique.otherNames %>
+                </small>
+                <div class="card-body">
+                    <div class="row">
+                        <p>
+                            <%= technique.side %>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p>
+                            <%= technique.video %>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p>
+                            <%= technique.type %>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p>
+                            <%= technique.position.name %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

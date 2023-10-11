@@ -19,3 +19,12 @@ module.exports.index = async (req, res) => {
     res.render('techniques/index', { techniques })
 
 }
+
+module.exports.show = async (req, res) => {
+    const { id } = req.params;
+    const technique = await Technique.findById(id).populate({
+        path: 'position',
+        match: { approved: true }
+    });
+    res.render('techniques/show', { technique })
+}

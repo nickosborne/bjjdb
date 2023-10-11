@@ -13,6 +13,7 @@ fs.createReadStream('./seed/techniques.csv')
         try {
             techniques = [];
             await connect();
+            await Technique.collection.drop().then(() => { console.log("dropped subs") })
             let pos = await Position.findOne();
             //await Technique.collection.drop().then(() => { console.log("dropped techniques") })
             for (technique of results) {

@@ -6,4 +6,8 @@ const { forceLogin, isAdmin } = require('../middleware');
 
 router.get('/', catchAsync(techniques.index))
 
+
+router.get('/:id', catchAsync(techniques.show))
+
+
 module.exports = router;
