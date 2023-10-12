@@ -16,7 +16,7 @@ module.exports.validateTechnique = (req, res, next) => {
 
 module.exports.index = async (req, res) => {
 
-    const techniques = await Technique.find({ public: true })
+    const techniques = await Technique.find({ public: true }).populate({ path: 'position' })
     res.render('techniques/index', { techniques })
 
 }

@@ -2,21 +2,39 @@
     <div class="container d-flex ms-5">
         <div class="row">
             <h1>All Techniques</h1>
-            <% for (let technique of techniques) {%>
-                <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%=technique.name %>
-                        </h5>
-                        <p>
-                            <small>
-                                <%=technique.otherNames %>
-                            </small>
-                        </p>
-                        <a class="btn btn-secondary" href="/techniques/<%= technique._id %>"
-                            class="card-link">Explore</a>
-                    </div>
-                </div>
-                <% } %>
+            <table class="table text-light">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Side</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Video</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let tech of techniques) { %>
+                        <tr>
+                            <th scope="row">
+                                <%= tech.name %>
+                            </th>
+                            <td>
+                                <a href="/positions/<%= tech.position._id %>">
+                                    <%= tech.position.name %>
+                                </a>
+                            </td>
+                            <td>
+                                <%= tech.side %>
+                            </td>
+                            <td>
+                                <%= tech.type %>
+                            </td>
+                            <td><a class="btn btn-primary" href="<%= tech.video %>" role="button" target="_blank"
+                                    rel="noopener noreferrer">Video</a>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
         </div>
     </div>
