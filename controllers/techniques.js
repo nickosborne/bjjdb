@@ -38,8 +38,48 @@ module.exports.new = async (req, res) => {
 module.exports.create = async (req, res) => {
     const technique = new Technique(req.body.technique);
     technique.userId = req.user.id;
-    technique.public = true;
+    technique.public = false;
     await technique.save();
     req.flash('success', 'Created the technique!');
     res.redirect(`/techniques/${technique.id}`)
+}
+
+module.exports.edit = async (req, res) => {
+    const { id } = req.params;
+    const technique = await (Technique.findByIdAndUpdate(id,
+        {
+            ...req.body.submission,
+            public: true
+        }));
+    if (technique) {
+        req.flash('success', 'approved')
+    } else {
+        req.flash('error', 'error approving technique')
+    }
+    res.redirect('/techniques/admin')
+}
+
+module.exports.admin = async (req, res) => {
+    const types = [
+        'Pass',
+        'Sweep',
+        'Submission',
+        'Takedown',
+        'Escape',
+        'Back Take'
+    ]
+    const positions = await Position.find();
+    const techniques = await Technique.find({ public: false }).populate(
+        {
+            path: 'position'
+        }
+    );
+    res.render('techniques/admin', { techniques, positions, types })
+}
+
+module.exports.delete = async (req, res) => {
+    const { id } = req.params;
+    await Technique.findByIdAndDelete(id);
+    req.flash('success', 'Technique deleted.')
+    res.redirect('/techniques/admin');
 }

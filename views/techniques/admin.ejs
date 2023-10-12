@@ -1,0 +1,80 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row justify-content-center">
+        <h1 class="col-auto">Approve Techniques</h1>
+    </div>
+    <table class="table text-light">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Other Names</th>
+                <th scope="col">Type</th>
+                <th scope="col">Side</th>
+                <th scope="col">Video</th>
+                <th scope="col">Position</th>
+                <th scope="col">Approve</th>
+                <th scope="col">Deny</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let tech of techniques) { %>
+
+                <tr>
+                    <form class="row gy-2 gx-3" action="/techniques/<%= tech.id %>/edit?_method=PUT" method="POST">
+                        <th scope="row">
+                            <input type="text" class="form-control" id="name" name="technique[name]"
+                                value="<%=tech.name %>">
+                        </th>
+                        <td>
+                            <input type="text" class="form-control" id="otherNames" name="technique[otherNames]"
+                                value="<%=tech.otherNames %>">
+                        </td>
+                        <td>
+                            <select class="form-select" id="type" name="technique[type]">
+                                <% for (let type of types) { %>
+                                    <option <% if (type==tech.type) { %>
+                                        <%="selected"%>
+                                            <% } %>>
+                                                <%=type %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" id="side" name="technique[side]">
+                                <% if (tech.side=="Top" ) { %>
+                                    <option selected>Top</option>
+                                    <option>Bottom</option>
+                                    <% } else { %>
+                                        <option>Top</option>
+                                        <option selected>Bottom</option>
+                                        <% } %>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" id="name" name="technique[video]"
+                                value="<%=tech.video %>">
+                        </td>
+                        <td>
+                            <select id="position" class="form-select" name="technique[position]">
+                                <% for (let pos of positions) { %>
+                                    <option value="<%=pos.id %>" <% if (tech.position.id==pos.id) { %>
+                                        <%="selected"%>
+                                            <% } %>>
+                                                <%= pos.name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </td>
+                    </form>
+                    <td>
+                        <form class="col-auto" action="/techniques/<%= tech._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
