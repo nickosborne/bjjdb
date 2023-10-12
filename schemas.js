@@ -42,6 +42,6 @@ module.exports.techniqueSchema = Joi.object({
             'Takedown',
             'Escape',
             'Backtake').required(),
-        userId: Joi.string()
+        userId: Joi.string().required()
     }).required()
 })
