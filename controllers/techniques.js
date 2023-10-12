@@ -15,10 +15,14 @@ module.exports.validateTechnique = (req, res, next) => {
 }
 
 module.exports.index = async (req, res) => {
-
-    const techniques = await Technique.find({ public: true }).populate({ path: 'position' })
-    res.render('techniques/index', { techniques })
-
+    if (req.isAuthenticated()) {
+        const techniques = await Technique.find({ $or: [{ public: true }, { userId: req.user.id }] })
+        res.render('techniques/index', { techniques })
+    }
+    else {
+        const techniques = await Technique.find({ public: true }).populate({ path: 'position' })
+        res.render('techniques/index', { techniques })
+    }
 }
 
 module.exports.show = async (req, res) => {
