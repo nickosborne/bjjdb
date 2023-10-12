@@ -52,6 +52,8 @@ module.exports.new = (req, res) => {
 module.exports.show = async (req, res) => {
     const { id } = req.params;
     const submissions = await Submission.find({ approved: true });
+    const position = await Position.findById(id);
+    const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] });
 
     if (req.isAuthenticated()) {
         const position = await Position.findById(id);
@@ -64,11 +66,11 @@ module.exports.show = async (req, res) => {
                 position.image = edit.image;
             }
         })
-        res.render('positions/show', { position, subs, submissions })
+        res.render('positions/show', { position, techniques })
     }
     else {
-        const position = await Position.findById(id);
-        const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] });
+
+
 
         res.render('positions/show', { position, techniques })
     }
