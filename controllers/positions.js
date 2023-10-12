@@ -4,6 +4,7 @@ const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const mongoose = require('mongoose');
 const SubmissionVariation = require('../models/SubmissionVariation');
+const Technique = require('../models/Technique')
 
 // middleware
 module.exports.validatePosition = (req, res, next) => {
@@ -67,9 +68,9 @@ module.exports.show = async (req, res) => {
     }
     else {
         const position = await Position.findById(id);
-        const subs = await SubmissionVariation.find({ $and: [{ approved: true }, { position: position }] });
+        const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] });
 
-        res.render('positions/show', { position, subs, submissions })
+        res.render('positions/show', { position, techniques })
     }
 }
 
