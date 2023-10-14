@@ -6,7 +6,7 @@ const techniques = [
     'Submission',
     'Takedown',
     'Escape',
-    'Back Take'
+    'Backtake'
 ]
 
 const techniqueSchema = new mongoose.Schema({
