@@ -50,6 +50,7 @@ module.exports.new = (req, res) => {
 }
 
 module.exports.show = async (req, res) => {
+    const techniqueTypes = Technique.schema.path('type').enumValues;
     const { id } = req.params;
     const submissions = await Submission.find({ approved: true });
     const position = await Position.findById(id);
@@ -66,13 +67,10 @@ module.exports.show = async (req, res) => {
                 position.image = edit.image;
             }
         })
-        res.render('positions/show', { position, techniques })
+        res.render('positions/show', { position, techniques, techniqueTypes })
     }
     else {
-
-
-
-        res.render('positions/show', { position, techniques })
+        res.render('positions/show', { position, techniques, techniqueTypes })
     }
 }
 

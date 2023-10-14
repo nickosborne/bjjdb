@@ -25,15 +25,6 @@ module.exports.index = async (req, res) => {
     }
 }
 
-module.exports.show = async (req, res) => {
-    const { id } = req.params;
-    const technique = await Technique.findById(id).populate({
-        path: 'position',
-        match: { approved: true }
-    });
-    res.render('techniques/show', { technique })
-}
-
 module.exports.new = async (req, res) => {
     const positions = await Position.find()
     res.render('techniques/new', { positions });
@@ -64,14 +55,7 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.admin = async (req, res) => {
-    const types = [
-        'Pass',
-        'Sweep',
-        'Submission',
-        'Takedown',
-        'Escape',
-        'Back Take'
-    ]
+    const types = Technique.schema.path('type').enumValues;
     const positions = await Position.find();
     const techniques = await Technique.find({ public: false }).populate(
         {

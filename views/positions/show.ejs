@@ -11,72 +11,50 @@
                     <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
                     <h2 class="text-light">Techniques</h2>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pass-tab" data-bs-toggle="tab"
-                                data-bs-target="#pass-tab-pane" type="button" role="tab" aria-controls="pass-tab-pane"
-                                aria-selected="true">Pass</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-                                data-bs-target="#profile-tab-pane" type="button" role="tab"
-                                aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-                                data-bs-target="#contact-tab-pane" type="button" role="tab"
-                                aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="disabled-tab" data-bs-toggle="tab"
-                                data-bs-target="#disabled-tab-pane" type="button" role="tab"
-                                aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
-                        </li>
+                        <% for (let techType of techniqueTypes) { %>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="<%=techType %>-tab" data-bs-toggle="tab"
+                                    data-bs-target="#<%=techType %>-tab-pane" type="button" role="tab"
+                                    aria-controls="<%=techType %>-tab-pane" aria-selected="false">
+                                    <%=techType %>
+                                </button>
+                            </li>
+                            <% } %>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="pass-tab-pane" role="tabpanel"
-                            aria-labelledby="pass-tab" tabindex="0">
-                            <table class="table text-light">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Side</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Video</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for (let tech of techniques) { %>
-                                        <% if (tech.type=="Pass" ) { %>
-                                            <tr>
-                                                <th scope="row">
-                                                    <%= tech.name %>
-                                                </th>
-                                                <td>
-                                                    <%= tech.side %>
-                                                </td>
-                                                <td>
-                                                    <%= tech.type %>
-                                                </td>
-                                                <td><a class="btn btn-primary" href="<%= tech.video %>" role="button"
-                                                        target="_blank" rel="noopener noreferrer">Video</a>
-                                                </td>
-                                            </tr>
-                                            <% } %>
+                        <% for (let techType of techniqueTypes) { %>
+                            <div class="tab-pane fade" id="<%=techType %>-tab-pane" role="tabpanel"
+                                aria-labelledby="<%=techType %>-tab" tabindex="<%= techniqueTypes.indexOf(techType) %>">
+                                <table class="table text-light">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Side</th>
+                                            <th scope="col">Video</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (let tech of techniques) { %>
+                                            <% if (tech.type==techType) { %>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <%= tech.name %>
+                                                    </th>
+                                                    <td>
+                                                        <%= tech.side %>
+                                                    </td>
+                                                    <td><a class="btn btn-primary" href="<%= tech.video %>"
+                                                            role="button" target="_blank"
+                                                            rel="noopener noreferrer">Video</a>
+                                                    </td>
+                                                </tr>
                                                 <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                            tabindex="0">...
-                        </div>
-                        <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab"
-                            tabindex="0">...
-                        </div>
-                        <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab"
-                            tabindex="0">...
-                        </div>
+                                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% } %>
                     </div>
-
                 </div>
             </div>
         </div>
