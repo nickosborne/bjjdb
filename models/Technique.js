@@ -23,6 +23,11 @@ const techniqueSchema = new mongoose.Schema({
         ref: 'Position',
         required: true
     },
+    techniqueName: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TechniqueName',
+        required: true
+    },
     type: {
         type: String,
         enum: techniques,

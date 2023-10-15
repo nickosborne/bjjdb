@@ -1,6 +1,7 @@
 const ExpressError = require('../utils/ExpressError');
 const { techniqueSchema } = require('../schemas.js')
-const Technique = require('../models/Technique')
+const Technique = require('../models/Technique');
+const TechniqueName = require('../models/TechniqueName');
 const Position = require('../models/Position');
 
 module.exports.validateTechnique = (req, res, next) => {
@@ -26,8 +27,10 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.new = async (req, res) => {
+    const techniqueTypes = Technique.schema.path('type').enumValues;
     const positions = await Position.find()
-    res.render('techniques/new', { positions });
+    const techniqueNames = await TechniqueName.find()
+    res.render('techniques/new', { positions, techniqueTypes, techniqueNames });
 }
 
 module.exports.create = async (req, res) => {

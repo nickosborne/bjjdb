@@ -14,13 +14,22 @@
                 <div class="mb-3">
                     <label class="form-label" for="type">Type</label>
                     <select class="form-select" id="type" name="technique[type]">
-                        <option>Pass</option>
-                        <option>Sweep</option>
-                        <option>Submission</option>
-                        <option>Takedown</option>
-                        <option>Backtake</option>
-                        <option>Escape</option>
+                        <% for (let techType of techniqueTypes) { %>
+                            <option>
+                                <%=techType %>
+                            </option>
+                            <% } %>
                     </select>
+                </div>
+                <div class="mb-3">
+                    <label for="technique[techniqueName]">Choose a flavor:</label>
+                    <input list="techniqueNames" id="technique[techniqueName]" name="technique[techniqueName]" />
+                    <datalist id="techniqueNames">
+                        <% for (let name of techniqueNames) {%>
+                            <option value="<%=name.name%>">
+                            </option>
+                            <% } %>
+                    </datalist>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="side">Side</label>
