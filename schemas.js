@@ -36,6 +36,7 @@ module.exports.techniqueSchema = Joi.object({
         position: Joi.string().required(),
         video: Joi.string().required(),
         side: Joi.string().valid('Top', 'Bottom').required(),
+        techniqueName: Joi.string().required(),
         type: Joi.string().valid('Pass',
             'Sweep',
             'Submission',

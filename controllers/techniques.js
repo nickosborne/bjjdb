@@ -32,14 +32,43 @@ module.exports.new = async (req, res) => {
     const techniqueNames = await TechniqueName.find()
     res.render('techniques/new', { positions, techniqueTypes, techniqueNames });
 }
+let findPositionById = async (id) => {
+    return await Position.findOne({ id: id });
+}
+
+let validateTechniqueName = async (name) => {
+    let techName = await TechniqueName.findOne({ name: name })
+    if (techName) {
+        console.log("found name")
+        return techName.id;
+    } else {
+        let newTechName = new TechniqueName({
+            name: name,
+            public: false
+        })
+        await newTechName.save()
+        console.log("created new name")
+        return newTechName.id;
+    }
+}
 
 module.exports.create = async (req, res) => {
-    const technique = new Technique(req.body.technique);
-    technique.userId = req.user.id;
-    technique.public = false;
-    await technique.save();
-    req.flash('success', 'Created the technique!');
-    res.redirect(`/techniques/${technique.id}`)
+    let { technique } = req.body;
+
+    if (await findPositionById(technique.position)) {
+        let id = await validateTechniqueName(technique.techniqueName)
+
+        technique.techniqueName = id
+        technique.public = false
+        let newTechnique = await new Technique(technique).save()
+        if (newTechnique) {
+            req.flash('success', 'Created the technique!');
+        }
+        else {
+            req.flash('error', 'Technique validation failed!');
+        }
+        res.redirect('/techniques')
+    }
 }
 
 module.exports.edit = async (req, res) => {
