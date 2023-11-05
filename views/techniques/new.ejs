@@ -22,11 +22,11 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="technique[techniqueName]">Choose a flavor:</label>
-                    <input list="techniqueNames" id="technique[techniqueName]" name="technique[techniqueName]" />
-                    <datalist id="techniqueNames">
-                        <% for (let name of techniqueNames) {%>
-                            <option value="<%=name.name%>">
+                    <label for="technique[group]">Choose a flavor:</label>
+                    <input list="groups" id="technique[group]" name="technique[group]" />
+                    <datalist id="groups">
+                        <% for (let group of groups) {%>
+                            <option value="<%=group.name%>">
                             </option>
                             <% } %>
                     </datalist>

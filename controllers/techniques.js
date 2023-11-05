@@ -1,7 +1,7 @@
 const ExpressError = require('../utils/ExpressError');
 const { techniqueSchema } = require('../schemas.js')
 const Technique = require('../models/Technique');
-const TechniqueName = require('../models/TechniqueName');
+const Group = require('../models/Group');
 const Position = require('../models/Position');
 
 module.exports.validateTechnique = (req, res, next) => {
@@ -29,26 +29,26 @@ module.exports.index = async (req, res) => {
 module.exports.new = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const positions = await Position.find()
-    const techniqueNames = await TechniqueName.find()
-    res.render('techniques/new', { positions, techniqueTypes, techniqueNames });
+    const groups = await Group.find()
+    res.render('techniques/new', { positions, techniqueTypes, groups });
 }
 let findPositionById = async (id) => {
     return await Position.findOne({ id: id });
 }
 
-let validateTechniqueName = async (name) => {
-    let techName = await TechniqueName.findOne({ name: name })
+let validateGroup = async (name) => {
+    let techName = await Group.findOne({ name: name })
     if (techName) {
         console.log("found name")
         return techName.id;
     } else {
-        let newTechName = new TechniqueName({
+        let newGroup = new Group({
             name: name,
             public: false
         })
-        await newTechName.save()
+        await newGroup.save()
         console.log("created new name")
-        return newTechName.id;
+        return newGroup.id;
     }
 }
 
@@ -56,9 +56,9 @@ module.exports.create = async (req, res) => {
     let { technique } = req.body;
 
     if (await findPositionById(technique.position)) {
-        let id = await validateTechniqueName(technique.techniqueName)
+        let id = await validateGroup(technique.group)
 
-        technique.techniqueName = id
+        technique.group = id
         technique.public = false
         let newTechnique = await new Technique(technique).save()
         if (newTechnique) {
@@ -90,7 +90,7 @@ module.exports.admin = async (req, res) => {
     const types = Technique.schema.path('type').enumValues;
     const positions = await Position.find();
     const techniques = await Technique.find({ public: false }).populate('position'
-    ).populate('techniqueName');
+    ).populate('group');
     res.render('techniques/admin', { techniques, positions, types })
 }
 

@@ -23,9 +23,9 @@ const techniqueSchema = new mongoose.Schema({
         ref: 'Position',
         required: true
     },
-    techniqueName: {
+    group: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'TechniqueName',
+        ref: 'Group',
         required: true
     },
     type: {

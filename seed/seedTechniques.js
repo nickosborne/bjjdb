@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Technique = require('../models/Technique');
 const Position = require('../models/Position');
-const TechniqueName = require('../models/TechniqueName');
+const Group = require('../models/Group');
 const csv = require('csv-parser')
 const fs = require('fs')
 const results = [];
@@ -12,18 +12,18 @@ fs.createReadStream('./seed/techniques.csv')
     .on('end', async () => {
 
         try {
-            techniqueNames = [];
+            groups = [];
             techniques = [];
             await connect();
             await Technique.collection.drop().then(() => { console.log("dropped techniques") })
             let pos = await Position.findOne();
-            await TechniqueName.collection.drop().then(() => { console.log("dropped techniqueNames") })
+            await Group.collection.drop().then(() => { console.log("dropped groups") })
 
             for (technique of results) {
-                var newTechniqueName = new TechniqueName({
+                var newGroup = new Group({
                     name: technique.name
                 })
-                techniqueNames.push(newTechniqueName)
+                groups.push(newGroup)
 
                 var newTechnique = new Technique({
                     name: technique.name,
@@ -31,12 +31,12 @@ fs.createReadStream('./seed/techniques.csv')
                     type: technique.type,
                     public: true,
                     position: pos.id,
-                    techniqueName: newTechniqueName.id,
+                    group: newGroup.id,
                     video: 'https://www.youtube.com/watch?v=A4HkWMOcYaQ'
                 })
                 techniques.push(newTechnique);
             }
-            await TechniqueName.insertMany(techniqueNames).then(() => { console.log("seeded techniqueNames") });
+            await Group.insertMany(groups).then(() => { console.log("seeded groups") });
             await Technique.insertMany(techniques).then(() => { console.log("seeded techniques") });
             disconnect();
         } catch (e) {
