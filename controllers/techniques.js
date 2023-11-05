@@ -89,11 +89,8 @@ module.exports.edit = async (req, res) => {
 module.exports.admin = async (req, res) => {
     const types = Technique.schema.path('type').enumValues;
     const positions = await Position.find();
-    const techniques = await Technique.find({ public: false }).populate(
-        {
-            path: 'position'
-        }
-    );
+    const techniques = await Technique.find({ public: false }).populate('position'
+    ).populate('techniqueName');
     res.render('techniques/admin', { techniques, positions, types })
 }
 

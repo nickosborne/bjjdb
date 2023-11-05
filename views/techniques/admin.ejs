@@ -11,6 +11,7 @@
                 <th scope="col">Side</th>
                 <th scope="col">Video</th>
                 <th scope="col">Position</th>
+                <th scope="col">Group</th>
                 <th scope="col">Approve</th>
                 <th scope="col">Deny</th>
             </tr>
@@ -64,6 +65,11 @@
                                     <% } %>
                             </select>
                         </td>
+                        <td>
+                            <input type="text" class="form-control" id="group" name="technique[techniqueName]"
+                                value="<%=tech.techniqueName.name %>">
+                        </td>
+                        <input type="hidden" id="userId" name="technique[userId]" value="<%=tech.userId%>">
                         <td>
                             <button type="submit" class="btn btn-success">Approve</button>
                         </td>
