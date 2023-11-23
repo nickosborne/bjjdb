@@ -73,12 +73,13 @@ module.exports.create = async (req, res) => {
 
 module.exports.edit = async (req, res) => {
     const { id } = req.params;
-    const technique = await (Technique.findByIdAndUpdate(id,
-        {
-            ...req.body.submission,
-            public: true
-        }));
-    if (technique) {
+    let { technique } = req.body
+    let groupId = await validateGroup(technique.group)
+    technique.group = groupId
+    technique.public = true
+    console.log(technique)
+    const update = await (Technique.findByIdAndUpdate(id, technique));
+    if (update) {
         req.flash('success', 'approved')
     } else {
         req.flash('error', 'error approving technique')

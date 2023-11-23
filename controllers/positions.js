@@ -52,20 +52,19 @@ module.exports.new = (req, res) => {
 module.exports.show = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const { id } = req.params;
-    const submissions = await Submission.find({ public: true });
     const position = await Position.findById(id);
-    const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] });
+    const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] },);
 
     if (req.isAuthenticated()) {
-        const position = await Position.findById(id);
-        const subs = await SubmissionVariation.find({ $and: [{ $or: [{ public: true }, { userId: req.user.id }] }, { position: position.id }] });
-
+        //const position = await Position.findById(id);
+        const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },);
         position.edits.forEach(edit => {
             if (edit.userId.toString() === req.user.id) {
                 position.name = edit.name;
                 position.otherNames = edit.otherNames;
                 position.image = edit.image;
             }
+            techniques.append(userTechniques)
         })
         res.render('positions/show', { position, techniques, techniqueTypes })
     }
