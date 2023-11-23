@@ -19,7 +19,7 @@ module.exports.validatePosition = (req, res, next) => {
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
-        let positions = await Position.find({ $or: [{ approved: true }, { userId: req.user.id }] })
+        let positions = await Position.find({ $or: [{ public: true }, { userId: req.user.id }] })
             .populate('edits').lean();
 
         // if the user has an edit, change the values to match the edit
@@ -33,14 +33,14 @@ module.exports.index = async (req, res) => {
             }));
         res.render('positions/index', { positions })
     } else {
-        const positions = await Position.find({ approved: true })
+        const positions = await Position.find({ public: true })
         res.render('positions/index', { positions })
     }
 }
 
 module.exports.admin = async (req, res) => {
     const result = await Position.find();
-    let positions = result.filter(pos => !pos.approved)
+    let positions = result.filter(pos => !pos.public)
     let edits = result.filter(pos => pos.edits.length)
     res.render('positions/admin', { positions, edits })
 }
@@ -52,13 +52,13 @@ module.exports.new = (req, res) => {
 module.exports.show = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const { id } = req.params;
-    const submissions = await Submission.find({ approved: true });
+    const submissions = await Submission.find({ public: true });
     const position = await Position.findById(id);
     const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] });
 
     if (req.isAuthenticated()) {
         const position = await Position.findById(id);
-        const subs = await SubmissionVariation.find({ $and: [{ $or: [{ approved: true }, { userId: req.user.id }] }, { position: position.id }] });
+        const subs = await SubmissionVariation.find({ $and: [{ $or: [{ public: true }, { userId: req.user.id }] }, { position: position.id }] });
 
         position.edits.forEach(edit => {
             if (edit.userId.toString() === req.user.id) {
@@ -84,7 +84,7 @@ module.exports.edit = async (req, res) => {
 module.exports.createPosition = async (req, res) => {
     const position = new Position(req.body.position);
     position.userId = req.user.id;
-    position.approved = false;
+    position.public = false;
     await position.save();
     req.flash('success', 'Created the position!');
     res.redirect(`/positions/${position.id}`)
@@ -136,7 +136,7 @@ module.exports.approve = async (req, res) => {
     const { id } = req.params;
     const position = await Position.findByIdAndUpdate(id, {
         ...req.body.position,
-        approved: true,
+        public: true,
         $pull: {
             edits: {
                 userId: { $eq: req.body.position.userId }

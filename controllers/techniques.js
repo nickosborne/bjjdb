@@ -47,7 +47,7 @@ let validateGroup = async (name) => {
             public: false
         })
         await newGroup.save()
-        console.log("created new name")
+        console.log("created new group")
         return newGroup.id;
     }
 }
