@@ -7,7 +7,22 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 
+//const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
+const dbUrl = 'mongodb://localhost:27017/bjjdb'
+
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
+
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e)
+})
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -23,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 const sessionConfig = {
+    store,
     secret: "testsecret",
     resave: false,
     saveUninitialized: true,
@@ -65,7 +81,8 @@ app.use('/contribute', contributeRoutes)
 app.use('/techniques', techniqueRoutes)
 
 // connect to DB
-mongoose.connect('mongodb://localhost:27017/bjjdb')
+//'mongodb://localhost:27017/bjjdb'
+mongoose.connect(dbUrl)
     .then(() => {
         console.log("Connection open")
     })
