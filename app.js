@@ -7,8 +7,8 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 
-//const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
-const dbUrl = 'mongodb://localhost:27017/bjjdb'
+const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
+//const dbUrl = 'mongodb://localhost:27017/bjjdb'
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
