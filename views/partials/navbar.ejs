@@ -1,6 +1,6 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">BJJ_DB</a>
+        <a class="navbar-brand" href="/">BJJ_DB</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,10 +31,10 @@
             </ul>
             <div class="navbar-nav flex-row flex-wrap ms-md-auto">
                 <% if (!currentUser) {%>
-                    <a class="nav-link" href="/login">Login</a>
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/users/login">Login</a>
+                    <a class="nav-link" href="/users/register">Register</a>
                     <% } else { %>
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" href="/users/logout">Logout</a>
                         <% } %>
             </div>
         </div>

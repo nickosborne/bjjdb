@@ -74,14 +74,13 @@ const submissionRoutes = require('./routes/submissions')
 const userRoutes = require('./routes/users')
 const contributeRoutes = require('./routes/contribute')
 const techniqueRoutes = require('./routes/techniques')
-app.use('/', userRoutes)
+app.use('/users', userRoutes)
 app.use('/positions', positionRoutes);
 app.use('/submissions', submissionRoutes);
 app.use('/contribute', contributeRoutes)
 app.use('/techniques', techniqueRoutes)
 
 // connect to DB
-//'mongodb://localhost:27017/bjjdb'
 mongoose.connect(dbUrl)
     .then(() => {
         console.log("Connection open")
@@ -93,7 +92,7 @@ mongoose.connect(dbUrl)
 
 // Routes
 app.get('/', (req, res) => {
-    res.send('home')
+    res.render('home/home')
 })
 
 app.all('*', (req, res, next) => {
