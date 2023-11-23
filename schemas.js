@@ -6,7 +6,7 @@ module.exports.positionSchema = Joi.object({
         otherNames: Joi.string().allow(''),
         image: Joi.string().required(),
         userId: Joi.string(),
-        approved: Joi.boolean()
+        public: Joi.boolean()
     }).required()
 });
 
@@ -43,6 +43,7 @@ module.exports.techniqueSchema = Joi.object({
             'Takedown',
             'Escape',
             'Backtake').required(),
-        userId: Joi.string().required()
+        userId: Joi.string().required(),
+        public: Joi.boolean().required()
     }).required()
 })

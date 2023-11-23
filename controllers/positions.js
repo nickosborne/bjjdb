@@ -53,11 +53,11 @@ module.exports.show = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const { id } = req.params;
     const position = await Position.findById(id);
-    const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] },);
+    const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] },).populate('group');
 
     if (req.isAuthenticated()) {
         //const position = await Position.findById(id);
-        const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },);
+        const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
         position.edits.forEach(edit => {
             if (edit.userId.toString() === req.user.id) {
                 position.name = edit.name;
