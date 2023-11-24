@@ -29,8 +29,8 @@ const seedPositions = async () => {
         }
     });
 }
-const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
-//const dbUrl = 'mongodb://localhost:27017/bjjdb'
+//const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
+const dbUrl = 'mongodb://localhost:27017/bjjdb'
 async function connect() {
     await mongoose.connect(dbUrl)
         .then(() => { console.log("connection open") }).catch(error => console.log("connection error"));

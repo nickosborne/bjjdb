@@ -16,14 +16,16 @@ module.exports.validateTechnique = (req, res, next) => {
 }
 
 module.exports.index = async (req, res) => {
-    if (req.isAuthenticated()) {
-        const techniques = await Technique.find({ $or: [{ public: true }, { userId: req.user.id }] })
-        res.render('techniques/index', { techniques })
-    }
-    else {
-        const techniques = await Technique.find({ public: true }).populate({ path: 'position' })
-        res.render('techniques/index', { techniques })
-    }
+    const groups = await Group.find({ public: true })
+    res.render('techniques/index copy', { groups })
+    // if (req.isAuthenticated()) {
+    //     const techniques = await Technique.find({ $or: [{ public: true }, { userId: req.user.id }] })
+    //     res.render('techniques/index', { techniques })
+    // }
+    // else {
+    //     const techniques = await Technique.find({ public: true }).populate({ path: 'position' })
+    //     res.render('techniques/index', { techniques })
+    // }
 }
 
 module.exports.new = async (req, res) => {
@@ -36,7 +38,7 @@ let findPositionById = async (id) => {
     return await Position.findOne({ id: id });
 }
 
-let validateGroup = async (name) => {
+let validateGroup = async (name, userId) => {
     let techName = await Group.findOne({ name: name })
     if (techName) {
         console.log("found name")
@@ -44,7 +46,8 @@ let validateGroup = async (name) => {
     } else {
         let newGroup = new Group({
             name: name,
-            public: false
+            public: false,
+            userId: userId
         })
         await newGroup.save()
         console.log("created new group")
@@ -56,9 +59,8 @@ module.exports.create = async (req, res) => {
     let { technique } = req.body;
 
     if (await findPositionById(technique.position)) {
-        let id = await validateGroup(technique.group)
-
-        technique.group = id
+        let groupId = await validateGroup(technique.group, technique.userId)
+        technique.group = groupId
         technique.public = false
         let newTechnique = await new Technique(technique).save()
         if (newTechnique) {
@@ -74,7 +76,9 @@ module.exports.create = async (req, res) => {
 module.exports.edit = async (req, res) => {
     const { id } = req.params;
     let { technique } = req.body
-    let groupId = await validateGroup(technique.group)
+    let groupId = await validateGroup(technique.group, technique.userId)
+    // approve the group
+    await Group.findByIdAndUpdate(groupId, { public: true })
     technique.group = groupId
     technique.public = true
     console.log(technique)

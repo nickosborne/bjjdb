@@ -21,7 +21,8 @@ fs.createReadStream('./seed/techniques.csv')
 
             for (technique of results) {
                 var newGroup = new Group({
-                    name: technique.name
+                    name: technique.name,
+                    public: true
                 })
                 groups.push(newGroup)
 
@@ -45,8 +46,8 @@ fs.createReadStream('./seed/techniques.csv')
 
     });
 
-const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
-//const dbUrl = 'mongodb://localhost:27017/bjjdb'
+//const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
+const dbUrl = 'mongodb://localhost:27017/bjjdb'
 async function connect() {
     await mongoose.connect(dbUrl)
         .then(() => { console.log("connection open") }).catch(error => console.log("connection error"));
