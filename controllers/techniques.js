@@ -17,7 +17,7 @@ module.exports.validateTechnique = (req, res, next) => {
 
 module.exports.index = async (req, res) => {
     const groups = await Group.find({ public: true })
-    res.render('techniques/index copy', { groups })
+    res.render('techniques/index', { groups })
     // if (req.isAuthenticated()) {
     //     const techniques = await Technique.find({ $or: [{ public: true }, { userId: req.user.id }] })
     //     res.render('techniques/index', { techniques })
@@ -104,4 +104,17 @@ module.exports.delete = async (req, res) => {
     await Technique.findByIdAndDelete(id);
     req.flash('success', 'Technique deleted.')
     res.redirect('/techniques/admin');
+}
+
+module.exports.show = async (req, res) => {
+    const { id } = req.params;
+    const group = await Group.findById(id);
+    const techniques = await Technique.find({ $and: [{ public: true }, { group: id }] }).populate('position')
+    const groupName = group.name
+    if (group) {
+        res.render('techniques/show', { techniques, groupName })
+    }
+    else {
+        res.redirect('/techniques');
+    }
 }

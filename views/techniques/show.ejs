@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate') %>
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card bg-dark">
+                <div class="card-body">
+                    <h1 class="text-center text-light">
+                        <%= groupName%>
+                    </h1>
+                    <table class="table text-light">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Position</th>
+                                <th scope="col">Side</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Video</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let tech of techniques) { %>
+                                <tr>
+                                    <th scope="row">
+                                        <%= tech.name %>
+                                    </th>
+                                    <td>
+                                        <a href="/positions/<%= tech.position._id %>">
+                                            <%= tech.position.name %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <%= tech.side %>
+                                    </td>
+                                    <td>
+                                        <%= tech.type %>
+                                    </td>
+                                    <td><a class="btn btn-primary" href="<%= tech.video %>" role="button"
+                                            target="_blank" rel="noopener noreferrer">Video</a>
+                                    </td>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
