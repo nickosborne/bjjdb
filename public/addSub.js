@@ -12,11 +12,14 @@ if (btn) {
 }
 
 const form = document.querySelector('#searchForm');
-form.addEventListener('submit', async function (e) {
+form.addEventListener('input', async function (e) {
     e.preventDefault();
     const query = form.elements.query.value;
-    const res = await axios.get(`/search/${query}`)
-    console.log(res)
+    if (query.length) {
+        const res = await axios.get(`/search/${query}`)
+        console.log(res.data.techs)
+    }
+
 })
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields

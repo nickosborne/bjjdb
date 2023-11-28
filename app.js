@@ -99,10 +99,14 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/search/:q', async (req, res) => {
-    const { q } = req.params;
-    console.log(q)
-    res.send("this is your search result")
+    let { q } = req.params;
+    q = q.replace(/[^a-zA-Z ]/g, "")
+
+    const techs = await Technique.find({ name: { $regex: q, lowercase: true } }, 'name group')
+    res.send({ techs })
 })
+
+
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404))
 })
