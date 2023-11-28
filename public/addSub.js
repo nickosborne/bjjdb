@@ -21,6 +21,10 @@ form.addEventListener('input', async function (e) {
     }
     if (query.length) {
         const res = await axios.get(`/search/${query}`)
+        let list = document.querySelector('#searchResults')
+        while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+        }
         res.data.results.forEach((result) => {
             const node = document.createElement("a");
             node.innerHTML = `${result.name} : <i>${result.type.toLowerCase()}</i>`
