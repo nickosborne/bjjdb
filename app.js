@@ -6,7 +6,8 @@ const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
-const Technique = require('./models/Technique')
+const Technique = require('./models/Technique');
+const Position = require('./models/Position');
 
 //const dbUrl = "mongodb+srv://nick:sNFl8jJdigY8oMNd@cluster0.uavscjk.mongodb.net/?retryWrites=true&w=majority"
 const dbUrl = 'mongodb://localhost:27017/bjjdb'
@@ -101,9 +102,26 @@ app.get('/', async (req, res) => {
 app.get('/search/:q', async (req, res) => {
     let { q } = req.params;
     q = q.replace(/[^a-zA-Z ]/g, "")
+    let results = []
+    const query = { name: { $regex: q, $options: "i" } }
+    const techs = await Technique.find(query, 'name group')
+    for (let tech of techs) {
+        results.push({
+            "name": tech.name,
+            "link": `/techniques/${tech.group}`,
+            "type": "Technique"
+        })
+    }
 
-    const techs = await Technique.find({ name: { $regex: q, $options: "i" } }, 'name group')
-    res.send({ techs })
+    const positions = await Position.find(query, 'name')
+    for (let pos of positions) {
+        results.push({
+            "name": pos.name,
+            "link": `/positions/${pos._id}`,
+            "type": "Position"
+        })
+    }
+    res.send({ results })
 })
 
 

@@ -21,13 +21,11 @@ form.addEventListener('input', async function (e) {
     }
     if (query.length) {
         const res = await axios.get(`/search/${query}`)
-        console.log(res.data.techs)
-        res.data.techs.forEach((result) => {
-            console.log(result.name)
+        res.data.results.forEach((result) => {
             const node = document.createElement("a");
-            node.textContent = result.name
+            node.innerHTML = `${result.name} : <i>${result.type.toLowerCase()}</i>`
             node.className = "list-group-item list-group-item-action list-group-item-dark"
-            node.href = `/techniques/${result.group}`
+            node.href = `${result.link}`
             document.querySelector('#searchResults').appendChild(node);
         })
     }
