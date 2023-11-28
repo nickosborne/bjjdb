@@ -98,6 +98,11 @@ app.get('/', async (req, res) => {
     res.render('home/home', { count })
 })
 
+app.get('/search/:q', async (req, res) => {
+    const { q } = req.params;
+    console.log(q)
+    res.send("this is your search result")
+})
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404))
 })

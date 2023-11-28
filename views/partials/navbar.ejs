@@ -29,6 +29,12 @@
                     </li>
                     <% } %>
             </ul>
+            <div class="navbar-nav flex-row ms-md-auto">
+                <form id="searchForm">
+                    <input type="text" placeholder="Position, Technique..." name="query">
+                    <button>Search</button>
+                </form>
+            </div>
             <div class="navbar-nav flex-row flex-wrap ms-md-auto">
                 <% if (!currentUser) {%>
                     <a class="nav-link" href="/users/login">Login</a>
