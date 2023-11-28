@@ -2,7 +2,7 @@ module.exports.forceLogin = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'you must me signed in');
-        return res.redirect('/login')
+        return res.redirect('/users/login')
     }
     next()
 }
