@@ -102,7 +102,7 @@ app.get('/search/:q', async (req, res) => {
     let { q } = req.params;
     q = q.replace(/[^a-zA-Z ]/g, "")
 
-    const techs = await Technique.find({ name: { $regex: q } }, 'name group')
+    const techs = await Technique.find({ name: { $regex: q, $options: "i" } }, 'name group')
     res.send({ techs })
 })
 

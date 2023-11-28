@@ -15,9 +15,19 @@ const form = document.querySelector('#searchForm');
 form.addEventListener('input', async function (e) {
     e.preventDefault();
     const query = form.elements.query.value;
+    let list = document.querySelector('#searchResults')
+    while (list.hasChildNodes()) {
+        list.removeChild(list.firstChild);
+    }
     if (query.length) {
         const res = await axios.get(`/search/${query}`)
         console.log(res.data.techs)
+        res.data.techs.forEach((result) => {
+            console.log(result.name)
+            const node = document.createElement("li");
+            node.textContent = result.name
+            document.querySelector('#searchResults').appendChild(node);
+        })
     }
 
 })
