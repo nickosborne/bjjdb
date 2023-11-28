@@ -24,8 +24,10 @@ form.addEventListener('input', async function (e) {
         console.log(res.data.techs)
         res.data.techs.forEach((result) => {
             console.log(result.name)
-            const node = document.createElement("li");
+            const node = document.createElement("a");
             node.textContent = result.name
+            node.className = "list-group-item list-group-item-action list-group-item-dark"
+            node.href = `/techniques/${result.group}`
             document.querySelector('#searchResults').appendChild(node);
         })
     }
