@@ -1,7 +1,16 @@
 <% layout('layouts/boilerplate')%>
     <div class="container d-flex ms-5">
         <div class="row">
-            <h1>Positions</h1>
+            <div class="col">
+                <h1>Positions</h1>
+            </div>
+            <div class="col"><a class="btn btn-success mb-3 text-align-right" href="/positions/new">Add
+                    New Position</a>
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex ms-5">
+        <div class="row">
             <% for (let position of positions) {%>
                 <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1">
                     <img class="card-img-top mt-2" src="<%=position.image %>" alt="Card image cap">
@@ -19,4 +28,5 @@
                 </div>
                 <% } %>
         </div>
+    </div>
     </div>

@@ -1,16 +1,26 @@
 <% layout('layouts/boilerplate')%>
     <div class="container d-flex ms-5">
         <div class="row">
-            <h1>Techniques</h1>
-            <% for (let group of groups) {%>
-                <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%=group.name %>
-                        </h5>
-                        <a class="btn btn-secondary" href="/techniques/<%= group._id %>" class="card-link">Explore</a>
+            <div class="col">
+                <h1>Techniques</h1>
+            </div>
+            <div class="col">
+                <a class="btn btn-success" href="/techniques/new">Add New Technique</a>
+            </div>
+
+            <div class="row">
+
+                <% for (let group of groups) {%>
+                    <div class="card col-lg-2 col-md-4 col-sm-6 text-light bg-dark m-1">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%=group.name %>
+                            </h5>
+                            <a class="btn btn-secondary" href="/techniques/<%= group._id %>"
+                                class="card-link">Explore</a>
+                        </div>
                     </div>
-                </div>
-                <% } %>
+                    <% } %>
+            </div>
         </div>
     </div>
