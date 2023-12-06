@@ -9,7 +9,16 @@
                         <%= position.name %>
                     </h1>
                     <p class="text-center text-light"> <small>(<%= position.otherNames %>)</small></p>
-                    <h2 class="text-light">Techniques</h2>
+                    <div class="d-flex mb-3 text-light">
+                        <div class="p-2 text-light">
+                            <h3>Techniques</h3>
+                        </div>
+
+                        <div class="ms-auto p-2 text-light"><a class="btn btn-success mb-3 text-align-right"
+                                href="/positions/new">Add</a></div>
+                    </div>
+
+
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <% for (let techType of techniqueTypes) { %>
                             <% if (techniqueTypes.indexOf(techType)==0) { %>
