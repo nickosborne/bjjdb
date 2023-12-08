@@ -1,0 +1,24 @@
+<div class="row p-2 mb-3 bg-secondary" id="add-technique" hidden>
+    <div class="col">
+        <input type="text" class="form-control" placeholder="Name" aria-label="Name">
+    </div>
+    <div class="col">
+        <select class="form-select" id="type" name="technique[type]">
+            <% for (let techType of techniqueTypes) { %>
+                <option>
+                    <%=techType %>
+                </option>
+                <% } %>
+        </select>
+    </div>
+    <div class="col">
+        <select class="form-select" id="side" name="technique[side]">
+            <option>Top</option>
+            <option>Bottom</option>
+        </select>
+    </div>
+    <div class="col">
+        <input class="form-control" type="text" id="video" name="technique[video]" placeholder="link" required>
+    </div>
+
+</div>

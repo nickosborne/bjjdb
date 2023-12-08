@@ -1,8 +1,8 @@
 
-let btn = document.getElementById('addSub')
+let btn = document.getElementById('addTechnique')
 if (btn) {
     btn.addEventListener('click', () => {
-        let form = document.getElementById('add-submission');
+        let form = document.getElementById('add-technique');
         if (form.hidden) {
             form.hidden = false;
         } else {
