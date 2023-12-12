@@ -1,4 +1,4 @@
-<form action="/techniques" method="POST" novalidate class="validated-form">
+<form action="/techniques" method="POST" class="validated-form" novalidate>
     <div class="row p-2 mb-3 bg-secondary" id="add-technique" hidden>
         <div class="col">
             <input type="text" class="form-control" name="technique[name]" placeholder="Name" aria-label="Name"
@@ -38,3 +38,4 @@
         <input type="hidden" id="position" name="technique[position]" value="<%=position.id%>">
     </div>
 </form>
+<script src="/addSub.js"></script>

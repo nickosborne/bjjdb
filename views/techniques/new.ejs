@@ -2,7 +2,7 @@
     <div class="row">
         <h1 class="text-center">New Technique</h1>
         <div class="col-6 offset-3">
-            <form action="/techniques" method="POST" novalidate class="validated-form" novalidate>
+            <form action="/techniques" method="POST" class="validated-form" novalidate>
                 <div class="mb-3">
                     <label class="form-label" for="name">Name</label>
                     <input class="form-control" type="text" id="name" name="technique[name]" required>
@@ -24,7 +24,7 @@
                 <div class="mb-3">
                     <label for="technique[group]">Group</label>
                     <input list="groups" id="technique[group]" name="technique[group]" />
-                    <datalist id="groups">
+                    <datalist id="groups" required>
                         <% for (let group of groups) {%>
                             <option value="<%=group.name%>">
                             </option>
