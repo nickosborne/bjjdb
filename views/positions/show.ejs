@@ -19,77 +19,84 @@
                     </div>
                     <% if (currentUser) {%>
                         <%- include('../partials/addTechnique')%>
-                            <% } %>
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <% for (let techType of techniqueTypes) { %>
-                                        <% if (techniqueTypes.indexOf(techType)==0) { %>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="<%=techType %>-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#<%=techType %>-tab-pane"
-                                                    type="button" role="tab" aria-controls="<%=techType %>-tab-pane"
-                                                    aria-selected="true">
-                                                    <%=techType %>
-                                                </button>
-                                            </li>
-                                            <% } else { %>
+                            <% } else {%>
+                                <div class="alert alert-warning" role="alert" id="add-technique" hidden>
+                                    You must be logged in to add a technique!
+                                </div>
+                                <% } %>
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <% for (let techType of techniqueTypes) { %>
+                                            <% if (techniqueTypes.indexOf(techType)==0) { %>
                                                 <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="<%=techType %>-tab"
+                                                    <button class="nav-link active" id="<%=techType %>-tab"
                                                         data-bs-toggle="tab" data-bs-target="#<%=techType %>-tab-pane"
                                                         type="button" role="tab" aria-controls="<%=techType %>-tab-pane"
-                                                        aria-selected="false">
+                                                        aria-selected="true">
                                                         <%=techType %>
                                                     </button>
                                                 </li>
-                                                <% } %>
+                                                <% } else { %>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link" id="<%=techType %>-tab"
+                                                            data-bs-toggle="tab"
+                                                            data-bs-target="#<%=techType %>-tab-pane" type="button"
+                                                            role="tab" aria-controls="<%=techType %>-tab-pane"
+                                                            aria-selected="false">
+                                                            <%=techType %>
+                                                        </button>
+                                                    </li>
                                                     <% } %>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <% for (let techType of techniqueTypes) { %>
-                                        <% if (techniqueTypes.indexOf(techType)==0) { %>
-                                            <div class="tab-pane fade show active" id="<%=techType %>-tab-pane"
-                                                role="tabpanel" aria-labelledby="<%=techType %>-tab" tabindex="0">
-                                                <% } else {%>
-                                                    <div class="tab-pane fade" id="<%=techType %>-tab-pane"
-                                                        role="tabpanel" aria-labelledby="<%=techType %>-tab"
-                                                        tabindex="0">
                                                         <% } %>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent">
+                                        <% for (let techType of techniqueTypes) { %>
+                                            <% if (techniqueTypes.indexOf(techType)==0) { %>
+                                                <div class="tab-pane fade show active" id="<%=techType %>-tab-pane"
+                                                    role="tabpanel" aria-labelledby="<%=techType %>-tab" tabindex="0">
+                                                    <% } else {%>
+                                                        <div class="tab-pane fade" id="<%=techType %>-tab-pane"
+                                                            role="tabpanel" aria-labelledby="<%=techType %>-tab"
+                                                            tabindex="0">
+                                                            <% } %>
 
-                                                            <table class="table text-light">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">Name</th>
-                                                                        <th scope="col">Group</th>
-                                                                        <th scope="col">Side</th>
-                                                                        <th scope="col">Video</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <% for (let tech of techniques) { %>
-                                                                        <% if (tech.type==techType) { %>
-                                                                            <tr>
-                                                                                <th scope="row">
-                                                                                    <%= tech.name %>
-                                                                                </th>
-                                                                                <td>
-                                                                                    <%= tech.group.name %>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <%= tech.side %>
-                                                                                </td>
-                                                                                <td><a class="btn btn-primary"
-                                                                                        href="<%= tech.video %>"
-                                                                                        role="button" target="_blank"
-                                                                                        rel="noopener noreferrer">Video</a>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <% } %>
+                                                                <table class="table text-light">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Name</th>
+                                                                            <th scope="col">Group</th>
+                                                                            <th scope="col">Side</th>
+                                                                            <th scope="col">Video</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% for (let tech of techniques) { %>
+                                                                            <% if (tech.type==techType) { %>
+                                                                                <tr>
+                                                                                    <th scope="row">
+                                                                                        <%= tech.name %>
+                                                                                    </th>
+                                                                                    <td>
+                                                                                        <%= tech.group.name %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%= tech.side %>
+                                                                                    </td>
+                                                                                    <td><a class="btn btn-primary"
+                                                                                            href="<%= tech.video %>"
+                                                                                            role="button"
+                                                                                            target="_blank"
+                                                                                            rel="noopener noreferrer">Video</a>
+                                                                                    </td>
+                                                                                </tr>
                                                                                 <% } %>
-                                                                </tbody>
-                                                            </table>
-                                                    </div>
-                                                    <% } %>
-                                            </div>
-                                </div>
+                                                                                    <% } %>
+                                                                    </tbody>
+                                                                </table>
+                                                        </div>
+                                                        <% } %>
+                                                </div>
+                                    </div>
                 </div>
             </div>
         </div>
+        <script src="/addSub.js"></script>
