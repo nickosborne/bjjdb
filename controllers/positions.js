@@ -4,7 +4,8 @@ const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const mongoose = require('mongoose');
 const SubmissionVariation = require('../models/SubmissionVariation');
-const Technique = require('../models/Technique')
+const Technique = require('../models/Technique');
+const Group = require('../models/Group.js');
 
 // middleware
 module.exports.validatePosition = (req, res, next) => {
@@ -54,7 +55,7 @@ module.exports.show = async (req, res) => {
     const { id } = req.params;
     const position = await Position.findById(id);
     const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] },).populate('group');
-
+    const groups = await Group.find({ public: true });
     if (req.isAuthenticated()) {
         //const position = await Position.findById(id);
         const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
@@ -66,10 +67,10 @@ module.exports.show = async (req, res) => {
             }
             techniques.append(userTechniques)
         })
-        res.render('positions/show', { position, techniques, techniqueTypes })
+        res.render('positions/show', { position, techniques, techniqueTypes, groups })
     }
     else {
-        res.render('positions/show', { position, techniques, techniqueTypes })
+        res.render('positions/show', { position, techniques, techniqueTypes, groups })
     }
 }
 

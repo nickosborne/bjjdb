@@ -1,24 +1,40 @@
-<div class="row p-2 mb-3 bg-secondary" id="add-technique" hidden>
-    <div class="col">
-        <input type="text" class="form-control" placeholder="Name" aria-label="Name">
+<form action="/techniques" method="POST" novalidate class="validated-form">
+    <div class="row p-2 mb-3 bg-secondary" id="add-technique" hidden>
+        <div class="col">
+            <input type="text" class="form-control" name="technique[name]" placeholder="Name" aria-label="Name"
+                required>
+        </div>
+        <div class="col">
+            <select class="form-select" id="type" name="technique[type]">
+                <% for (let techType of techniqueTypes) { %>
+                    <option>
+                        <%=techType %>
+                    </option>
+                    <% } %>
+            </select>
+        </div>
+        <div class="col">
+            <select class="form-select" id="side" name="technique[side]">
+                <option>Top</option>
+                <option>Bottom</option>
+            </select>
+        </div>
+        <div class="col">
+            <input class="form-control" type="text" id="video" name="technique[video]" placeholder="link" required>
+        </div>
+        <div class="col">
+            <input class="form-control" list="groups" id="technique[group]" name="technique[group]"
+                placeholder="Group" />
+            <datalist id="groups">
+                <% for (let group of groups) {%>
+                    <option value="<%=group.name%>">
+                    </option>
+                    <% } %>
+            </datalist>
+        </div>
+        <div class="col"><button class="btn btn-success">Submit</button>
+        </div>
+        <input type="hidden" id="userId" name="technique[userId]" value="<%=currentUser.id%>">
+        <input type="hidden" id="position" name="technique[position]" value="<%=position.id%>">
     </div>
-    <div class="col">
-        <select class="form-select" id="type" name="technique[type]">
-            <% for (let techType of techniqueTypes) { %>
-                <option>
-                    <%=techType %>
-                </option>
-                <% } %>
-        </select>
-    </div>
-    <div class="col">
-        <select class="form-select" id="side" name="technique[side]">
-            <option>Top</option>
-            <option>Bottom</option>
-        </select>
-    </div>
-    <div class="col">
-        <input class="form-control" type="text" id="video" name="technique[video]" placeholder="link" required>
-    </div>
-
-</div>
+</form>
