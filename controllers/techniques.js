@@ -110,9 +110,10 @@ module.exports.show = async (req, res) => {
     const { id } = req.params;
     const group = await Group.findById(id);
     const techniques = await Technique.find({ $and: [{ public: true }, { group: id }] }).populate('position')
-    const groupName = group.name
+    const positions = await Position.find({ public: true })
+    const techniqueTypes = Technique.schema.path('type').enumValues;
     if (group) {
-        res.render('techniques/show', { techniques, groupName })
+        res.render('techniques/show', { techniques, group, positions, techniqueTypes })
     }
     else {
         res.redirect('/techniques');
