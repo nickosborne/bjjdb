@@ -1,9 +1,6 @@
 const Position = require('../models/Position');
-const Submission = require('../models/Submission');
 const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
-const mongoose = require('mongoose');
-const SubmissionVariation = require('../models/SubmissionVariation');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
 
@@ -54,8 +51,14 @@ module.exports.show = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const { id } = req.params;
     const position = await Position.findById(id);
-    const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] },).populate('group');
-    const groups = await Group.find({ public: true });
+    //const techniques = await Technique.find({ $and: [{ public: true }, { position: position }] },).populate('group');
+    const techniques = await Technique.find({
+        $or: [
+            { $and: [{ public: true }, { position: position }] },
+            { $and: [{ userId: req.user.id }, { position: position }] }
+        ]
+    }).populate('group');
+    const groups = await Group.find({ $or: [{ public: true }, { userId: req.user.id }] });
     if (req.isAuthenticated()) {
         //const position = await Position.findById(id);
         const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');

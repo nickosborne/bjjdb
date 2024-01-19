@@ -16,16 +16,16 @@ module.exports.validateTechnique = (req, res, next) => {
 }
 
 module.exports.index = async (req, res) => {
-    const groups = await Group.find({ public: true })
-    res.render('techniques/index', { groups })
-    // if (req.isAuthenticated()) {
-    //     const techniques = await Technique.find({ $or: [{ public: true }, { userId: req.user.id }] })
-    //     res.render('techniques/index', { techniques })
-    // }
-    // else {
-    //     const techniques = await Technique.find({ public: true }).populate({ path: 'position' })
-    //     res.render('techniques/index', { techniques })
-    // }
+    // const groups = await Group.find({ public: true })
+    // res.render('techniques/index', { groups })
+    if (req.isAuthenticated()) {
+        const groups = await Group.find({ $or: [{ public: true }, { userId: req.user.id }] })
+        res.render('techniques/index', { groups })
+    }
+    else {
+        const groups = await Group.find({ public: true })
+        res.render('techniques/index', { groups })
+    }
 }
 
 module.exports.new = async (req, res) => {
@@ -107,7 +107,13 @@ module.exports.delete = async (req, res) => {
 module.exports.show = async (req, res) => {
     const { id } = req.params;
     const group = await Group.findById(id);
-    const techniques = await Technique.find({ $and: [{ public: true }, { group: id }] }).populate('position')
+    //const techniques = await Technique.find({ $and: [{ public: true }, { group: id }] }).populate('position')
+    const techniques = await Technique.find({
+        $or: [
+            { $and: [{ public: true }, { group: id }] },
+            { $and: [{ userId: req.user.id }, { group: id }] }
+        ]
+    }).populate('position');
     const positions = await Position.find({ public: true })
     const techniqueTypes = Technique.schema.path('type').enumValues;
     if (group) {
