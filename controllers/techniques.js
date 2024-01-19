@@ -79,7 +79,6 @@ module.exports.edit = async (req, res) => {
     await Group.findByIdAndUpdate(groupId, { public: true })
     technique.group = groupId
     technique.public = true
-    console.log(technique)
     const update = await (Technique.findByIdAndUpdate(id, technique));
     if (update) {
         req.flash('success', 'approved')
