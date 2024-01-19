@@ -41,7 +41,6 @@ let findPositionById = async (id) => {
 let validateGroup = async (name, userId) => {
     let techName = await Group.findOne({ name: name })
     if (techName) {
-        console.log("found name")
         return techName.id;
     } else {
         let newGroup = new Group({
@@ -50,7 +49,6 @@ let validateGroup = async (name, userId) => {
             userId: userId
         })
         await newGroup.save()
-        console.log("created new group")
         return newGroup.id;
     }
 }
