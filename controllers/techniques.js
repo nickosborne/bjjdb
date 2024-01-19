@@ -16,8 +16,9 @@ module.exports.validateTechnique = (req, res, next) => {
 }
 
 module.exports.index = async (req, res) => {
-    // const groups = await Group.find({ public: true })
-    // res.render('techniques/index', { groups })
+
+    const url = new URL('https://youtu.be/U8tGzGVRiQA?feature=shared&t=24')
+    console.log(url)
     if (req.isAuthenticated()) {
         const groups = await Group.find({ $or: [{ public: true }, { userId: req.user.id }] })
         res.render('techniques/index', { groups })
