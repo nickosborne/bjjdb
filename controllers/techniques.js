@@ -16,9 +16,6 @@ module.exports.validateTechnique = (req, res, next) => {
 }
 
 module.exports.index = async (req, res) => {
-
-    const url = new URL('https://youtu.be/U8tGzGVRiQA?feature=shared&t=24')
-    console.log(url)
     if (req.isAuthenticated()) {
         const groups = await Group.find({ $or: [{ public: true }, { userId: req.user.id }] })
         res.render('techniques/index', { groups })
@@ -108,7 +105,6 @@ module.exports.edit = async (req, res) => {
     await Group.findByIdAndUpdate(groupId, { public: true })
     technique.group = groupId
     technique.public = true
-    console.log(technique)
     const update = await (Technique.findByIdAndUpdate(id, technique));
     if (update) {
         req.flash('success', 'approved')

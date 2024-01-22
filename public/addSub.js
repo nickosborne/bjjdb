@@ -34,4 +34,3 @@ form.addEventListener('input', async function (e) {
         })
     }
 })
-

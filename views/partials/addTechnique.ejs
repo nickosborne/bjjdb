@@ -23,13 +23,12 @@
             <input class="form-control" type="url" id="video" name="technique[video]" placeholder="link" required>
         </div>
         <div class="col">
-            <input class="form-control" list="groups" id="technique[group]" name="technique[group]"
-                placeholder="Group" />
+            <input class="form-control" list="groups" id="technique[group]" name="technique[group]" placeholder="Group"
+                required />
             <datalist id="groups">
                 <% for (let group of groups) {%>
                     <option value="<%=group.name%>">
-                    </option>
-                    <% } %>
+                        <% } %>
             </datalist>
         </div>
         <div class="col"><button class="btn btn-success">Submit</button>
