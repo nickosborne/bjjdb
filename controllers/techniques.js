@@ -124,7 +124,14 @@ module.exports.admin = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
-    await Technique.findByIdAndDelete(id);
+    const technique = await Technique.findById(id);
+    const techniques = await Technique.find({ group: technique.group })
+    //if only one technique exists in the group, delete the group also
+    if (!(techniques.length > 1)) {
+        console.log("deleted group")
+        await Group.findByIdAndDelete(technique.group);
+    }
+    await technique.delete();
     req.flash('success', 'Technique deleted.')
     res.redirect('/techniques/admin');
 }
