@@ -51,6 +51,9 @@
                 <div class="mb-3">
                     <label class="form-label" for="video">Video</label>
                     <input class="form-control" type="url" id="video" name="technique[video]" required>
+                    <div class="invalid-feedback">
+                        Must be a valid YouTube link
+                    </div>
                 </div>
                 <input type="hidden" id="userId" name="technique[userId]" value="<%=currentUser.id%>">
                 <div class="mb-3">

@@ -59,17 +59,10 @@ const validateLink = () => {
     var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (url.match(p) && url.match(p)[1]) {
         link.setCustomValidity("");
-        // link.classList.remove("is-invalid");
-        // link.classList.add('is-valid');
-        console.log("Valid")
         return true;
     }
     else {
-        console.log("invalid")
-        // link.classList.add("is-invalid");
-        // link.classList.remove('is-valid');
         link.setCustomValidity("Invalid field.");
-
         return false;
     }
 }
