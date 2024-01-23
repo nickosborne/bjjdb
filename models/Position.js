@@ -43,15 +43,9 @@ const positionSchema = new Schema({
 
 positionSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
-        // get all the submission Ids from the variations
+        // remove all techniques linked to this position
         const techniques = await mongoose.model('Technique').find({ position: { $eq: doc._id } })
-        // const subIds = techniques.map(({ submission }) => { return submission })
-
-        // remove variations from submissions
         await mongoose.model('Technique').deleteMany({ _id: { $in: techniques } });
-
-        // // delete variations
-        // await mongoose.model('SubmissionVariation').deleteMany({ position: { $eq: doc._id } });
     }
 })
 const Position = mongoose.model('Position', positionSchema);
