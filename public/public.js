@@ -70,5 +70,4 @@ const validateLink = () => {
     else {
         return true;
     }
-
 }
