@@ -55,14 +55,20 @@ form.addEventListener('input', async function (e) {
 
 const validateLink = () => {
     const link = document.getElementById('video');
-    const url = link.value
-    var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    if (url.match(p) && url.match(p)[1]) {
-        link.setCustomValidity("");
-        return true;
+    if (link) {
+        const url = link.value
+        var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        if (url.match(p) && url.match(p)[1]) {
+            link.setCustomValidity("");
+            return true;
+        }
+        else {
+            link.setCustomValidity("Invalid field.");
+            return false;
+        }
     }
     else {
-        link.setCustomValidity("Invalid field.");
-        return false;
+        return true;
     }
+
 }

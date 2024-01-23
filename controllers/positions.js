@@ -1,9 +1,6 @@
 const Position = require('../models/Position');
-const Submission = require('../models/Submission');
 const { positionSchema, editSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
-const mongoose = require('mongoose');
-const SubmissionVariation = require('../models/SubmissionVariation');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
 const TechniqueControls = require('../controllers/techniques')
