@@ -1,3 +1,21 @@
+(() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.validated-form')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!validateLink() || !form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
 
 let btn = document.getElementById('addTechnique')
 if (btn) {
@@ -36,14 +54,17 @@ form.addEventListener('input', async function (e) {
 })
 
 const validateLink = () => {
-    const url = document.getElementById('video').value;
+    const link = document.getElementById('video');
+    const url = link.value
     var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (url.match(p) && url.match(p)[1]) {
         link.classList.remove("is-invalid");
         link.classList.add('is-valid');
+        console.log("Valid")
         return true;
     }
     else {
+        console.log("invalid")
         link.classList.add("is-invalid");
         link.classList.remove('is-valid');
         return false;
