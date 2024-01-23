@@ -61,4 +61,14 @@
                 </div>
             </div>
         </div>
-        <script src="/addSub.js"></script>
+        <script>
+            const btn = document.getElementById('addTechnique');
+            btn.addEventListener('click', function () {
+                let form = document.getElementById('add-technique');
+                if (form.hidden) {
+                    form.hidden = false;
+                } else {
+                    form.hidden = true;
+                }
+            })
+        </script>
