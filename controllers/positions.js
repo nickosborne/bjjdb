@@ -1,5 +1,5 @@
 const Position = require('../models/Position');
-const { positionSchema, editSchema } = require('../schemas.js');
+const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');

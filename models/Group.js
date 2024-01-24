@@ -11,8 +11,9 @@ const groupSchema = new mongoose.Schema({
         default: false
     },
     userId: {
-        type: String,
-    }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
 });
 
 const Group = mongoose.model('Group', groupSchema);

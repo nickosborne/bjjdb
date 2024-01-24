@@ -15,4 +15,7 @@ router.post('/login', checkReturnTo, passport.authenticate('local', { failureFla
 
 router.get('/logout', users.logout);
 
+router.get('/journal', users.journal)
+router.post('/journal', forceLogin, users.validateJournal, users.createJournalEntry)
+
 module.exports = router;
