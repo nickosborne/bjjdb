@@ -17,6 +17,14 @@
     })
 })()
 
+let test = document.querySelectorAll('button[name="noteButton"]')
+
+Array.from(test).forEach(button => {
+    button.addEventListener('click', () => {
+        console.log("clicked")
+    })
+})
+
 let btn = document.getElementById('addTechnique')
 if (btn) {
     btn.addEventListener('click', () => {
