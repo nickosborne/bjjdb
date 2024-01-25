@@ -14,7 +14,7 @@ router.get('/login', users.login)
 
 router.post('/login', checkReturnTo, passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.authenticate)
 
-router.get('/logout', users.logout);
+router.get('/logout', checkReturnTo, users.logout);
 
 router.get('/journal', users.journal)
 router.post('/journal', forceLogin, helpers.validateJournal, users.createJournalEntry)

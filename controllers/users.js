@@ -31,7 +31,7 @@ module.exports.login = (req, res) => {
 
 module.exports.authenticate = (req, res) => {
     req.flash('success', 'logged in!');
-    const redirectUrl = res.locals.returnTo || res.locals.previous || '/positions';
+    const redirectUrl = res.locals.returnTo || res.locals.previous || '/';
     res.redirect(redirectUrl)
 }
 
@@ -39,7 +39,7 @@ module.exports.logout = function (req, res, next) {
     req.logout(function (err) {
         if (err) { return next(err); }
         req.flash('success', 'logged out')
-        res.redirect('/positions');
+        res.redirect(res.locals.returnTo || res.locals.previous || '/');
     });
 }
 
