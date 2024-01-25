@@ -1,3 +1,9 @@
+const Technique = require('./models/Technique');
+const Group = require('./models/Group');
+const Position = require('./models/Position');
+const User = require('./models/User');
+const Journal = require('./models/Journal');
+
 module.exports.forceLogin = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
@@ -24,5 +30,81 @@ module.exports.isAdmin = (req, res, next) => {
     else {
         req.flash('error', 'Permission denied.')
         res.redirect('/positions')
+    }
+}
+
+module.exports.GetTechniquesForRequest = async (req) => {
+    if (req.isAuthenticated()) {
+        return await Technique.find({ $or: [{ public: true }, { userId: req.user.id }] })
+    }
+    else {
+        return await Technique.find({ pubic: true })
+    }
+}
+
+module.exports.GetTechniquesByPosition = async (req, positionId) => {
+    if (req.isAuthenticated()) {
+        return await Technique.find({
+            $or: [
+                { $and: [{ public: true }, { position: positionId }] },
+                { $and: [{ userId: req.user.id }, { position: positionId }] }
+            ]
+        }).populate('group');
+    }
+    else {
+        return await Technique.find({ $and: [{ public: true }, { position: positionId }] },).populate('group');
+    }
+}
+
+module.exports.GetTechniquesByGroup = async (req, groupId) => {
+    if (req.isAuthenticated()) {
+        return await Technique.find({
+            $or: [
+                { $and: [{ public: true }, { group: groupId }] },
+                { $and: [{ userId: req.user.id }, { group: groupId }] }
+            ]
+        }).populate('position');
+    }
+    else {
+        return await Technique.find({ $and: [{ public: true }, { group: groupId }] }).populate('position')
+    }
+}
+
+module.exports.validateJournal = (req, res, next) => {
+    const { error } = journalSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+module.exports.validateTechnique = (req, res, next) => {
+
+    const { error } = techniqueSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+module.exports.GetPositionsForRequest = async (req) => {
+    if (req.isAuthenticated()) {
+        return await Position.find({ $or: [{ public: true }, { userId: req.user.id }] })
+    }
+    else {
+        return await Position.find({ public: true });
+    }
+}
+
+module.exports.GetJournalsForRequest = async function (req) {
+    if (req.isAuthenticated()) {
+        return await Journal.find({ userId: req.user.id })
+    }
+    else {
+        return [];
     }
 }

@@ -1,19 +1,9 @@
 const User = require('../models/User');
 const Journal = require('../models/Journal');
-const Technique = require('../models/Technique.js');
 const { journalSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
+const helpers = require('../middleware')
 
-// middleware
-module.exports.validateJournal = (req, res, next) => {
-    const { error } = journalSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
 
 module.exports.register = (req, res) => {
     res.render('users/register')
@@ -54,22 +44,13 @@ module.exports.logout = function (req, res, next) {
 }
 
 module.exports.journal = async function (req, res) {
-    if (req.isAuthenticated()) {
-        const journals = await Journal.find({
-            $or: [{ public: true }, { userId: req.user.id }]
-        })
-        const techniques = await Technique.find({
-            $or: [{ public: true }, { userId: req.user.id }]
-        })
-        res.render('users/journal', { techniques, journals });
-    }
-    else {
-        const techniques = await Technique.find({ public: true });
-        const journals = [];
-        res.render('users/journal', { techniques, journals });
-    }
-
+    const techniques = await helpers.GetTechniquesForRequest(req);
+    const journals = await helpers.GetJournalsForRequest(req);
+    const positions = await helpers.GetPositionsForRequest(req);
+    res.render('users/journal', { techniques, journals });
 }
+
+
 
 module.exports.createJournalEntry = async function (req, res) {
     let { journal } = req.body;
