@@ -3,7 +3,7 @@ const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
-const TechniqueControls = require('../controllers/techniques')
+const helpers = require('../middleware.js')
 
 // middleware
 module.exports.validatePosition = (req, res, next) => {
@@ -52,7 +52,7 @@ module.exports.show = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const positionId = req.params.id;
     const position = await Position.findById(positionId);
-    const techniques = await TechniqueControls.GetTechniquesByPosition(req, positionId)
+    const techniques = await helpers.GetTechniquesByPosition(req, positionId)
     const groups = await Group.find({ public: true });
     if (req.isAuthenticated()) {
         //const position = await Position.findById(id);

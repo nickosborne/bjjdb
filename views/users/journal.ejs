@@ -29,6 +29,16 @@
                                 <% } %>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Position</label>
+                        <select class="form-select" id="position" name="journal[position]">
+                            <% for (let pos of positions) { %>
+                                <option value="<%=pos.id %>">
+                                    <%=pos.name %>
+                                </option>
+                                <% } %>
+                        </select>
+                    </div>
                     <input type="hidden" id="userId" name="journal[userId]" value="<%=currentUser.id%>">
                     <div class="mb-3">
                         <button class="btn btn-success">Submit</button>

@@ -47,7 +47,7 @@ module.exports.journal = async function (req, res) {
     const techniques = await helpers.GetTechniquesForRequest(req);
     const journals = await helpers.GetJournalsForRequest(req);
     const positions = await helpers.GetPositionsForRequest(req);
-    res.render('users/journal', { techniques, journals });
+    res.render('users/journal', { techniques, journals, positions });
 }
 
 
