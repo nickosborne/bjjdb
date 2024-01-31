@@ -17,13 +17,17 @@
     })
 })()
 
-let test = document.querySelectorAll('button[name="noteButton"]')
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+const noteForms = document.querySelectorAll('.note-form')
 
-Array.from(test).forEach(button => {
-    button.addEventListener('click', () => {
-        console.log("clicked")
+// Loop over them and prevent submission
+Array.from(noteForms).forEach(form => {
+    form.addEventListener('submit', event => {
+        event.preventDefault()
+
     })
 })
+
 
 let btn = document.getElementById('addTechnique')
 if (btn) {
@@ -79,3 +83,4 @@ const validateLink = () => {
         return true;
     }
 }
+

@@ -30,8 +30,7 @@ module.exports.techniqueSchema = Joi.object({
 
 module.exports.journalSchema = Joi.object({
     journal: Joi.object({
-        data: Joi.string().required(),
-        date: Joi.date().required(),
+        text: Joi.string().required(),
         technique: Joi.string().required(),
         userId: Joi.string().required()
     })

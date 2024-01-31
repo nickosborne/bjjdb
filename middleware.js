@@ -3,6 +3,8 @@ const Group = require('./models/Group');
 const Position = require('./models/Position');
 const User = require('./models/User');
 const Journal = require('./models/Journal');
+const { journalSchema, techniqueSchema } = require('./schemas')
+const ExpressError = require('./utils/ExpressError');
 
 module.exports.forceLogin = (req, res, next) => {
     if (!req.isAuthenticated()) {

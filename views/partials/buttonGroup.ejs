@@ -19,12 +19,15 @@
                 d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
         </svg></button>
     <div class="dropdown-menu dropdown-menu-dark">
-        <form class="px-4 py-3">
+        <form class="px-4 py-3" action="/users/journal" method="POST" class="note-form" novalidate>
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                    name="journal[text]"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
+            <input type="hidden" id="userId" name="journal[userId]" value="<%=currentUser.id%>">
+            <input type="hidden" id="technique" name="journal[technique]" value="<%=tech.id%>">
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
 </div>

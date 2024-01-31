@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
-const { journal } = require('../controllers/users');
 
 const journalSchema = new mongoose.Schema({
-    data: {
+    text: {
         type: String,
+        required: true
+    },
+    date: {
+        type: Date,
         required: true
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    },
-    position: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Position'
     },
     technique: {
         type: mongoose.Schema.Types.ObjectId,
