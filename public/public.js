@@ -22,8 +22,19 @@ const noteForms = document.querySelectorAll('.note-form')
 
 // Loop over them and prevent submission
 Array.from(noteForms).forEach(form => {
-    form.addEventListener('submit', event => {
+    form.addEventListener("submit", event => {
         event.preventDefault()
+        const formData = new FormData(form);
+        // output as an object
+        const journal = Object.fromEntries(formData);
+        console.log(journal)
+        axios.post('/users/journal', journal, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
     })
 })

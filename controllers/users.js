@@ -53,10 +53,11 @@ module.exports.journal = async function (req, res) {
 
 
 module.exports.createJournalEntry = async function (req, res) {
-    const { journal } = req.body;
-    journal.date = new Date();
+    let { journal } = req.body
     console.log(journal)
-    const newEntry = new Journal(journal);
-    await newEntry.save();
-    res.redirect('/users/journal');
+    // journal.date = new Date();
+    // console.log(journal)
+    // const newEntry = new Journal(journal);
+    // await newEntry.save();
+    //res.redirect('/users/journal');
 }
