@@ -1,8 +1,7 @@
 const User = require('../models/User');
 const Journal = require('../models/Journal');
-const { journalSchema } = require('../schemas.js');
-const ExpressError = require('../utils/ExpressError');
 const helpers = require('../middleware')
+const Technique = require('../models/Technique');
 
 
 module.exports.register = (req, res) => {
@@ -54,10 +53,18 @@ module.exports.journal = async function (req, res) {
 
 module.exports.createJournalEntry = async function (req, res) {
     let { journal } = req.body
-    console.log(journal)
-    // journal.date = new Date();
-    // console.log(journal)
-    // const newEntry = new Journal(journal);
-    // await newEntry.save();
-    //res.redirect('/users/journal');
+    const technique = await Technique.findOne({ id: journal.technique });
+    if (req.isAuthenticated() && technique) {
+        journal.userId = req.user.id;
+        journal.date = new Date();
+
+        const filter = { $and: [{ userId: req.user.id }, { technique: journal.technique }] };
+        const update = journal;
+
+        const doc = await Journal.findOneAndUpdate(filter, update, {
+            new: true,
+            upsert: true // Make this update into an upsert
+        });
+    }
+    res.redirect('/users/journal');
 }
