@@ -17,10 +17,8 @@
     })
 })()
 
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-const noteForms = document.querySelectorAll('.note-form')
 
-// Loop over them and prevent submission
+const noteForms = document.querySelectorAll('.note-form')
 Array.from(noteForms).forEach(form => {
     form.addEventListener("submit", event => {
         event.preventDefault()
