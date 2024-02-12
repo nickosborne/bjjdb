@@ -3,6 +3,7 @@ const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
+const Journal = require('../models/Journal')
 const helpers = require('../middleware.js')
 
 // middleware
@@ -54,22 +55,23 @@ module.exports.show = async (req, res) => {
     const position = await Position.findById(positionId);
     const techniques = await helpers.GetTechniquesByPosition(req, positionId)
     const groups = await Group.find({ public: true });
-    if (req.isAuthenticated()) {
-        //const position = await Position.findById(id);
-        const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
-        position.edits.forEach(edit => {
-            if (edit.userId.toString() === req.user.id) {
-                position.name = edit.name;
-                position.otherNames = edit.otherNames;
-                position.image = edit.image;
-            }
-            techniques.append(userTechniques)
-        })
-        res.render('positions/show', { position, techniques, techniqueTypes, groups })
-    }
-    else {
-        res.render('positions/show', { position, techniques, techniqueTypes, groups })
-    }
+    const journals = await helpers.GetJournalsForRequest(req, { position: position })
+    // if (req.isAuthenticated()) {
+    //     // //const position = await Position.findById(id);
+    //     // const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
+    //     // position.edits.forEach(edit => {
+    //     //     if (edit.userId.toString() === req.user.id) {
+    //     //         position.name = edit.name;
+    //     //         position.otherNames = edit.otherNames;
+    //     //         position.image = edit.image;
+    //     //     }
+    //     //     techniques.append(userTechniques)
+    //     // })
+    //     res.render('positions/show', { position, techniques, techniqueTypes, groups })
+    // }
+
+    res.render('positions/show', { position, techniques, techniqueTypes, groups, journals })
+
 }
 
 module.exports.edit = async (req, res) => {

@@ -102,9 +102,9 @@ module.exports.GetPositionsForRequest = async (req) => {
     }
 }
 
-module.exports.GetJournalsForRequest = async function (req) {
+module.exports.GetJournalsForRequest = async function (req, filter = {}) {
     if (req.isAuthenticated()) {
-        return await Journal.find({ userId: req.user.id })
+        return await Journal.find({ $and: [{ userId: req.user.id }, filter] })
     }
     else {
         return [];
