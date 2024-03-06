@@ -18,23 +18,23 @@
 })()
 
 
-const noteForms = document.querySelectorAll('.note-form')
-Array.from(noteForms).forEach(form => {
-    form.addEventListener("submit", event => {
-        event.preventDefault()
-        if (form.querySelector("textarea").value) {
-            const formData = new FormData(form);
-            const journal = Object.fromEntries(formData);
-            axios.post('/users/journal', journal, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    })
-})
+// const noteForms = document.querySelectorAll('.note-form')
+// Array.from(noteForms).forEach(form => {
+//     form.addEventListener("submit", event => {
+//         event.preventDefault()
+//         if (form.querySelector("textarea").value) {
+//             const formData = new FormData(form);
+//             const journal = Object.fromEntries(formData);
+//             axios.post('/users/journal', journal, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+//                 .then(function (response) {
+//                     console.log(response);
+//                 })
+//                 .catch(function (error) {
+//                     console.log(error);
+//                 });
+//         }
+//     })
+// })
 
 
 let btn = document.getElementById('addTechnique')

@@ -3,7 +3,6 @@ const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
-const Journal = require('../models/Journal')
 const helpers = require('../middleware.js')
 
 // middleware
@@ -55,7 +54,6 @@ module.exports.show = async (req, res) => {
     const position = await Position.findById(positionId);
     const techniques = await helpers.GetTechniquesByPosition(req, positionId)
     const groups = await Group.find({ public: true });
-    const journals = await helpers.GetJournalsForRequest(req, { position: position })
     // if (req.isAuthenticated()) {
     //     // //const position = await Position.findById(id);
     //     // const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
@@ -70,7 +68,7 @@ module.exports.show = async (req, res) => {
     //     res.render('positions/show', { position, techniques, techniqueTypes, groups })
     // }
 
-    res.render('positions/show', { position, techniques, techniqueTypes, groups, journals })
+    res.render('positions/show', { position, techniques, techniqueTypes, groups })
 
 }
 

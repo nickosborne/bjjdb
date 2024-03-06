@@ -2,8 +2,7 @@ const Technique = require('./models/Technique');
 const Group = require('./models/Group');
 const Position = require('./models/Position');
 const User = require('./models/User');
-const Journal = require('./models/Journal');
-const { journalSchema, techniqueSchema } = require('./schemas')
+const {  techniqueSchema } = require('./schemas')
 const ExpressError = require('./utils/ExpressError');
 
 module.exports.forceLogin = (req, res, next) => {
@@ -72,16 +71,6 @@ module.exports.GetTechniquesByGroup = async (req, groupId) => {
     }
 }
 
-module.exports.validateJournal = (req, res, next) => {
-    const { error } = journalSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
 module.exports.validateTechnique = (req, res, next) => {
 
     const { error } = techniqueSchema.validate(req.body);
@@ -99,14 +88,5 @@ module.exports.GetPositionsForRequest = async (req) => {
     }
     else {
         return await Position.find({ public: true });
-    }
-}
-
-module.exports.GetJournalsForRequest = async function (req, filter = {}) {
-    if (req.isAuthenticated()) {
-        return await Journal.find({ $and: [{ userId: req.user.id }, filter] })
-    }
-    else {
-        return [];
     }
 }
