@@ -40,3 +40,8 @@ module.exports.logout = function (req, res, next) {
         res.redirect(res.locals.returnTo || res.locals.previous || '/');
     });
 }
+
+module.exports.favorites = async (req, res, next) => {
+    console.log(req.body);
+
+}
