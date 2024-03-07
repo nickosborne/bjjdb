@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
-const Schema = mongoose.Schema;
 
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -12,6 +11,11 @@ const userSchema = new Schema({
     admin: {
         type: Boolean,
         default: false
+    },
+    favorites:
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Technique"
     }
 })
 

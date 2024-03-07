@@ -43,5 +43,15 @@ module.exports.logout = function (req, res, next) {
 
 module.exports.favorites = async (req, res, next) => {
     const { technique, favorite } = req.body;
-    console.log(technique, favorite)
+    if (technique && favorite) {
+        let foundTechnique = await Technique.findById(technique);
+        if (foundTechnique) {
+            if (favorite === "true") {
+                let user = await User.findByIdAndUpdate(req.user.id, { $push: { favorites: technique } })
+            } else {
+                let user = await User.findByIdAndUpdate(req.user.id, { $pull: { favorites: technique } })
+            }
+        }
+    }
+    res.send("success")
 }
