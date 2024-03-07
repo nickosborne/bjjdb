@@ -42,6 +42,6 @@ module.exports.logout = function (req, res, next) {
 }
 
 module.exports.favorites = async (req, res, next) => {
-    console.log(req.body);
-
+    const { technique, favorite } = req.body;
+    console.log(technique, favorite)
 }
