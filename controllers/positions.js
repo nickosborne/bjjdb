@@ -4,6 +4,7 @@ const ExpressError = require('../utils/ExpressError');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
 const helpers = require('../middleware.js')
+const User = require('../models/User')
 
 // middleware
 module.exports.validatePosition = (req, res, next) => {
@@ -54,6 +55,11 @@ module.exports.show = async (req, res) => {
     const position = await Position.findById(positionId);
     const techniques = await helpers.GetTechniquesByPosition(req, positionId)
     const groups = await Group.find({ public: true });
+    let favorites = [];
+    if (req.isAuthenticated()) {
+        let user = await User.findById(req.user.id).populate().lean();
+        user.favorites.forEach(element => { favorites.push(element.toString()) })
+    }
     // if (req.isAuthenticated()) {
     //     // //const position = await Position.findById(id);
     //     // const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
@@ -68,7 +74,7 @@ module.exports.show = async (req, res) => {
     //     res.render('positions/show', { position, techniques, techniqueTypes, groups })
     // }
 
-    res.render('positions/show', { position, techniques, techniqueTypes, groups })
+    res.render('positions/show', { position, techniques, techniqueTypes, groups, favorites })
 
 }
 
