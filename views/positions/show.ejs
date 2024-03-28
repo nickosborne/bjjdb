@@ -59,13 +59,13 @@
                                                             tabindex="0">
                                                             <% } %>
 
-                                                                <table class="table text-light">
+                                                                <table class="table table-hover table-dark">
                                                                     <thead>
                                                                         <tr>
                                                                             <th scope="col">Name</th>
                                                                             <th scope="col">Group</th>
                                                                             <th scope="col">Side</th>
-                                                                            <th scope="col">Video</th>
+                                                                            <th scope="col"></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -81,11 +81,8 @@
                                                                                     <td>
                                                                                         <%= tech.side %>
                                                                                     </td>
-                                                                                    <td><a class="btn btn-primary"
-                                                                                            href="<%= tech.video %>"
-                                                                                            role="button"
-                                                                                            target="_blank"
-                                                                                            rel="noopener noreferrer">Video</a>
+                                                                                    <td class="d-flex justify-content-center">
+                                                                                        <%-include('../partials/buttonGroup', {tech, currentUser, favorites})%>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <% } %>

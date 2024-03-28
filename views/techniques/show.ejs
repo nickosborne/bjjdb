@@ -30,7 +30,7 @@
                                                 <th scope="col">Position</th>
                                                 <th scope="col">Side</th>
                                                 <th scope="col">Type</th>
-                                                <th scope="col">Video</th>
+                                                <th scope="col"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,9 +50,8 @@
                                                     <td>
                                                         <%= tech.type %>
                                                     </td>
-                                                    <td><a class="btn btn-primary" href="<%= tech.video %>"
-                                                            role="button" target="_blank"
-                                                            rel="noopener noreferrer">Video</a>
+                                                    <td>
+                                                    <%-include('../partials/buttonGroup', {tech})%>
                                                     </td>
                                                 </tr>
                                                 <% } %>

@@ -1,9 +1,10 @@
 const Position = require('../models/Position');
-const { positionSchema, editSchema } = require('../schemas.js');
+const { positionSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Technique = require('../models/Technique');
 const Group = require('../models/Group.js');
-const TechniqueControls = require('../controllers/techniques')
+const helpers = require('../middleware.js')
+const User = require('../models/User')
 
 // middleware
 module.exports.validatePosition = (req, res, next) => {
@@ -52,24 +53,29 @@ module.exports.show = async (req, res) => {
     const techniqueTypes = Technique.schema.path('type').enumValues;
     const positionId = req.params.id;
     const position = await Position.findById(positionId);
-    const techniques = await TechniqueControls.GetTechniquesByPosition(req, positionId)
+    const techniques = await helpers.GetTechniquesByPosition(req, positionId)
     const groups = await Group.find({ public: true });
+    let favorites = [];
     if (req.isAuthenticated()) {
-        //const position = await Position.findById(id);
-        const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
-        position.edits.forEach(edit => {
-            if (edit.userId.toString() === req.user.id) {
-                position.name = edit.name;
-                position.otherNames = edit.otherNames;
-                position.image = edit.image;
-            }
-            techniques.append(userTechniques)
-        })
-        res.render('positions/show', { position, techniques, techniqueTypes, groups })
+        let user = await User.findById(req.user.id).populate().lean();
+        user.favorites.forEach(element => { favorites.push(element.toString()) })
     }
-    else {
-        res.render('positions/show', { position, techniques, techniqueTypes, groups })
-    }
+    // if (req.isAuthenticated()) {
+    //     // //const position = await Position.findById(id);
+    //     // const userTechniques = await Technique.find({ $and: [{ userId: req.user.id }, { position: position }] },).populate('group');
+    //     // position.edits.forEach(edit => {
+    //     //     if (edit.userId.toString() === req.user.id) {
+    //     //         position.name = edit.name;
+    //     //         position.otherNames = edit.otherNames;
+    //     //         position.image = edit.image;
+    //     //     }
+    //     //     techniques.append(userTechniques)
+    //     // })
+    //     res.render('positions/show', { position, techniques, techniqueTypes, groups })
+    // }
+
+    res.render('positions/show', { position, techniques, techniqueTypes, groups, favorites })
+
 }
 
 module.exports.edit = async (req, res) => {

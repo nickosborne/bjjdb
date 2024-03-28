@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const passport = require('passport');
 const { checkReturnTo, forceLogin, isAdmin } = require('../middleware')
 const users = require('../controllers/users')
+const helpers = require('../middleware')
 
 router.get('/register', users.register)
 
@@ -13,6 +14,8 @@ router.get('/login', users.login)
 
 router.post('/login', checkReturnTo, passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.authenticate)
 
-router.get('/logout', users.logout);
+router.get('/logout', checkReturnTo, users.logout);
+
+router.post('/favorites', forceLogin, users.favorites)
 
 module.exports = router;

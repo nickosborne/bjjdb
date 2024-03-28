@@ -3,17 +3,7 @@ const { techniqueSchema } = require('../schemas.js')
 const Technique = require('../models/Technique');
 const Group = require('../models/Group');
 const Position = require('../models/Position');
-
-module.exports.validateTechnique = (req, res, next) => {
-
-    const { error } = techniqueSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+const helpers = require('../middleware.js');
 
 module.exports.index = async (req, res) => {
     if (req.isAuthenticated()) {
@@ -69,34 +59,6 @@ module.exports.create = async (req, res) => {
     }
 }
 
-module.exports.GetTechniquesByGroup = async (req, groupId) => {
-    if (req.isAuthenticated()) {
-        return await Technique.find({
-            $or: [
-                { $and: [{ public: true }, { group: groupId }] },
-                { $and: [{ userId: req.user.id }, { group: groupId }] }
-            ]
-        }).populate('position');
-    }
-    else {
-        return await Technique.find({ $and: [{ public: true }, { group: groupId }] }).populate('position')
-    }
-}
-
-module.exports.GetTechniquesByPosition = async (req, positionId) => {
-    if (req.isAuthenticated()) {
-        return await Technique.find({
-            $or: [
-                { $and: [{ public: true }, { position: positionId }] },
-                { $and: [{ userId: req.user.id }, { position: positionId }] }
-            ]
-        }).populate('group');
-    }
-    else {
-        return await Technique.find({ $and: [{ public: true }, { position: positionId }] },).populate('group');
-    }
-}
-
 module.exports.edit = async (req, res) => {
     const { id } = req.params;
     let { technique } = req.body
@@ -139,7 +101,7 @@ module.exports.delete = async (req, res) => {
 module.exports.show = async (req, res) => {
     const groupId = req.params.id;
     const group = await Group.findById(groupId);
-    const techniques = await module.exports.GetTechniquesByGroup(req, groupId);
+    const techniques = await helpers.GetTechniquesByGroup(req, groupId);
     const positions = await Position.find({ public: true })
     const techniqueTypes = Technique.schema.path('type').enumValues;
     if (group) {
